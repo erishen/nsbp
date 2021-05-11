@@ -1,13 +1,13 @@
 .testBox {
-    width: 300px;
-    height: 200px;
-    background: blue;
-    transform: rotate(45deg);
+  width: 300px;
+  height: 200px;
+  background: blue;
+  transform: rotate(45deg);
 }
 
 #name {
-    width: 300px;
-    height: 200px;
-    background: blue;
-    transform: rotate(45deg);
+  width: 300px;
+  height: 200px;
+  background: blue;
+  transform: rotate(45deg);
 }
