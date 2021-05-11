@@ -36,7 +36,7 @@ module.exports = ({ mode, entry, server }) => {
                 {
                     test: /\.less$/,
                     use: [
-                        (mode === 'production') ? MiniCssExtractPlugin.loader : 'style-loader', 
+                        (mode === 'production' || server) ? MiniCssExtractPlugin.loader : 'style-loader', 
                         'css-loader',
                         'postcss-loader',
                         'less-loader'
@@ -45,7 +45,7 @@ module.exports = ({ mode, entry, server }) => {
                 {
                     test: /\.s(a|c)ss$/,
                     use: [
-                        (mode === 'production') ? MiniCssExtractPlugin.loader : 'style-loader', 
+                        (mode === 'production' || server) ? MiniCssExtractPlugin.loader : 'style-loader', 
                         'css-loader',
                         'postcss-loader',
                         'sass-loader'
@@ -54,7 +54,7 @@ module.exports = ({ mode, entry, server }) => {
                 {
                     test:/\.css$/,
                     use: [
-                        (mode === 'production') ? MiniCssExtractPlugin.loader : 'style-loader', 
+                        (mode === 'production' || server) ? MiniCssExtractPlugin.loader : 'style-loader', 
                         'css-loader', 
                         'postcss-loader'
                     ]
@@ -70,7 +70,7 @@ module.exports = ({ mode, entry, server }) => {
             new MiniCssExtractPlugin()
         ],
         optimization: {
-            minimize: (mode === 'production') ? true : false,
+            minimize: (mode === 'production' || server) ? true : false,
             minimizer: [
                 `...`,
                 new CssMinimizerPlugin()

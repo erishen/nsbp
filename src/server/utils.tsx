@@ -84,6 +84,19 @@ export const render = (req:any, res:any) => {
 
         // console.log('content', content)
 
+        const nodeEnv = process.env.NODE_ENV
+
+        let cssArr = []
+        let scriptBundleArr = []
+
+        if (nodeEnv === 'development') {
+            scriptBundleArr.push('<script src="/js/vendor.bundle.js" type="text/javascript"></script>')
+        } else if (nodeEnv === 'production') {
+            scriptBundleArr.push('<script src="/js/framework.bundle.js" type="text/javascript"></script>')
+            scriptBundleArr.push('<script src="/js/runtime.bundle.js" type="text/javascript"></script>')
+            cssArr.push('<link href="/client.css" rel="stylesheet">')
+        }
+
         res.send(`
             <!DOCTYPE html>
             <html>
@@ -91,11 +104,12 @@ export const render = (req:any, res:any) => {
                     <meta charset="utf-8">
                     ${helmet?.title?.toString()}
                     ${helmet?.meta?.toString()}
+                    ${cssArr.join("\n")}
                 </head>
                 <body>
                     <div id="root">${content}</div>
-                    <script src="/js/vendor.bundle.js"></script>
-                    <script src="/js/client.bundle.js"></script>
+                    ${scriptBundleArr.join("\n")}
+                    <script src="/js/client.bundle.js" type="text/javascript"></script>
                     <script type="text/javascript">
                         window.context = { state: ${serialize(serverState)} }
                         window.query = ${serialize(query)}
