@@ -1,53 +1,87 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import Header from '../component/Header'
-import Loading from '../component/Loading'
+import Layout from '../component/Layout'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { GITHUB_ZEITNEXT_GET } from '../store/constants'
 import { isSEO } from '../utils'
 import { Helmet } from 'react-helmet'
+import { Motion, spring } from 'react-motion'
+import { Container } from '../styled/home'
 
 const Home = ({ name, data, query, getGithubZeitNext }: any) => {
-  let { seo } = query
-  const [pageLoad, setPageLoad] = useState(
-    seo !== undefined ? parseInt(seo, 10) : 0
-  )
-  console.log('pageLoad', query, pageLoad)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (!isSEO()) {
       getGithubZeitNext()
     }
-
-    if (pageLoad === 0) {
-      setPageLoad(1)
-    }
   }, [])
+
+  const handleMouseDown = () => {
+    setOpen(!open)
+  }
+
+  const handleTouchStart = (e: any) => {
+    e.preventDefault()
+    handleMouseDown()
+  }
 
   return (
     <>
-      {pageLoad ? (
-        <Fragment>
-          <Helmet>
-            <title>Home</title>
-            <meta name="description" content="Home Description" />
-          </Helmet>
-          <Header />
+      <Fragment>
+        <Helmet>
+          <title>Home</title>
+          <meta name="description" content="Home Description" />
+        </Helmet>
+
+        <Header />
+
+        <Layout query={query}>
           <div>{name}</div>
+
           <div>
             <p>{data?.description || data?.message}</p>
           </div>
-          <button
-            onClick={() => {
-              alert('click')
-            }}
-          >
-            click
-          </button>
-        </Fragment>
-      ) : (
-        <Loading />
-      )}
+
+          <div>
+            <button
+              onClick={() => {
+                alert('click')
+              }}
+            >
+              click
+            </button>
+          </div>
+
+          <div>
+            <button
+              onMouseDown={handleMouseDown}
+              onTouchStart={handleTouchStart}
+            >
+              Toggle
+            </button>
+          </div>
+
+          <Container>
+            <Motion style={{ x: spring(open ? 400 : 0) }}>
+              {({ x }) => (
+                // children is a callback which should accept the current value of
+                // `style`
+                <div className="demo0">
+                  <div
+                    className="demo0-block"
+                    style={{
+                      WebkitTransform: `translate3d(${x}px, 0, 0)`,
+                      transform: `translate3d(${x}px, 0, 0)`
+                    }}
+                  />
+                </div>
+              )}
+            </Motion>
+          </Container>
+        </Layout>
+      </Fragment>
     </>
   )
 }

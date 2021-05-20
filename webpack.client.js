@@ -16,8 +16,7 @@ const clientConfig = {
       const { name } = chunk
       console.log('name', name)
       return `js/[name].bundle.js`
-    },
-    clean: true
+    }
   }
 }
 

@@ -72,9 +72,7 @@ module.exports = ({ mode, entry, server }) => {
         }
       ]
     },
-    plugins: [
-      new MiniCssExtractPlugin()
-    ],
+    plugins: [new MiniCssExtractPlugin()],
     optimization: {
       minimize: mode === 'production' || server ? true : false,
       minimizer: [`...`, new CssMinimizerPlugin()]

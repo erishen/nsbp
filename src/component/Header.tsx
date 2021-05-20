@@ -1,12 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Container } from '../styled/component/header'
 
 const Header = () => {
   return (
-    <div>
+    <Container>
       <Link to="/">Home </Link>
       <Link to="/login">Login</Link>
-    </div>
+      <Link to="/photo">Photo</Link>
+    </Container>
   )
 }
 
