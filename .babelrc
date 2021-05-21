@@ -1,13 +1,14 @@
 {
-  "presets": ["@babel/react", ["@babel/preset-env", { 
+  "presets": ["@babel/preset-react", ["@babel/preset-env", { 
     "targets": {
       "browsers": ["last 2 versions"]   //对主流浏览器最近两个版本进行兼容
     }
   }]],
   "plugins": [
-    ["styled-components", { "ssr": true }],
-    ["@babel/proposal-class-properties"],
-    ["@babel/plugin-proposal-optional-chaining"]
+    //["styled-components", { "ssr": true }],
+    ["@babel/plugin-proposal-class-properties"],
+    ["@babel/plugin-proposal-optional-chaining"],
+    ["babel-plugin-styled-components"]
   ]
 }
   

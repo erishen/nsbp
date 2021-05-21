@@ -1,6 +1,7 @@
 const path = require('path') //node的path模块
 const { merge } = require('webpack-merge')
 const config = require('./webpack.base.js')
+const { version } = require('./package.json')
 
 const server = false
 
@@ -15,7 +16,7 @@ const clientConfig = {
     filename: ({ chunk }) => {
       const { name } = chunk
       console.log('name', name)
-      return `js/[name].bundle.js`
+      return `js/[name].${version}.bundle.js`
     }
   }
 }

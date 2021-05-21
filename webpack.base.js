@@ -1,5 +1,10 @@
+const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default
+const { version } = require('./package.json')
+
+const styledComponentsTransformer = createStyledComponentsTransformer()
 
 module.exports = ({ mode, entry, server }) => {
   const config = {
@@ -12,31 +17,39 @@ module.exports = ({ mode, entry, server }) => {
     module: {
       rules: [
         {
-          //打包规则
-          test: /\.js?$/, //对所有js文件进行打包
-          loader: 'babel-loader', //使用babel-loader进行打包
-          exclude: /node_modules/, //不打包node_modules中的js文件
-          options: {
-            presets: [
-              '@babel/react',
-              [
-                '@babel/preset-env',
-                {
-                  targets: {
-                    browsers: ['last 2 versions'] //对主流浏览器最近两个版本进行兼容
-                  }
-                }
-              ]
-            ],
-            plugins: [
-              '@babel/proposal-class-properties',
-              '@babel/plugin-proposal-optional-chaining'
-            ]
-          }
-        },
-        {
-          test: /\.tsx?$/,
-          loader: 'awesome-typescript-loader'
+          test: /\.(ts|js)x?$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: "babel-loader",
+              options: {
+                presets: [
+                  '@babel/preset-react',
+                  [
+                    '@babel/preset-env',
+                    {
+                      targets: {
+                        browsers: ['last 2 versions'] //对主流浏览器最近两个版本进行兼容
+                      }
+                    }
+                  ]
+                ],
+                plugins: [
+                  //["styled-components", { "ssr": true }],
+                  ['@babel/plugin-proposal-class-properties'],
+                  ['@babel/plugin-proposal-optional-chaining'],
+                  ['babel-plugin-styled-components']
+                ]
+              }
+            },
+            {
+              loader: "awesome-typescript-loader",
+              options: {
+                configFileName: path.resolve(__dirname, "./tsconfig.json"),
+                getCustomTransformers: () => ({ before: [styledComponentsTransformer] })
+              }
+            }
+          ]
         },
         {
           test: /\.less$/,
@@ -69,6 +82,14 @@ module.exports = ({ mode, entry, server }) => {
             'css-loader',
             'postcss-loader'
           ]
+        },
+        {
+          test: /\.(png|svg|jp?g|webp|gif)$/i,
+          use: ["file-loader", "webp-loader?{quality: 100}"]
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: ["file-loader"]
         }
       ]
     },
@@ -78,6 +99,14 @@ module.exports = ({ mode, entry, server }) => {
       minimizer: [`...`, new CssMinimizerPlugin()]
     }
   }
+
+  config.plugins.map(plugin => {
+    if ('MiniCssExtractPlugin' == plugin.constructor.name) {
+      plugin.options = {
+        filename: `[name].${version}.css`
+      }
+    }
+  })
 
   if (!server) {
     if (mode === 'development') {
@@ -97,10 +126,12 @@ module.exports = ({ mode, entry, server }) => {
           lib: {
             test(module) {
               // 匹配包大于160000的
+              // console.log('test_module', module.identifier(), module.size())
               return module.size() > 160000
             },
             name(module) {
               // 名字就是包当中的名字
+              console.log('name_module', module.identifier(), module.size())
               return (
                 /node_modules\/(.*)/.exec(module.identifier()) &&
                 /node_modules\/(.*)/.exec(module.identifier()).length &&

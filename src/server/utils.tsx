@@ -8,6 +8,12 @@ import serialize from 'serialize-javascript'
 import { REQUEST_QUERY } from '../store/constants'
 import { Helmet } from 'react-helmet'
 import { minify } from 'html-minifier'
+import { ServerStyleSheet, ThemeProvider } from 'styled-components'
+import { GlobalStyle, theme } from '../styled/common'
+
+const removeCommentsAndSpacing = (str = '') => str.replace(/\/\*.*\*\//g, ' ').replace(/\s+/g, ' ')
+
+const removeSpacing = (str = '') => str.replace(/\s+/g, ' ')
 
 export const render = (req: any, res: any) => {
   const store = getStore()
@@ -66,77 +72,94 @@ export const render = (req: any, res: any) => {
 
   Promise.all(promises)
     .then(() => {
+      const sheet = new ServerStyleSheet()
       const serverState = store.getState()
       console.log('server_state: ', serverState)
 
       const helmet: any = Helmet.renderStatic()
 
-      const content = renderToString(
-        <Provider store={store}>
-          <StaticRouter location={path} context={{}}>
-            <div>
-              {routers.map((router) => (
-                <Route {...router} />
-              ))}
-            </div>
-          </StaticRouter>
-        </Provider>
-      )
+      try {
+        const content = renderToString(sheet.collectStyles(
+          <>
+            <GlobalStyle whiteColor={true} />
+            <ThemeProvider theme={theme}>
+              <Provider store={store}>
+                <StaticRouter location={path} context={{}}>
+                  <div>
+                    {routers.map((router) => (
+                      <Route {...router} />
+                    ))}
+                  </div>
+                </StaticRouter>
+              </Provider>
+            </ThemeProvider>
+          </>
+        ))
+  
+        let styleTags = sheet.getStyleTags()
 
-      // console.log('content', content)
-
-      const nodeEnv = process.env.NODE_ENV
-
-      let cssArr = []
-      let scriptBundleArr = []
-
-      if (nodeEnv === 'development') {
-        scriptBundleArr.push(
-          '<script src="/js/vendor.bundle.js" type="text/javascript"></script>'
-        )
-      } else if (nodeEnv === 'production') {
-        scriptBundleArr.push(
-          '<script src="/js/framework.bundle.js" type="text/javascript"></script>'
-        )
-        scriptBundleArr.push(
-          '<script src="/js/runtime.bundle.js" type="text/javascript"></script>'
-        )
-        cssArr.push('<link href="/client.css" rel="stylesheet">')
-      }
-
-      const html = `
-            <!DOCTYPE html>
-            <html>
-                <head>
-                    <meta charset="utf-8">
-                    ${helmet?.title?.toString()}
-                    ${helmet?.meta?.toString()}
-                    ${cssArr.join('\n')}
-                </head>
-                <body>
-                    <div id="root">${content}</div>
-                    ${scriptBundleArr.join('\n')}
-                    <script src="/js/client.bundle.js" type="text/javascript"></script>
-                    <script type="text/javascript">
-                        window.context = { state: ${serialize(serverState)} }
-                        window.query = ${serialize(query)}
-                    </script>
-                </body>
-            </html>
-        `
-
-      if (nodeEnv === 'development') {
-        res.send(html)
-      } else if (nodeEnv === 'production') {
-        res.send(
-          minify(html, {
-            collapseWhitespace: true,
-            conservativeCollapse: true,
-            removeComments: true,
-            minifyCSS: true,
-            minifyJS: true
-          })
-        )
+        // console.log('content', content)
+        // console.log('styleTags', styleTags)
+  
+        const nodeEnv = process.env.NODE_ENV
+        const { version } = require('../../package.json')
+  
+        let cssArr = []
+        let scriptBundleArr = []
+  
+        if (nodeEnv === 'development') {
+          scriptBundleArr.push(
+            `<script src="/js/vendor.${version}.bundle.js" type="text/javascript"></script>`
+          )
+        } else if (nodeEnv === 'production') {
+          scriptBundleArr.push(
+            `<script src="/js/framework.${version}.bundle.js" type="text/javascript"></script>`
+          )
+          scriptBundleArr.push(
+            `<script src="/js/runtime.${version}.bundle.js" type="text/javascript"></script>`
+          )
+          cssArr.push(`<link href="/client.${version}.css" rel="stylesheet">`)
+        }
+  
+        const html = `
+              <!DOCTYPE html>
+              <html>
+                  <head>
+                      <meta charset="utf-8">
+                      ${helmet?.title?.toString()}
+                      ${helmet?.meta?.toString()}
+                      ${cssArr.join('\n')}
+                      ${styleTags}
+                  </head>
+                  <body>
+                      <div id="root">${content}</div>
+                      ${scriptBundleArr.join('\n')}
+                      <script src="/js/client.${version}.bundle.js" type="text/javascript"></script>
+                      <script type="text/javascript">
+                          window.context = { state: ${serialize(serverState)} }
+                          window.query = ${serialize(query)}
+                      </script>
+                  </body>
+              </html>
+          `
+  
+        if (nodeEnv === 'development') {
+          res.send(html)
+        } else if (nodeEnv === 'production') {
+          res.send(
+            minify(html, {
+              collapseWhitespace: true,
+              conservativeCollapse: true,
+              removeComments: true,
+              minifyCSS: false,  // 因为 styled-components 不能使用 minifyCSS
+              minifyJS: true
+            })
+          )
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        sheet.seal()
       }
     })
     .catch((e) => {

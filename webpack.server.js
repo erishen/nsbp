@@ -2,6 +2,7 @@ const path = require('path') //node的path模块
 const nodeExternals = require('webpack-node-externals')
 const { merge } = require('webpack-merge')
 const config = require('./webpack.base.js')
+const { version } = require('./package.json')
 
 const server = true
 
@@ -13,7 +14,7 @@ const serverConfig = {
   target: 'node',
   output: {
     //打包出口
-    filename: 'bundle.js', //打包后的文件名
+    filename: `bundle.${version}.js`, //打包后的文件名
     path: path.resolve(__dirname, 'build'), //存放到根目录的build文件夹
     clean: true
   },
