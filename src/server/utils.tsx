@@ -8,10 +8,11 @@ import serialize from 'serialize-javascript'
 import { REQUEST_QUERY } from '../store/constants'
 import { Helmet } from 'react-helmet'
 import { minify } from 'html-minifier'
-import { ServerStyleSheet, ThemeProvider } from 'styled-components'
-import { GlobalStyle, theme } from '../styled/common'
+import { ServerStyleSheet } from 'styled-components'
+import Theme from '../component/Theme'
 
-const removeCommentsAndSpacing = (str = '') => str.replace(/\/\*.*\*\//g, ' ').replace(/\s+/g, ' ')
+const removeCommentsAndSpacing = (str = '') =>
+  str.replace(/\/\*.*\*\//g, ' ').replace(/\s+/g, ' ')
 
 const removeSpacing = (str = '') => str.replace(/\s+/g, ' ')
 
@@ -79,10 +80,9 @@ export const render = (req: any, res: any) => {
       const helmet: any = Helmet.renderStatic()
 
       try {
-        const content = renderToString(sheet.collectStyles(
-          <>
-            <GlobalStyle whiteColor={true} />
-            <ThemeProvider theme={theme}>
+        const content = renderToString(
+          sheet.collectStyles(
+            <Theme>
               <Provider store={store}>
                 <StaticRouter location={path} context={{}}>
                   <div>
@@ -92,21 +92,21 @@ export const render = (req: any, res: any) => {
                   </div>
                 </StaticRouter>
               </Provider>
-            </ThemeProvider>
-          </>
-        ))
-  
+            </Theme>
+          )
+        )
+
         let styleTags = sheet.getStyleTags()
 
         // console.log('content', content)
         // console.log('styleTags', styleTags)
-  
+
         const nodeEnv = process.env.NODE_ENV
         const { version } = require('../../package.json')
-  
+
         let cssArr = []
         let scriptBundleArr = []
-  
+
         if (nodeEnv === 'development') {
           scriptBundleArr.push(
             `<script src="/js/vendor.${version}.bundle.js" type="text/javascript"></script>`
@@ -120,7 +120,7 @@ export const render = (req: any, res: any) => {
           )
           cssArr.push(`<link href="/client.${version}.css" rel="stylesheet">`)
         }
-  
+
         const html = `
               <!DOCTYPE html>
               <html>
@@ -142,7 +142,7 @@ export const render = (req: any, res: any) => {
                   </body>
               </html>
           `
-  
+
         if (nodeEnv === 'development') {
           res.send(html)
         } else if (nodeEnv === 'production') {
@@ -151,7 +151,7 @@ export const render = (req: any, res: any) => {
               collapseWhitespace: true,
               conservativeCollapse: true,
               removeComments: true,
-              minifyCSS: false,  // 因为 styled-components 不能使用 minifyCSS
+              minifyCSS: false, // 因为 styled-components 不能使用 minifyCSS
               minifyJS: true
             })
           )

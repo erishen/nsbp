@@ -5,8 +5,7 @@ import routers from '../Routers'
 import { Provider } from 'react-redux'
 import getStore from '../store'
 import { isSEO } from '../utils'
-import { ThemeProvider } from 'styled-components'
-import { GlobalStyle, theme } from '../styled/common'
+import Theme from '../component/Theme'
 
 const App = () => {
   const [store, setStore] = useState(getStore())
@@ -19,20 +18,17 @@ const App = () => {
   }, [])
 
   return (
-    <>
-      <GlobalStyle whiteColor={true} />
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <div>
-              {routers.map((router) => (
-                <Route {...router} />
-              ))}
-            </div>
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    </>
+    <Theme>
+      <Provider store={store}>
+        <BrowserRouter>
+          <div>
+            {routers.map((router) => (
+              <Route {...router} />
+            ))}
+          </div>
+        </BrowserRouter>
+      </Provider>
+    </Theme>
   )
 }
 

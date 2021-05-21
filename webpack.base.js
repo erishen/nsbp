@@ -1,7 +1,8 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default
+const createStyledComponentsTransformer =
+  require('typescript-plugin-styled-components').default
 const { version } = require('./package.json')
 
 const styledComponentsTransformer = createStyledComponentsTransformer()
@@ -21,7 +22,7 @@ module.exports = ({ mode, entry, server }) => {
           exclude: /node_modules/,
           use: [
             {
-              loader: "babel-loader",
+              loader: 'babel-loader',
               options: {
                 presets: [
                   '@babel/preset-react',
@@ -43,10 +44,12 @@ module.exports = ({ mode, entry, server }) => {
               }
             },
             {
-              loader: "awesome-typescript-loader",
+              loader: 'awesome-typescript-loader',
               options: {
-                configFileName: path.resolve(__dirname, "./tsconfig.json"),
-                getCustomTransformers: () => ({ before: [styledComponentsTransformer] })
+                configFileName: path.resolve(__dirname, './tsconfig.json'),
+                getCustomTransformers: () => ({
+                  before: [styledComponentsTransformer]
+                })
               }
             }
           ]
@@ -85,11 +88,11 @@ module.exports = ({ mode, entry, server }) => {
         },
         {
           test: /\.(png|svg|jp?g|webp|gif)$/i,
-          use: ["file-loader", "webp-loader?{quality: 100}"]
+          use: ['file-loader', 'webp-loader?{quality: 100}']
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: ["file-loader"]
+          use: ['file-loader']
         }
       ]
     },
@@ -100,7 +103,7 @@ module.exports = ({ mode, entry, server }) => {
     }
   }
 
-  config.plugins.map(plugin => {
+  config.plugins.map((plugin) => {
     if ('MiniCssExtractPlugin' == plugin.constructor.name) {
       plugin.options = {
         filename: `[name].${version}.css`

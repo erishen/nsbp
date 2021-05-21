@@ -18,3 +18,9 @@ export const theme = {
     primary: '#0070f3'
   }
 }
+
+export const theme2 = {
+  colors: {
+    primary: 'black'
+  }
+}
