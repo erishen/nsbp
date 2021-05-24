@@ -20,6 +20,7 @@ export default [
     path: '/photo',
     component: Photo,
     exact: true,
+    loadData: Photo.loadData, 
     key: 'photo'
   }
 ]

@@ -1,4 +1,5 @@
 import { homeReducer } from './home'
+import { photoReducer } from './photo'
 import { REQUEST_QUERY } from '../store/constants'
 
 const queryReducer = (state = {}, action: any) => {
@@ -26,5 +27,6 @@ const queryReducer = (state = {}, action: any) => {
 export default {
   name: (state = 'Erishen Sun') => state,
   query: queryReducer,
-  home: homeReducer
+  home: homeReducer,
+  photo: photoReducer
 }

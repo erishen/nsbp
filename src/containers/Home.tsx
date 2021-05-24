@@ -2,12 +2,12 @@ import React, { Fragment, useEffect, useState } from 'react'
 import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import { GITHUB_ZEITNEXT_GET } from '../store/constants'
 import { isSEO } from '../utils'
 import { Helmet } from 'react-helmet'
 import { Motion, spring } from 'react-motion'
 import { Container } from '../styled/home'
+import { doGet } from '../utils/fetch'
 
 const Home = ({ name, data, query, getGithubZeitNext }: any) => {
   const [open, setOpen] = useState(false)
@@ -17,7 +17,7 @@ const Home = ({ name, data, query, getGithubZeitNext }: any) => {
       getGithubZeitNext()
     }
   }, [])
-
+  
   const handleMouseDown = () => {
     setOpen(!open)
   }
@@ -94,9 +94,8 @@ const getData = (callback: any = null) => {
   console.log('getData')
 
   return (dispatch: any) => {
-    axios
-      .get('https://api.apiopen.top/getJoke?page=1&count=2&type=video')
-      .then((res) => {
+    doGet('https://api.apiopen.top/getJoke?page=1&count=2&type=video')
+      .then((res:any) => {
         // console.log('res', res)
         dispatch({
           type: GITHUB_ZEITNEXT_GET,
@@ -105,7 +104,7 @@ const getData = (callback: any = null) => {
 
         callback && callback()
       })
-      .catch((e) => {
+      .catch((e:any) => {
         // console.log('e', e.response)
         dispatch({
           type: GITHUB_ZEITNEXT_GET,

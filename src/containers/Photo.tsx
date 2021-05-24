@@ -1,41 +1,40 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { Helmet } from 'react-helmet'
 import { Container, Row } from '../styled/photo'
 import { Motion, spring } from 'react-motion'
+import { isSEO } from '../utils'
+import { doGet } from '../utils/fetch'
+import { GET_PHOTO_WIDTH_HEIGHT } from '../store/constants'
 
 const springSettings = { stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
-const Photo = ({ query }: any) => {
-  const [photos, setPhotos] = useState([
-    [500, 350],
-    [800, 600],
-    [800, 400],
-    [700, 500],
-    [200, 650],
-    [600, 600]
-  ])
+const Photo = ({ query, data, getPhotoWH }: any) => {
+  const photos = data
   const [currPhoto, setCurrPhoto] = useState(0)
 
   const [currWidth, currHeight] = photos[currPhoto]
 
-  const widths = photos.map(([origW, origH]) => (currHeight / origH) * origW)
+  const widths = photos.map(([origW, origH]:any) => (currHeight / origH) * origW)
 
   const leftStartCoords = widths
     .slice(0, currPhoto)
-    .reduce((sum, width) => sum - width, 0)
+    .reduce((sum:any, width:any) => sum - width, 0)
 
   let configs: any = []
-  photos.reduce((prevLeft, [origW, origH], i) => {
+  photos.reduce((prevLeft:any, [origW, origH]:any, i:any) => {
     configs.push({
       left: spring(prevLeft, springSettings),
       height: spring(currHeight, springSettings),
-      width: spring(widths[i], springSettings)
+      width: spring(widths[i] || 0, springSettings)
     })
     return prevLeft + widths[i]
   }, leftStartCoords)
+
+  // console.log('configs', configs)
 
   const handleChange = ({ target: { value } }: any) => {
     setCurrPhoto(value)
@@ -50,6 +49,12 @@ const Photo = ({ query }: any) => {
     setCurrPhoto(photoIndex)
   }
 
+  useEffect(() => {
+    if (!isSEO()) {
+      getPhotoWH()
+    }
+  }, [])
+  
   return (
     <Fragment>
       <Helmet>
@@ -83,7 +88,7 @@ const Photo = ({ query }: any) => {
                       {(style) => (
                         <img
                           className="demo4-photo"
-                          src={`/images/${i}.jpg`}
+                          src={`/images/${photos[i][2]}`}
                           style={style}
                         />
                       )}
@@ -99,4 +104,40 @@ const Photo = ({ query }: any) => {
   )
 }
 
-export default Photo
+Photo.loadData = (resolve: any) => {
+  return getData(resolve)
+}
+
+const getData = (callback: any = null) => {
+  return (dispatch: any) => {
+    doGet('getPhotoWH')
+      .then((res:any) => {
+        // console.log('getPhotoWH_res', res)
+        dispatch({
+          type: GET_PHOTO_WIDTH_HEIGHT,
+          data: res?.data
+        })
+        callback && callback()
+      })
+      .catch((e:any) => {
+        console.log('getPhotoWH_e', e)
+        callback && callback()
+      })
+  }
+}
+
+const mapStateToProps = (state: any) => {
+  console.info('mapStateToProps_state', state)
+  return {
+    query: state?.query,
+    data: state?.photo?.data
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => ({
+  getPhotoWH() {
+    dispatch(getData())
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Photo)
