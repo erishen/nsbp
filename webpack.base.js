@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const createStyledComponentsTransformer =
   require('typescript-plugin-styled-components').default
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const { version } = require('./package.json')
 
 const styledComponentsTransformer = createStyledComponentsTransformer()
@@ -106,7 +107,7 @@ module.exports = ({ mode, entry, server }) => {
   config.plugins.map((plugin) => {
     if ('MiniCssExtractPlugin' == plugin.constructor.name) {
       plugin.options = {
-        filename: `[name].${version}.css`
+        filename: `css/[name].${version}.css`
       }
     }
   })
@@ -115,47 +116,58 @@ module.exports = ({ mode, entry, server }) => {
     if (mode === 'development') {
       config.entry['vendor'] = ['react', 'react-dom']
     } else if (mode === 'production') {
+      config.plugins.push(
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            compress: {
+              drop_debugger: true,
+              //drop_console: true,
+              pure_funcs: ['console.log']
+            }
+          }
+        })
+      )
+
       config.optimization['splitChunks'] = {
+        chunks: 'all',
+        minSize: 20000,
+        minRemainingSize: 0,
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+        enforceSizeThreshold: 50000,
+        name: false,
         cacheGroups: {
-          default: false,
-          vendors: false,
           framework: {
             // 将react和react-dom打入framework当中
             name: 'framework',
-            chunks: 'all',
             test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/, //匹配库当中的react和react-dom
-            priority: 40 //权重为40 最大权重
-          },
-          lib: {
-            test(module) {
-              // 匹配包大于160000的
-              // console.log('test_module', module.identifier(), module.size())
-              return module.size() > 160000
-            },
-            name(module) {
-              // 名字就是包当中的名字
-              console.log('name_module', module.identifier(), module.size())
-              return (
-                /node_modules\/(.*)/.exec(module.identifier()) &&
-                /node_modules\/(.*)/.exec(module.identifier()).length &&
-                /node_modules\/(.*)/
-                  .exec(module.identifier())[1]
-                  .replace(/\/|\\/g, '_')
-              )
-            },
-            priority: 30, //权重为30
-            minChunks: 1, //最小共用次数为1时就使用
+            priority: 40, //权重为40 最大权重
             reuseExistingChunk: true
           },
-          commons: {
-            name: 'commons',
-            chunks: 'all',
-            minChunks: 20,
-            priority: 20
+          lib: {
+            test: (module) => {
+              // 匹配包大于160000的
+              if (module.size() > 20000) {
+                console.log('test_module', module.identifier(), module.size())
+              }
+              return module.size() > 20000
+            },
+            name: 'lib',
+            minChunks: 1, //最小共用次数为1时就使用
+            priority: 30, //权重为30
+            reuseExistingChunk: true
           },
-          shared: {
-            priority: 10,
+          vendor: {
+            name: 'vendor',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 20,
+            reuseExistingChunk: true
+          },
+          default: {
+            name: 'default',
             minChunks: 2,
+            priority: 10,
             reuseExistingChunk: true
           }
         }

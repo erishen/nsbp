@@ -10,7 +10,7 @@ export const Container = styled.div`
 
   a {
     margin: 5px;
-    color: ${props => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.primary};
   }
 
   p {

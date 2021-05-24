@@ -118,7 +118,7 @@ const getData = (callback: any = null) => {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log('mapStateToProps_state', state)
+  console.info('mapStateToProps_state', state)
   return {
     name: state?.name,
     query: state?.query,

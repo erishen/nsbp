@@ -107,18 +107,19 @@ export const render = (req: any, res: any) => {
         let cssArr = []
         let scriptBundleArr = []
 
-        if (nodeEnv === 'development') {
-          scriptBundleArr.push(
-            `<script src="/js/vendor.${version}.bundle.js" type="text/javascript"></script>`
-          )
-        } else if (nodeEnv === 'production') {
+        if (nodeEnv === 'production') {
           scriptBundleArr.push(
             `<script src="/js/framework.${version}.bundle.js" type="text/javascript"></script>`
           )
           scriptBundleArr.push(
             `<script src="/js/runtime.${version}.bundle.js" type="text/javascript"></script>`
           )
-          cssArr.push(`<link href="/client.${version}.css" rel="stylesheet">`)
+          scriptBundleArr.push(
+            `<script src="/js/lib.${version}.bundle.js" type="text/javascript"></script>`
+          )
+          cssArr.push(
+            `<link href="/css/client.${version}.css" rel="stylesheet">`
+          )
         }
 
         const html = `
@@ -134,6 +135,7 @@ export const render = (req: any, res: any) => {
                   <body>
                       <div id="root">${content}</div>
                       ${scriptBundleArr.join('\n')}
+                      <script src="/js/vendor.${version}.bundle.js" type="text/javascript"></script>
                       <script src="/js/client.${version}.bundle.js" type="text/javascript"></script>
                       <script type="text/javascript">
                           window.context = { state: ${serialize(serverState)} }
