@@ -29,12 +29,16 @@ export const Container = styled.div`
 
 export const Row = styled.div`
   display: flex;
-  flex: 1;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
+  font-size: 20px;
+  word-wrap: break-word; 
+  word-break: break-all; 
+  overflow: hidden;
+  padding-bottom: 10px;
 
   a {
-    padding: 5px;
+    padding-right: 10px;
   }
 `

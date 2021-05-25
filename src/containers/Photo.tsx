@@ -80,7 +80,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
       <Layout query={query}>
         <Container>
           <Row>
-          {
+          { 
             _.map(menu, (item:any, index:number) => {
               return (
                 <a key={`menu${index}`} href={handleLink(`/photo?dic=${item}`)}>{item}</a>
@@ -88,7 +88,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
             })
           }
           </Row>
-          <div>Scroll Me</div>
+          <Row>Scroll Me</Row>
           <Row>
             <button onClick={() => clickHandler('')}>Previous</button>
             <input
