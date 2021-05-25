@@ -28,7 +28,7 @@ export const getPhotoWH = () => {
   fileList.forEach((item:any, index:number) => {
     const data = fs.readFileSync(item)
     let fileName:string = fileList[index]
-    fileName = fileName.substring(fileName.lastIndexOf('\\') + 1)
+    fileName = fileName.substring(fileName.lastIndexOf('images\\') + 7)
 
     const { width, height }:any = probe.sync(data)
     whArr.push([width, height, fileName])
