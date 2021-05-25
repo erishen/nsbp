@@ -1,6 +1,6 @@
 import express from 'express'
 import { render } from './utils'
-import { getPhotoWH } from './photo'
+import { getPhotoWH, getPhotoMenu } from './photo'
 import { useCurrentFlag, outPhotoDicPath } from '../utils/config'
 
 const app = express()
@@ -11,7 +11,15 @@ app.use(express.static('public'))
 //使用express提供的static中间件,中间件会将所有静态文件的路由指向public文件夹
 
 app.get('/getPhotoWH', (req, res) => {
-  res.send(getPhotoWH())
+  const { query } = req
+  console.log('query', query)
+  const { dic } = query
+
+  res.send(getPhotoWH(dic))
+})
+
+app.get('/getPhotoMenu', (req, res) => {
+  res.send(getPhotoMenu())
 })
 
 app.get('*', (req, res) => {

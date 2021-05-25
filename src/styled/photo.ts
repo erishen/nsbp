@@ -33,4 +33,8 @@ export const Row = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
+
+  a {
+    padding: 5px;
+  }
 `

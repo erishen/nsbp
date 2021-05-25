@@ -5,15 +5,17 @@ import Layout from '../component/Layout'
 import { Helmet } from 'react-helmet'
 import { Container, Row } from '../styled/photo'
 import { Motion, spring } from 'react-motion'
-import { isSEO } from '../utils'
+import { isSEO, getLocationParams } from '../utils'
 import { doGet } from '../utils/fetch'
-import { GET_PHOTO_WIDTH_HEIGHT } from '../store/constants'
+import { GET_PHOTO_MENU, GET_PHOTO_WIDTH_HEIGHT } from '../store/constants'
 import { useCurrentFlag } from '../utils/config'
+import _ from 'lodash'
 
 const springSettings = { stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
-const Photo = ({ query, data, getPhotoWH }: any) => {
+const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
+  let { dic } = query
   const photos = data
   const [currPhoto, setCurrPhoto] = useState(0)
 
@@ -52,7 +54,10 @@ const Photo = ({ query, data, getPhotoWH }: any) => {
 
   useEffect(() => {
     if (!isSEO()) {
-      getPhotoWH()
+      if (!dic) {
+        dic = getLocationParams('dic')
+      }
+      getPhotoMenu(dic)
     }
   }, [])
   
@@ -66,6 +71,15 @@ const Photo = ({ query, data, getPhotoWH }: any) => {
 
       <Layout query={query}>
         <Container>
+          <Row>
+          {
+            _.map(menu, (item:any, index:number) => {
+              return (
+                <a key={`menu${index}`} href={`/photo?dic=${item}`}>{item}</a>
+              )
+            })
+          }
+          </Row>
           <div>Scroll Me</div>
           <Row>
             <button onClick={() => clickHandler('')}>Previous</button>
@@ -109,9 +123,13 @@ Photo.loadData = (resolve: any) => {
   return getData(resolve)
 }
 
-const getData = (callback: any = null) => {
-  return (dispatch: any) => {
-    doGet('getPhotoWH')
+const getPhotoWH = (dispatch: any, callback: any, dic='') => {
+  let action = 'getPhotoWH'
+  if (dic) {
+    action += `?dic=${dic}`
+  }
+
+  doGet(action)
       .then((res:any) => {
         // console.log('getPhotoWH_res', res)
         dispatch({
@@ -124,6 +142,40 @@ const getData = (callback: any = null) => {
         console.log('getPhotoWH_e', e)
         callback && callback()
       })
+}
+
+const getPhotoMenu = (dispatch:any, callback:any) => {
+  doGet('getPhotoMenu')
+      .then((res:any) => {
+        console.log('getPhotoMenu_res', res)
+        const { data } = res
+        dispatch({
+          type: GET_PHOTO_MENU,
+          menu: data
+        })
+
+        callback && callback(data)
+      })
+      .catch((e:any) => {
+        console.log('getPhotoMenu_e', e)
+        callback && callback()
+      })
+}
+
+const getData = (callback: any = null, dic='') => {
+  return (dispatch: any) => {
+
+    if (dic) {
+      getPhotoMenu(dispatch, () => {
+        getPhotoWH(dispatch, callback, dic)
+      })
+    } else {
+      getPhotoMenu(dispatch, (data:any) => {
+        if (data && data.length > 0) {
+          getPhotoWH(dispatch, callback, data[0])
+        }
+      })
+    }
   }
 }
 
@@ -131,13 +183,14 @@ const mapStateToProps = (state: any) => {
   console.info('mapStateToProps_state', state)
   return {
     query: state?.query,
+    menu: state?.photo?.menu,
     data: state?.photo?.data
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-  getPhotoWH() {
-    dispatch(getData())
+  getPhotoMenu(dic:any) {
+    dispatch(getData(null, dic))
   }
 })
 
