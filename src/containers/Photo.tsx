@@ -8,6 +8,7 @@ import { Motion, spring } from 'react-motion'
 import { isSEO } from '../utils'
 import { doGet } from '../utils/fetch'
 import { GET_PHOTO_WIDTH_HEIGHT } from '../store/constants'
+import { useCurrentFlag } from '../utils/config'
 
 const springSettings = { stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
@@ -88,7 +89,7 @@ const Photo = ({ query, data, getPhotoWH }: any) => {
                       {(style) => (
                         <img
                           className="demo4-photo"
-                          src={`/images/${photos[i][2]}`}
+                          src={useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2] }
                           style={style}
                         />
                       )}
