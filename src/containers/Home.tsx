@@ -15,6 +15,10 @@ const Home = ({ name, data, query, getGithubZeitNext }: any) => {
   useEffect(() => {
     if (!isSEO()) {
       getGithubZeitNext()
+    } else {
+      if (Object.keys(data).length === 0) {
+        getGithubZeitNext()
+      }
     }
   }, [])
   

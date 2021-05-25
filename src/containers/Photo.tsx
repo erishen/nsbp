@@ -5,7 +5,7 @@ import Layout from '../component/Layout'
 import { Helmet } from 'react-helmet'
 import { Container, Row } from '../styled/photo'
 import { Motion, spring } from 'react-motion'
-import { isSEO, getLocationParams } from '../utils'
+import { isSEO, getLocationParams, handleLink } from '../utils'
 import { doGet } from '../utils/fetch'
 import { GET_PHOTO_MENU, GET_PHOTO_WIDTH_HEIGHT } from '../store/constants'
 import { useCurrentFlag } from '../utils/config'
@@ -53,11 +53,19 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
   }
 
   useEffect(() => {
-    if (!isSEO()) {
+    const doGetPhotoMenu = () => {
       if (!dic) {
         dic = getLocationParams('dic')
       }
       getPhotoMenu(dic)
+    }
+
+    if (!isSEO()) {
+      doGetPhotoMenu()
+    } else {
+      if (Object.keys(menu).length === 0) {
+        doGetPhotoMenu()
+      }
     }
   }, [])
   
@@ -75,7 +83,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
           {
             _.map(menu, (item:any, index:number) => {
               return (
-                <a key={`menu${index}`} href={`/photo?dic=${item}`}>{item}</a>
+                <a key={`menu${index}`} href={handleLink(`/photo?dic=${item}`)}>{item}</a>
               )
             })
           }
@@ -147,7 +155,7 @@ const getPhotoWH = (dispatch: any, callback: any, dic='') => {
 const getPhotoMenu = (dispatch:any, callback:any) => {
   doGet('getPhotoMenu')
       .then((res:any) => {
-        console.log('getPhotoMenu_res', res)
+        // console.log('getPhotoMenu_res', res)
         const { data } = res
         dispatch({
           type: GET_PHOTO_MENU,

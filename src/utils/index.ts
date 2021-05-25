@@ -29,3 +29,17 @@ export const isSEO = () => {
   }
   return 0
 }
+
+export const handleLink = (link: string) => {
+  let result = link
+
+  if (isSEO()) {
+    if (link.indexOf('?') !== -1) {
+      result += '&'
+    } else {
+      result += '?'
+    }
+    result += 'seo=1'
+  }
+  return result
+}

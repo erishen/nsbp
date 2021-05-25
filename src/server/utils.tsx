@@ -18,11 +18,11 @@ const removeSpacing = (str = '') => str.replace(/\s+/g, ' ')
 
 export const render = (req: any, res: any) => {
   const store = getStore()
-  const { path, query } = req
+  const { path, query, url } = req
   const matchRoutes: any = []
   const promises = []
 
-  console.log('query', query)
+  console.log('path_query_url', path, query, url)
   let { seo } = query
 
   if (seo !== undefined && seo !== '') {
