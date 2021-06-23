@@ -2,12 +2,11 @@ import React, { Fragment, useEffect, useState } from 'react'
 import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { connect } from 'react-redux'
-import { GITHUB_ZEITNEXT_GET } from '../store/constants'
 import { isSEO } from '../utils'
 import { Helmet } from 'react-helmet'
 import { Motion, spring } from 'react-motion'
 import { Container } from '../styled/home'
-import { doGet } from '../utils/fetch'
+import { loadData } from '../services/home'
 
 const Home = ({ name, data, query, getGithubZeitNext }: any) => {
   const [open, setOpen] = useState(false)
@@ -90,36 +89,6 @@ const Home = ({ name, data, query, getGithubZeitNext }: any) => {
   )
 }
 
-Home.loadData = (resolve: any) => {
-  return getData(resolve)
-}
-
-const getData = (callback: any = null) => {
-  console.log('getData')
-
-  return (dispatch: any) => {
-    doGet('https://api.apiopen.top/getJoke?page=1&count=2&type=video')
-      .then((res:any) => {
-        // console.log('res', res)
-        dispatch({
-          type: GITHUB_ZEITNEXT_GET,
-          data: res?.data
-        })
-
-        callback && callback()
-      })
-      .catch((e:any) => {
-        // console.log('e', e.response)
-        dispatch({
-          type: GITHUB_ZEITNEXT_GET,
-          data: e?.response?.data
-        })
-
-        callback && callback()
-      })
-  }
-}
-
 const mapStateToProps = (state: any) => {
   console.info('mapStateToProps_state', state)
   return {
@@ -132,7 +101,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => ({
   getGithubZeitNext() {
     console.log('getGithubZeitNext')
-    dispatch(getData())
+    dispatch(loadData())
   }
 })
 

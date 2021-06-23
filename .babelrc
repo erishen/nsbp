@@ -8,6 +8,7 @@
     //["styled-components", { "ssr": true }],
     ["@babel/plugin-proposal-class-properties"],
     ["@babel/plugin-proposal-optional-chaining"],
+    ["@babel/plugin-syntax-dynamic-import"],
     ["babel-plugin-styled-components"]
   ]
 }
