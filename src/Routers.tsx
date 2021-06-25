@@ -1,25 +1,22 @@
 import React from 'react'
-import Loadable from 'react-loadable'
 import { loadData as homeLoadData } from './services/home'
 import { loadData as photoLoadData } from './services/photo'
+import loadable from "@loadable/component"
 
 const Loading = () => {
   return <div>Loading...</div>
 }
 
-const Home = Loadable({
-  loader: () => import('./containers/Home'),
-  loading: Loading
+const Home = loadable(() => import("./containers/Home"), {
+  fallback: <Loading />
 })
 
-const Login = Loadable({
-  loader: () => import('./containers/Login'),
-  loading: Loading
+const Login = loadable(() => import("./containers/Login"), {
+  fallback: <Loading />
 })
 
-const Photo = Loadable({
-  loader: () => import('./containers/Photo'),
-  loading: Loading
+const Photo = loadable(() => import("./containers/Photo"), {
+  fallback: <Loading />
 })
 
 export default [
