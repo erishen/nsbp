@@ -46,9 +46,9 @@ module.exports = ({ mode, entry, server }) => {
               }
             },
             {
-              loader: 'awesome-typescript-loader',
+              loader: 'ts-loader',
               options: {
-                configFileName: path.resolve(__dirname, './tsconfig.json'),
+                configFile: path.resolve(__dirname, './tsconfig.json'),
                 getCustomTransformers: () => ({
                   before: [styledComponentsTransformer]
                 })
