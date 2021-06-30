@@ -4,4 +4,7 @@ build
 public/js
 public/css
 public/client.*
-public/images/*照
+public/*.js
+public/*.js.map
+public/*.txt
+public/*.json

@@ -10,6 +10,8 @@ import { Helmet } from 'react-helmet'
 import { minify } from 'html-minifier'
 import { ServerStyleSheet } from 'styled-components'
 import Theme from '../component/Theme'
+import path from 'path'
+import { ChunkExtractor } from '@loadable/server'
 
 const removeCommentsAndSpacing = (str = '') =>
   str.replace(/\/\*.*\*\//g, ' ').replace(/\s+/g, ' ')
@@ -18,11 +20,11 @@ const removeSpacing = (str = '') => str.replace(/\s+/g, ' ')
 
 export const render = (req: any, res: any) => {
   const store = getStore()
-  const { path, query, url } = req
+  const { path:reqPath, query, url } = req
   const matchRoutes: any = []
   const promises = []
 
-  console.log('path_query_url', path, query, url)
+  console.log('path_query_url', reqPath, query, url)
   let { seo } = query
 
   if (seo !== undefined && seo !== '') {
@@ -30,7 +32,7 @@ export const render = (req: any, res: any) => {
   }
 
   routers.some((route) => {
-    matchPath(path, route) ? matchRoutes.push(route) : ''
+    matchPath(reqPath, route) ? matchRoutes.push(route) : ''
   })
 
   // console.log('matchRoutes', matchRoutes)
@@ -73,18 +75,35 @@ export const render = (req: any, res: any) => {
 
   Promise.all(promises)
     .then(() => {
+      const nodeEnv = process.env.NODE_ENV
       const sheet = new ServerStyleSheet()
       const serverState = store.getState()
       console.log('server_state: ', serverState)
 
       const helmet: any = Helmet.renderStatic()
 
+      const webStats = path.resolve(
+        __dirname,
+        '../public/loadable-stats.json',
+      )
+
       try {
-        const content = renderToString(
-          sheet.collectStyles(
+        let webEntryPoints = ['client', 'vendor']
+
+        if (nodeEnv === 'production') {
+          webEntryPoints = ['client']
+        }
+
+        const webExtractor = new ChunkExtractor({ 
+          statsFile: webStats, 
+          entrypoints: webEntryPoints, 
+          publicPath: '/' 
+        })
+
+        const jsx = webExtractor.collectChunks(sheet.collectStyles(
             <Theme>
               <Provider store={store}>
-                <StaticRouter location={path} context={{}}>
+                <StaticRouter location={reqPath} context={{}}>
                   <div>
                     {routers.map((router) => (
                       <Route {...router} />
@@ -96,31 +115,11 @@ export const render = (req: any, res: any) => {
           )
         )
 
-        let styleTags = sheet.getStyleTags()
+        const content = renderToString(jsx)
+        const styleTags = sheet.getStyleTags()
 
         // console.log('content', content)
         // console.log('styleTags', styleTags)
-
-        const nodeEnv = process.env.NODE_ENV
-        const { version } = require('../../package.json')
-
-        let cssArr = []
-        let scriptBundleArr = []
-
-        if (nodeEnv === 'production') {
-          scriptBundleArr.push(
-            `<script src="/js/framework.${version}.bundle.js" type="text/javascript"></script>`
-          )
-          scriptBundleArr.push(
-            `<script src="/js/runtime.${version}.bundle.js" type="text/javascript"></script>`
-          )
-          scriptBundleArr.push(
-            `<script src="/js/lib.${version}.bundle.js" type="text/javascript"></script>`
-          )
-          cssArr.push(
-            `<link href="/css/client.${version}.css" rel="stylesheet">`
-          )
-        }
 
         const html = `
               <!DOCTYPE html>
@@ -129,18 +128,17 @@ export const render = (req: any, res: any) => {
                       <meta charset="utf-8">
                       ${helmet?.title?.toString()}
                       ${helmet?.meta?.toString()}
-                      ${cssArr.join('\n')}
                       ${styleTags}
+                      ${webExtractor.getLinkTags()}
+                      ${webExtractor.getStyleTags()}
                   </head>
                   <body>
                       <div id="root">${content}</div>
-                      ${scriptBundleArr.join('\n')}
-                      <script src="/js/vendor.${version}.bundle.js" type="text/javascript"></script>
-                      <script src="/js/client.${version}.bundle.js" type="text/javascript"></script>
                       <script type="text/javascript">
                           window.context = { state: ${serialize(serverState)} }
                           window.query = ${serialize(query)}
                       </script>
+                      ${webExtractor.getScriptTags()}
                   </body>
               </html>
           `

@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import getStore from '../store'
 import { isSEO } from '../utils'
 import Theme from '../component/Theme'
+import { loadableReady } from '@loadable/component'
 
 const App = () => {
   const [store, setStore] = useState(getStore())
@@ -32,4 +33,6 @@ const App = () => {
   )
 }
 
-ReactDom.hydrate(<App />, document.getElementById('root'))
+loadableReady(() => {
+  ReactDom.hydrate(<App />, document.getElementById('root'))
+})

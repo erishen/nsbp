@@ -5,6 +5,9 @@ const createStyledComponentsTransformer =
   require('typescript-plugin-styled-components').default
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const { version } = require('./package.json')
+const LoadablePlugin = require('@loadable/webpack-plugin')
+const { loadableTransformer } = require('loadable-ts-transformer')
+const { createLoadableComponentsTransformer } = require('typescript-loadable-components-plugin')
 
 const styledComponentsTransformer = createStyledComponentsTransformer()
 
@@ -37,21 +40,37 @@ module.exports = ({ mode, entry, server }) => {
                   ]
                 ],
                 plugins: [
-                  //["styled-components", { "ssr": true }],
                   ['@babel/plugin-proposal-class-properties'],
                   ['@babel/plugin-proposal-optional-chaining'],
                   ["@babel/plugin-syntax-dynamic-import"],
-                  ['babel-plugin-styled-components']
+                  ['babel-plugin-styled-components'],
+                  ["@loadable/babel-plugin"]
                 ]
               }
             },
             {
               loader: 'ts-loader',
               options: {
+                logInfoToStdOut: true,
+                logLevel: 'info',
+                transpileOnly: true,
                 configFile: path.resolve(__dirname, './tsconfig.json'),
-                getCustomTransformers: () => ({
-                  before: [styledComponentsTransformer]
-                })
+                getCustomTransformers: (program) => {
+                  // console.log('getCustomTransformers', program)
+
+                  return {
+                    before: [
+                      //createLoadableComponentsTransformer(program, {}),
+                      styledComponentsTransformer, 
+                      createLoadableComponentsTransformer(program, {
+                        setComponentId: true,
+                        setDisplayName: true,
+                        minify: true,
+                      }),
+                      //loadableTransformer
+                    ]
+                  }
+                }
               }
             }
           ]
@@ -98,20 +117,19 @@ module.exports = ({ mode, entry, server }) => {
         }
       ]
     },
-    plugins: [new MiniCssExtractPlugin()],
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: `css/[name].${version}.css`
+      }), 
+      new LoadablePlugin({
+        writeToDisk: true
+      })
+    ],
     optimization: {
       minimize: mode === 'production' || server ? true : false,
       minimizer: [`...`, new CssMinimizerPlugin()]
     }
   }
-
-  config.plugins.map((plugin) => {
-    if ('MiniCssExtractPlugin' == plugin.constructor.name) {
-      plugin.options = {
-        filename: `css/[name].${version}.css`
-      }
-    }
-  })
 
   if (!server) {
     if (mode === 'development') {
@@ -154,7 +172,14 @@ module.exports = ({ mode, entry, server }) => {
               }
               return module.size() > 20000
             },
-            name: 'lib',
+            name(module) {
+              //名字就是包当中的名字
+              return (
+                /[\\/]node_modules[\\/](.*)/.exec(module.identifier()) &&
+                /[\\/]node_modules[\\/](.*)/.exec(module.identifier()).length &&
+                /[\\/]node_modules[\\/](.*)/.exec(module.identifier())[1].replace(/\/|\\/g, '_')
+              )
+            },
             minChunks: 1, //最小共用次数为1时就使用
             priority: 30, //权重为30
             reuseExistingChunk: true

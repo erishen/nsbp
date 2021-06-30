@@ -107,13 +107,19 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
                 <div className="demo4-inner" style={container}>
                   {configs.map((style: any, i: any) => (
                     <Motion key={i} style={style}>
-                      {(style) => (
-                        <img
-                          className="demo4-photo"
-                          src={useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2] }
-                          style={style}
-                        />
-                      )}
+                      {(style) => {
+                        if (photos[i][2]) {
+                          return (
+                            <img
+                              className="demo4-photo"
+                              src={useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2]}
+                              style={style}
+                            />
+                          )
+                        } else {
+                          return null
+                        }
+                      }}
                     </Motion>
                   ))}
                 </div>
