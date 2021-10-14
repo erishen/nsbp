@@ -12,19 +12,13 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 const styledComponentsTransformer = createStyledComponentsTransformer()
 
-module.exports = ({ mode, entry, server }) => {
+module.exports = ({ mode, entry, server, init }) => {
   const config = {
     mode,
     entry,
     devtool: 'source-map',
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
-    },
-    cache: {
-      type: 'filesystem',
-      cacheDirectory: path.resolve(__dirname, '.temp_cache'),
-      // type: 'memory',
-      // cacheUnaffected: true,
     },
     module: {
       rules: [
@@ -154,6 +148,17 @@ module.exports = ({ mode, entry, server }) => {
     optimization: {
       minimize: mode === 'production' || server ? true : false,
       minimizer: [`...`, new CssMinimizerPlugin()]
+    }
+  }
+
+  if(init){
+    config.cache = false
+  } else {
+    config.cache = {
+      type: 'filesystem',
+      cacheDirectory: path.resolve(__dirname, '.temp_cache'),
+      // type: 'memory',
+      // cacheUnaffected: true,
     }
   }
 

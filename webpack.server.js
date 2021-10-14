@@ -4,7 +4,10 @@ const { merge } = require('webpack-merge')
 const config = require('./webpack.base.js')
 const { version } = require('./package.json')
 
+const init = process.env.INIT || 0
 const server = true
+
+console.log('init', init)
 
 const entry = {
   server: ['./src/server/index.ts']
@@ -26,5 +29,5 @@ const serverConfig = {
 }
 
 module.exports = (_, { mode }) => {
-  return merge(config({ mode, entry, server }), serverConfig)
+  return merge(config({ mode, entry, server, init }), serverConfig)
 }
