@@ -14,7 +14,7 @@ const springSettings = { stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
 const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
-  let { dic } = query
+  let { dic, from } = query
   const photos = data
   const [currPhoto, setCurrPhoto] = useState(0)
 
@@ -62,7 +62,11 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
     if (!isSEO()) {
       doGetPhotoMenu()
     } else {
-      if (Object.keys(menu).length === 0) {
+      if (!from) {
+        from = getLocationParams('from')
+      }
+
+      if(from === 'link'){
         doGetPhotoMenu()
       }
     }

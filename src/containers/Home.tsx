@@ -2,20 +2,25 @@ import React, { Fragment, useEffect, useState } from 'react'
 import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { connect } from 'react-redux'
-import { isSEO } from '../utils'
+import { isSEO, getLocationParams } from '../utils'
 import { Helmet } from 'react-helmet'
 import { Motion, spring } from 'react-motion'
 import { Container } from '../styled/home'
 import { loadData } from '../services/home'
 
 const Home = ({ name, data, query, getGithubZeitNext }: any) => {
+  let { from } = query
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (!isSEO()) {
       getGithubZeitNext()
     } else {
-      if (Object.keys(data).length === 0) {
+      if (!from) {
+        from = getLocationParams('from')
+      }
+
+      if(from === 'link'){
         getGithubZeitNext()
       }
     }
@@ -45,6 +50,13 @@ const Home = ({ name, data, query, getGithubZeitNext }: any) => {
 
           <div>
             <p>{data?.description || data?.message}</p>
+            {
+              data?.result?.map((item:any, index:number)=>{
+                return (
+                  <p key={'item'+index}>{(index+1) + '. ' + item?.text}</p>
+                )
+              })
+            }
           </div>
 
           <div>
@@ -56,6 +68,8 @@ const Home = ({ name, data, query, getGithubZeitNext }: any) => {
               click
             </button>
           </div>
+
+          <br/>
 
           <div>
             <button

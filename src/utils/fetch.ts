@@ -1,9 +1,13 @@
 import axios from 'axios'
 
-const prefix = 'http://localhost:3001'
+let prefix = 'http://localhost:3001'
 
 export const doGet = (action:any) => {
   return new Promise((resolve, reject) => {
+
+    if(typeof window !== "undefined"){
+      prefix = window.location.origin
+    }
 
     let url = action
     if (action.indexOf('http') === -1) {

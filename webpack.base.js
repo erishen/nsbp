@@ -8,6 +8,7 @@ const { version } = require('./package.json')
 const LoadablePlugin = require('@loadable/webpack-plugin')
 const { loadableTransformer } = require('loadable-ts-transformer')
 const { createLoadableComponentsTransformer } = require('typescript-loadable-components-plugin')
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 const styledComponentsTransformer = createStyledComponentsTransformer()
 
@@ -18,6 +19,12 @@ module.exports = ({ mode, entry, server }) => {
     devtool: 'source-map',
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+    },
+    cache: {
+      type: 'filesystem',
+      cacheDirectory: path.resolve(__dirname, '.temp_cache'),
+      // type: 'memory',
+      // cacheUnaffected: true,
     },
     module: {
       rules: [
@@ -81,9 +88,21 @@ module.exports = ({ mode, entry, server }) => {
             mode === 'production' || server
               ? MiniCssExtractPlugin.loader
               : 'style-loader',
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+              }
+            },
             'postcss-loader',
-            'less-loader'
+            {
+              loader: 'less-loader',
+              options: {
+                lessOptions: {
+                  javascriptEnabled: true,
+                }
+              }
+            },
           ]
         },
         {
@@ -92,7 +111,12 @@ module.exports = ({ mode, entry, server }) => {
             mode === 'production' || server
               ? MiniCssExtractPlugin.loader
               : 'style-loader',
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+              }
+            },
             'postcss-loader',
             'sass-loader'
           ]
@@ -103,7 +127,12 @@ module.exports = ({ mode, entry, server }) => {
             mode === 'production' || server
               ? MiniCssExtractPlugin.loader
               : 'style-loader',
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+              }
+            },
             'postcss-loader'
           ]
         },
@@ -118,9 +147,6 @@ module.exports = ({ mode, entry, server }) => {
       ]
     },
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: `css/[name].${version}.css`
-      }), 
       new LoadablePlugin({
         writeToDisk: true
       })
@@ -129,6 +155,26 @@ module.exports = ({ mode, entry, server }) => {
       minimize: mode === 'production' || server ? true : false,
       minimizer: [`...`, new CssMinimizerPlugin()]
     }
+  }
+
+  if(mode === 'development' && !server){
+    config.plugins.push(
+      new BrowserSyncPlugin(
+        {
+          host: 'localhost',
+          port: 3000,
+          proxy: 'http://localhost:3001/'
+        }
+      )
+    )
+  }
+
+  if(mode === 'production' || server){
+    config.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: `css/[name].${version}.css`
+      })
+    )
   }
 
   if (!server) {

@@ -15,7 +15,7 @@ const clientConfig = {
     path: path.resolve(__dirname, 'public'),
     filename: ({ chunk }) => {
       const { name } = chunk
-      console.log('name', name)
+      // console.log('name', name)
       return `js/[name].${version}.bundle.js`
     }
   }
