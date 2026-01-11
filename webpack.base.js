@@ -40,8 +40,8 @@ module.exports = ({ mode, entry, server, init }) => {
                   ]
                 ],
                 plugins: [
-                  ['@babel/plugin-proposal-class-properties'],
-                  ['@babel/plugin-proposal-optional-chaining'],
+                  ['@babel/plugin-transform-class-properties'],
+                  ['@babel/plugin-transform-optional-chaining'],
                   ["@babel/plugin-syntax-dynamic-import"],
                   ['babel-plugin-styled-components'],
                   ["@loadable/babel-plugin"]
