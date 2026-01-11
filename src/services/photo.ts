@@ -11,9 +11,10 @@ const getPhotoWH = (dispatch: any, callback: any, dic = '') => {
   doGet(action)
       .then((res:any) => {
         // console.log('getPhotoWH_res', res)
+        // axios 响应格式是 { data: { data: [...] }, status: ... }，需要取 res.data.data
         dispatch({
           type: GET_PHOTO_WIDTH_HEIGHT,
-          data: res?.data
+          data: res?.data?.data || []
         })
         callback && callback()
       })
@@ -27,7 +28,8 @@ const getPhotoMenu = (dispatch:any, callback:any) => {
   doGet('getPhotoMenu')
       .then((res:any) => {
         // console.log('getPhotoMenu_res', res)
-        const { data } = res
+        // axios 响应格式是 { data: { data: [...] }, status: ... }，需要取 res.data.data
+        const { data } = res?.data || {}
         dispatch({
           type: GET_PHOTO_MENU,
           menu: data
@@ -51,7 +53,8 @@ const getData = (callback:any, dic:any) => {
     } else {
       getPhotoMenu(dispatch, (data:any) => {
         if (data && data.length > 0) {
-          getPhotoWH(dispatch, callback, data[0])
+          // data[0] 是对象 {name, cover}，需要取 name
+          getPhotoWH(dispatch, callback, data[0].name)
         }
       })
     }

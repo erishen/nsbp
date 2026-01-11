@@ -1,12 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
 import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { Helmet } from 'react-helmet'
 import { Container, Row } from '../styled/photo'
 import { motion } from 'framer-motion'
-import { isSEO, getLocationParams, handleLink } from '../utils'
-import { useCurrentFlag } from '../utils/config'
+import { isSEO, getLocationParams } from '../utils'
+import { useCurrentFlag } from '../utils/clientConfig'
 import _ from 'lodash'
 import { loadData } from '../services/photo'
 
@@ -14,13 +15,23 @@ const springSettings = { type: "spring", stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
 const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
+  const location = useLocation()
   let { dic, from } = query
-  const photos = data
+  const photos = Array.isArray(data) ? data : []
   const [currPhoto, setCurrPhoto] = useState(0)
 
-  const [currWidth, currHeight] = photos[currPhoto]
+  const [currPhotoData, setCurrPhotoData] = useState(photos[0] || [0, 0, ''])
+
+  const [currWidth, currHeight] = currPhotoData
 
   const widths = photos.map(([origW, origH]:any) => (currHeight / origH) * origW)
+
+  // 同步 currPhoto 和 currPhotoData
+  useEffect(() => {
+    if (photos[currPhoto]) {
+      setCurrPhotoData(photos[currPhoto])
+    }
+  }, [currPhoto, photos])
 
   const leftStartCoords = widths
     .slice(0, currPhoto)
@@ -53,25 +64,23 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
   }
 
   useEffect(() => {
+    const currentDic = getLocationParams('dic')
+
     const doGetPhotoMenu = () => {
-      if (!dic) {
-        dic = getLocationParams('dic')
-      }
-      getPhotoMenu(dic)
+      getPhotoMenu(currentDic)
     }
 
     if (!isSEO()) {
       doGetPhotoMenu()
     } else {
-      if (!from) {
-        from = getLocationParams('from')
-      }
-
       if(from === 'link'){
         doGetPhotoMenu()
       }
     }
-  }, [])
+
+    // 重置到第一张
+    setCurrPhoto(0)
+  }, [location?.search])
 
   return (
     <Fragment>
@@ -87,7 +96,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
           {
             _.map(menu, (item:any, index:number) => {
               return (
-                <a key={`menu${index}`} href={handleLink(`/photo?dic=${item}`)}>{item}</a>
+                <Link key={`menu${index}`} to={`/photo?dic=${item.name}`}>{item.name}</Link>
               )
             })
           }

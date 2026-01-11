@@ -11,18 +11,15 @@ app.use(express.static('public'))
 //使用express提供的static中间件,中间件会将所有静态文件的路由指向public文件夹
 
 app.get('/getPhotoWH', (req, res) => {
-  const { query } = req
-  console.log('query', query)
-  const { dic } = query
-
-  res.send(getPhotoWH(dic))
+  getPhotoWH(req, res)
 })
 
 app.get('/getPhotoMenu', (req, res) => {
-  res.send(getPhotoMenu())
+  getPhotoMenu(req, res)
 })
 
-app.get('*', (req, res) => {
+// Catch-all middleware for SSR
+app.use((req, res) => {
   // console.log('req.url', req.url, req.headers)
   render(req, res)
 })
