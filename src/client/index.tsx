@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import ReactDom from 'react-dom'
+import { hydrateRoot } from 'react-dom/client'
 import { BrowserRouter, Route } from 'react-router-dom'
 import routers from '../Routers'
 import { Provider } from 'react-redux'
@@ -34,5 +34,5 @@ const App = () => {
 }
 
 loadableReady(() => {
-  ReactDom.hydrate(<App />, document.getElementById('root'))
+  const root = hydrateRoot(document.getElementById('root')!, <App />)
 })

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { Helmet } from 'react-helmet'
 import {
@@ -120,8 +119,6 @@ const Home: React.FC = () => {
         <meta property="og:title" content="Nsbp.js - 轻量级 React SSR 框架" />
         <meta property="og:description" content="与 Next.js 相比，Nsbp.js 更轻量、更灵活、更可控。" />
       </Helmet>
-
-      <Header />
 
       <Layout query={{}}>
         <PageWrapper>
