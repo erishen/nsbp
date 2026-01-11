@@ -1,6 +1,6 @@
 import React from 'react' //引入React以支持JSX的语法
 import { renderToString } from 'react-dom/server' //引入renderToString方法
-import { StaticRouter, Route, matchPath } from 'react-router-dom'
+import { StaticRouter, Routes, Route, matchPath } from 'react-router-dom'
 import routers from '../Routers'
 import { Provider } from 'react-redux'
 import getStore from '../store'
@@ -30,7 +30,7 @@ export const render = (req: any, res: any) => {
   }
 
   routers.some((route) => {
-    matchPath(reqPath, route) ? matchRoutes.push(route) : ''
+    matchPath({ path: route.path, end: true }, reqPath) ? matchRoutes.push(route) : ''
   })
 
   matchRoutes.forEach((item: any) => {
@@ -110,12 +110,12 @@ export const render = (req: any, res: any) => {
         const jsx = webExtractor.collectChunks(sheet.collectStyles(
             <Theme>
               <Provider store={store}>
-                <StaticRouter location={reqPath} context={{}}>
-                  <div>
+                <StaticRouter location={reqPath}>
+                  <Routes>
                     {routers.map((router) => (
-                      <Route {...router} />
+                      <Route key={router.key} path={router.path} element={router.element} />
                     ))}
-                  </div>
+                  </Routes>
                 </StaticRouter>
               </Provider>
             </Theme>

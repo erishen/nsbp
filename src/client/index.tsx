@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { hydrateRoot } from 'react-dom/client'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import routers from '../Routers'
 import { Provider } from 'react-redux'
 import getStore from '../store'
@@ -21,11 +21,11 @@ const App = () => {
     <Theme>
       <Provider store={store}>
         <BrowserRouter>
-          <div>
+          <Routes>
             {routers.map((router) => (
-              <Route {...router} />
+              <Route key={router.key} path={router.path} element={router.element} />
             ))}
-          </div>
+          </Routes>
         </BrowserRouter>
       </Provider>
     </Theme>

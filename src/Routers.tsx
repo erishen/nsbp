@@ -22,21 +22,18 @@ const Photo = loadable(() => import("./containers/Photo"), {
 export default [
   {
     path: '/',
-    component: Home,
-    exact: true,
+    element: <Home />,
     loadData: homeLoadData, //传入loadData方法
     key: 'home'
   },
   {
     path: '/login',
-    component: Login,
-    exact: true,
+    element: <Login />,
     key: 'login'
   },
   {
     path: '/photo',
-    component: Photo,
-    exact: true,
+    element: <Photo />,
     loadData: homeLoadData, // 使用相同的 loadData 来预取图片菜单
     key: 'photo'
   }
