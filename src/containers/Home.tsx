@@ -69,18 +69,29 @@ const Home: React.FC = () => {
     if (typeof window === 'undefined') return
 
     setLoading(true)
-    fetch('/getPhotoMenu')
-      .then(res => {
-        if (!res.ok) throw new Error(`Status ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        setMenu(data?.data || [])
-      })
-      .catch(err => {
-        setMenu([])
-      })
-      .finally(() => setLoading(false))
+    // 先检查服务端是否已预取了图片菜单数据
+    const serverMenu = window?.context?.state?.photo?.menu || {}
+    const serverMenuArray = Array.isArray(serverMenu) ? serverMenu : []
+
+    if (serverMenuArray.length > 0) {
+      setMenu(serverMenuArray)
+      setLoading(false)
+    } else {
+      // 如果服务端没有预取，则在客户端获取
+      fetch('/getPhotoMenu')
+        .then(res => {
+          if (!res.ok) throw new Error(`Status ${res.status}`)
+          return res.json()
+        })
+        .then(data => {
+          setMenu(data?.data || [])
+        })
+        .catch(err => {
+          console.error('Failed to load menu:', err)
+          setMenu([])
+        })
+        .finally(() => setLoading(false))
+    }
   }, [])
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -338,7 +349,7 @@ export const getPhotoMenu = (req: any, res: any) => {
                 <QuickStartTitle>1️⃣ 创建项目</QuickStartTitle>
                 <QuickStartCode>$ npx nsbp create my-app</QuickStartCode>
                 <QuickStartDescription>
-                  使用CLI工具创建新项目
+                  使用 CLI 工具创建新项目
                 </QuickStartDescription>
               </QuickStartCard>
 

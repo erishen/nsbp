@@ -34,7 +34,21 @@ export const render = (req: any, res: any) => {
   })
 
   matchRoutes.forEach((item: any) => {
-    if (item?.loadData && seo) {
+    if (item?.loadData) {
+      const promise = new Promise((resolve, reject) => {
+        try {
+          store.dispatch(item?.loadData(resolve))
+        } catch (e) {
+          reject()
+        }
+      })
+
+      promises.push(promise)
+    }
+  })
+
+  matchRoutes.forEach((item: any) => {
+    if (item?.loadData) {
       const promise = new Promise((resolve, reject) => {
         try {
           store.dispatch(item?.loadData(resolve))
