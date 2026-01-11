@@ -32,6 +32,7 @@
     "@loadable/component": "^5.15.0",
     "@loadable/server": "^5.15.0",
     "@redux-devtools/extension": "^3.3.0",
+    "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.7.0",
     "express": "^5.2.1",
     "framer-motion": "^12.25.0",
