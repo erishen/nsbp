@@ -6,7 +6,6 @@ import reducers from '../reducers'
 const combineReducer = combineReducers({ ...reducers })
 
 const getStore = (stateParam = {}) => {
-  // console.log('getStore_stateParam', stateParam)
 
   return createStore(
     (state: any, action: any) => combineReducer(state || stateParam, action),

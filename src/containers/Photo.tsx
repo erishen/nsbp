@@ -146,7 +146,6 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
 }
 
 const mapStateToProps = (state: any) => {
-  console.info('mapStateToProps_state', state)
   return {
     query: state?.query,
     menu: state?.photo?.menu,

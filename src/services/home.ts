@@ -2,7 +2,6 @@ import { doGet } from '../utils/fetch'
 import { GITHUB_ZEITNEXT_GET } from '../store/constants'
 
 const getData = (callback: any) => {
-  console.log('getData')
 
   return (dispatch: any) => {
     doGet('https://api.apiopen.top/getJoke?page=1&count=2&type=video')

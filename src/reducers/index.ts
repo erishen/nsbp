@@ -8,16 +8,10 @@ const queryReducer = (state = {}, action: any) => {
 
   switch (type) {
     case REQUEST_QUERY:
-      // console.log('state', type, state)
-      newState = Object.assign({}, state)
-
-      if (query) {
-        newState = {
-          ...query
-        }
+      newState = {
+        ...query
       }
 
-      console.log('newState', newState)
       return newState
     default:
       return state

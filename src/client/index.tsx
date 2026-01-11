@@ -10,7 +10,6 @@ import { loadableReady } from '@loadable/component'
 
 const App = () => {
   const [store, setStore] = useState(getStore())
-  console.log('client_state: ', store.getState())
 
   useEffect(() => {
     if (isSEO()) {

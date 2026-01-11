@@ -23,7 +23,6 @@ export const render = (req: any, res: any) => {
   const matchRoutes: any = []
   const promises = []
 
-  console.log('path_query_url', reqPath, query, url)
   let { seo } = query
 
   if (seo !== undefined && seo !== '') {
@@ -33,8 +32,6 @@ export const render = (req: any, res: any) => {
   routers.some((route) => {
     matchPath(reqPath, route) ? matchRoutes.push(route) : ''
   })
-
-  // console.log('matchRoutes', matchRoutes)
 
   matchRoutes.forEach((item: any) => {
     if (item?.loadData && seo) {
@@ -70,14 +67,11 @@ export const render = (req: any, res: any) => {
 
   promises.push(queryPromise)
 
-  // console.log('promises', promises)
-
   Promise.all(promises)
     .then(() => {
       const nodeEnv = process.env.NODE_ENV
       const sheet = new ServerStyleSheet()
       const serverState = store.getState()
-      console.log('server_state: ', serverState)
 
       const helmet: any = Helmet.renderStatic()
 
@@ -93,10 +87,10 @@ export const render = (req: any, res: any) => {
           webEntryPoints = ['client']
         }
 
-        const webExtractor = new ChunkExtractor({ 
-          statsFile: webStats, 
-          entrypoints: webEntryPoints, 
-          publicPath: '/' 
+        const webExtractor = new ChunkExtractor({
+          statsFile: webStats,
+          entrypoints: webEntryPoints,
+          publicPath: '/'
         })
 
         const jsx = webExtractor.collectChunks(sheet.collectStyles(
@@ -116,9 +110,6 @@ export const render = (req: any, res: any) => {
 
         const content = renderToString(jsx)
         const styleTags = sheet.getStyleTags()
-
-        // console.log('content', content)
-        // console.log('styleTags', styleTags)
 
         const html = `
               <!DOCTYPE html>
@@ -144,12 +135,10 @@ export const render = (req: any, res: any) => {
 
         res.send(html)
       } catch (e) {
-        console.log(e)
-      } finally {
         sheet.seal()
       }
     })
     .catch((e) => {
-      console.log('promises_exception', e)
+      // Error handling
     })
 }

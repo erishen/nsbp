@@ -33,7 +33,6 @@ const getPhotosDicPath = () => {
 
 // 获取目录下的子目录（分类），并为每个分类找封面图和图片数量
 const getFileMenu = (dir: string): { name: string; cover?: string; count?: number }[] => {
-  console.log('getFileMenu called with dir:', dir)
   const arr = fs.readdirSync(dir)
   const result: { name: string; cover?: string; count?: number }[] = []
 
@@ -67,14 +66,12 @@ export const getPhotoWH = (req: any, res: any) => {
   try {
     const dic = req.query.dic || ''
     const photosDicPath = getPhotosDicPath()
-    console.log('getPhotoWH photosDicPath:', photosDicPath)
 
     const fileList: any = []
     let photoPath = photosDicPath
     if (dic) {
       photoPath = path.join(photosDicPath, dic)
     }
-    console.log('getPhotoWH photoPath:', photoPath)
 
     const getFileList = (dir: string, list: string[]) => {
       const arr = fs.readdirSync(dir)
@@ -91,7 +88,6 @@ export const getPhotoWH = (req: any, res: any) => {
     }
 
     getFileList(photoPath, fileList)
-    console.log('fileList', fileList)
 
     const whArr: any = []
     fileList.forEach((item: any, index: number) => {
@@ -100,28 +96,23 @@ export const getPhotoWH = (req: any, res: any) => {
       const { width, height }: any = probe.sync(data)
       whArr.push([width, height, fileName])
     })
-    console.log('whArr', whArr)
+
     // 按前端期望的格式包装
     res.json({ data: whArr })
   } catch (err) {
-    console.error('getPhotoWH error:', err)
     res.status(500).json({ error: 'Internal Server Error', details: err.message })
   }
 }
 
 export const getPhotoMenu = (req: any, res: any) => {
   try {
-    console.log('getPhotoMenu called')
     const photosDicPath = getPhotosDicPath()
-    console.log('getPhotoMenu photosDicPath:', photosDicPath)
 
     const fileMenu = getFileMenu(photosDicPath)
-    console.log('fileMenu', fileMenu)
 
     // 按前端期望的格式包装
     res.json({ data: fileMenu })
   } catch (err) {
-    console.error('getPhotoMenu error:', err)
     res.status(500).json({ error: 'Internal Server Error', details: err.message })
   }
 }

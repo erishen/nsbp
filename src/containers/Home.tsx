@@ -78,7 +78,6 @@ const Home: React.FC = () => {
         setMenu(data?.data || [])
       })
       .catch(err => {
-        console.error('Failed to load menu:', err)
         setMenu([])
       })
       .finally(() => setLoading(false))
