@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { Helmet } from 'react-helmet'
 import {
@@ -70,23 +69,59 @@ const Home: React.FC = () => {
     if (typeof window === 'undefined') return
 
     setLoading(true)
-    fetch('/getPhotoMenu')
-      .then(res => {
-        if (!res.ok) throw new Error(`Status ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        setMenu(data?.data || [])
-      })
-      .catch(err => {
-        console.error('Failed to load menu:', err)
-        setMenu([])
-      })
-      .finally(() => setLoading(false))
+    // 先检查服务端是否已预取了图片菜单数据
+    const serverMenu = window?.context?.state?.photo?.menu || {}
+    const serverMenuArray = Array.isArray(serverMenu) ? serverMenu : []
+
+    if (serverMenuArray.length > 0) {
+      setMenu(serverMenuArray)
+      setLoading(false)
+    } else {
+      // 如果服务端没有预取，则在客户端获取
+      fetch('/getPhotoMenu')
+        .then(res => {
+          if (!res.ok) throw new Error(`Status ${res.status}`)
+          return res.json()
+        })
+        .then(data => {
+          setMenu(data?.data || [])
+        })
+        .catch(err => {
+          console.error('Failed to load menu:', err)
+          setMenu([])
+        })
+        .finally(() => setLoading(false))
+    }
+  }, [])
+
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // 模拟页面加载
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 500)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
     <GlobalStyle>
+      {!isLoaded && (
+        <div className="page-loader" id="pageLoader">
+          <div className="loader-spinner"></div>
+        </div>
+      )}
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          setTimeout(() => {
+            const loader = document.getElementById('pageLoader');
+            if (loader) {
+              loader.classList.add('fade-out');
+              setTimeout(() => loader.remove(), 500);
+            }
+          }, 800);
+        `
+      }} />
       <Helmet>
         <title>Nsbp.js - 轻量级 React SSR 框架</title>
         <meta name="description" content="Nsbp.js - 一个轻量级 React SSR 框架，专为低资源部署与高度可定制场景而生。与 Next.js 相比，更节省资源，更灵活配置。" />
@@ -95,19 +130,19 @@ const Home: React.FC = () => {
         <meta property="og:description" content="与 Next.js 相比，Nsbp.js 更轻量、更灵活、更可控。" />
       </Helmet>
 
-      <Header />
-
       <Layout query={{}}>
         <PageWrapper>
 
           {/* ========================================
               Hero Section - 首屏视觉冲击
               ======================================== */}
-          <HeroSection>
+          <HeroSection className="fade-in">
             <HeroContent>
-              <HeroBadge>🚀 轻量级 React SSR 框架</HeroBadge>
-              <HeroTitle>Nsbp.js</HeroTitle>
-              <HeroSubtitle>
+              <div className="hero-glow"></div>
+              <div className="hero-glow"></div>
+              <HeroBadge className="fade-in" style={{animationDelay: '0.1s'}}>🚀 轻量级 React SSR 框架</HeroBadge>
+              <HeroTitle className="fade-in" style={{animationDelay: '0.2s'}}>Nsbp.js</HeroTitle>
+              <HeroSubtitle className="fade-in" style={{animationDelay: '0.3s'}}>
                 与 Next.js 相比，节省 60% 资源消耗
                 <br />
                 完全掌控 Webpack 配置，无黑盒限制
@@ -137,10 +172,10 @@ const Home: React.FC = () => {
           {/* ========================================
               技术特性展示
               ======================================== */}
-          <TechSection>
+          <TechSection className="fade-in" style={{animationDelay: '0.4s'}}>
             <SectionHeader>
-              <SectionTitle>核心特性</SectionTitle>
-              <SectionDescription>
+              <SectionTitle className="fade-in" style={{animationDelay: '0.5s'}}>核心特性</SectionTitle>
+              <SectionDescription className="fade-in" style={{animationDelay: '0.6s'}}>
                 基于 React 19 + TypeScript，提供完整的 SSR 能力同时保持极致轻量
               </SectionDescription>
             </SectionHeader>
@@ -237,10 +272,10 @@ export const getPhotoMenu = (req: any, res: any) => {
           {/* ========================================
               Nsbp.js vs Next.js 对比
               ======================================== */}
-          <ComparisonSection>
+          <ComparisonSection className="fade-in" style={{animationDelay: '0.7s'}}>
             <SectionHeader>
-              <SectionTitle>Nsbp.js vs Next.js</SectionTitle>
-              <SectionDescription>
+              <SectionTitle className="fade-in" style={{animationDelay: '0.8s'}}>Nsbp.js vs Next.js</SectionTitle>
+              <SectionDescription className="fade-in" style={{animationDelay: '0.9s'}}>
                 对比两个 SSR 框架的关键差异，帮助你做出正确选择
               </SectionDescription>
             </SectionHeader>
@@ -301,10 +336,10 @@ export const getPhotoMenu = (req: any, res: any) => {
           {/* ========================================
               快速开始
               ======================================== */}
-          <QuickStartSection>
+          <QuickStartSection className="fade-in" style={{animationDelay: '1.0s'}}>
             <SectionHeader>
-              <SectionTitle>快速开始</SectionTitle>
-              <SectionDescription>
+              <SectionTitle className="fade-in" style={{animationDelay: '1.1s'}}>快速开始</SectionTitle>
+              <SectionDescription className="fade-in" style={{animationDelay: '1.2s'}}>
                 三步启动你的第一个 SSR 项目
               </SectionDescription>
             </SectionHeader>
@@ -314,7 +349,7 @@ export const getPhotoMenu = (req: any, res: any) => {
                 <QuickStartTitle>1️⃣ 创建项目</QuickStartTitle>
                 <QuickStartCode>$ npx nsbp create my-app</QuickStartCode>
                 <QuickStartDescription>
-                  使用CLI工具创建新项目
+                  使用 CLI 工具创建新项目
                 </QuickStartDescription>
               </QuickStartCard>
 
@@ -339,10 +374,10 @@ export const getPhotoMenu = (req: any, res: any) => {
           {/* ========================================
               Photo Menu 示例
               ======================================== */}
-          <PhotoSection>
+          <PhotoSection className="fade-in" style={{animationDelay: '1.3s'}}>
             <SectionHeader>
-              <SectionTitle>图片分类示例</SectionTitle>
-              <SectionDescription>
+              <SectionTitle className="fade-in" style={{animationDelay: '1.4s'}}>图片分类示例</SectionTitle>
+              <SectionDescription className="fade-in" style={{animationDelay: '1.5s'}}>
                 基于 Nsbp.js 内置的图片服务接口，快速构建图库应用
               </SectionDescription>
             </SectionHeader>

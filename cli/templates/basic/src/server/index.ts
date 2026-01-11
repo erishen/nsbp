@@ -24,4 +24,6 @@ app.use((req, res) => {
   render(req, res)
 })
 
-app.listen(3001, () => console.log('NSBP listening on port 3001!'))
+app.listen(3001, () => {
+  // Server started successfully
+})

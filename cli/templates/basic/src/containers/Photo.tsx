@@ -5,13 +5,13 @@ import Header from '../component/Header'
 import Layout from '../component/Layout'
 import { Helmet } from 'react-helmet'
 import { Container, Row } from '../styled/photo'
-import { Motion, spring } from 'react-motion'
+import { motion } from 'framer-motion'
 import { isSEO, getLocationParams } from '../utils'
 import { useCurrentFlag } from '../utils/clientConfig'
 import _ from 'lodash'
 import { loadData } from '../services/photo'
 
-const springSettings = { stiffness: 170, damping: 26 }
+const springSettings = { type: "spring", stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
 const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
@@ -37,17 +37,18 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
     .slice(0, currPhoto)
     .reduce((sum:any, width:any) => sum - width, 0)
 
-  let configs: any = []
-  photos.reduce((prevLeft:any, [origW, origH]:any, i:any) => {
-    configs.push({
-      left: spring(prevLeft, springSettings),
-      height: spring(currHeight, springSettings),
-      width: spring(widths[i] || 0, springSettings)
+  // Calculate position for each photo
+  const photoPositions = photos.reduce((acc:any, [origW, origH]:any, i:any, arr:any) => {
+    const prevLeft = i === 0 ? leftStartCoords : acc[i-1].left + acc[i-1].width
+    acc.push({
+      left: prevLeft,
+      height: currHeight,
+      width: widths[i] || 0
     })
-    return prevLeft + widths[i]
-  }, leftStartCoords)
+    return acc
+  }, [])
 
-  // console.log('configs', configs)
+  // console.log('photoPositions', photoPositions)
 
   const handleChange = ({ target: { value } }: any) => {
     setCurrPhoto(value)
@@ -80,7 +81,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
     // 重置到第一张
     setCurrPhoto(0)
   }, [location?.search])
-  
+
   return (
     <Fragment>
       <Helmet>
@@ -113,31 +114,30 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
             <button onClick={() => clickHandler(NEXT)}>Next</button>
           </Row>
           <div className="demo4">
-            <Motion
-              style={{ height: spring(currHeight), width: spring(currWidth) }}
+            <motion.div
+              className="demo4-inner"
+              animate={{ height: currHeight, width: currWidth }}
+              transition={springSettings}
             >
-              {(container) => (
-                <div className="demo4-inner" style={container}>
-                  {configs.map((style: any, i: any) => (
-                    <Motion key={i} style={style}>
-                      {(style) => {
-                        if (photos[i][2]) {
-                          return (
-                            <img
-                              className="demo4-photo"
-                              src={useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2]}
-                              style={style}
-                            />
-                          )
-                        } else {
-                          return null
-                        }
-                      }}
-                    </Motion>
-                  ))}
-                </div>
-              )}
-            </Motion>
+              {photoPositions.map((pos: any, i: any) => (
+                <motion.img
+                  key={i}
+                  className="demo4-photo"
+                  src={useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2]}
+                  initial={false}
+                  animate={{
+                    left: pos.left,
+                    height: pos.height,
+                    width: pos.width
+                  }}
+                  transition={springSettings}
+                  style={{
+                    position: 'absolute',
+                    top: 0
+                  }}
+                />
+              ))}
+            </motion.div>
           </div>
         </Container>
       </Layout>
@@ -146,7 +146,6 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
 }
 
 const mapStateToProps = (state: any) => {
-  console.info('mapStateToProps_state', state)
   return {
     query: state?.query,
     menu: state?.photo?.menu,

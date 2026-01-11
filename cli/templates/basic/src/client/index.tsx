@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { hydrateRoot } from 'react-dom/client'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import routers from '../Routers'
 import { Provider } from 'react-redux'
 import getStore from '../store'
@@ -10,10 +10,9 @@ import { loadableReady } from '@loadable/component'
 
 const App = () => {
   const [store, setStore] = useState(getStore())
-  console.log('client_state: ', store.getState())
 
   useEffect(() => {
-    if (window?.context?.state) {
+    if (isSEO()) {
       setStore(getStore(window?.context?.state))
     }
   }, [])
@@ -22,11 +21,11 @@ const App = () => {
     <Theme>
       <Provider store={store}>
         <BrowserRouter>
-          <div>
+          <Routes>
             {routers.map((router) => (
-              <Route {...router} />
+              <Route key={router.key} path={router.path} element={router.element} />
             ))}
-          </div>
+          </Routes>
         </BrowserRouter>
       </Provider>
     </Theme>
@@ -34,8 +33,5 @@ const App = () => {
 }
 
 loadableReady(() => {
-  const container = document.getElementById('root')
-  if (container) {
-    hydrateRoot(container, <App />)
-  }
+  const root = hydrateRoot(document.getElementById('root')!, <App />)
 })

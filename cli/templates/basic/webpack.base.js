@@ -1,48 +1,21 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const createStyledComponentsTransformer =
-  require('typescript-plugin-styled-components').default
 const TerserPlugin = require('terser-webpack-plugin')
 const { version } = require('./package.json')
 const LoadablePlugin = require('@loadable/webpack-plugin')
-const { loadableTransformer } = require('loadable-ts-transformer')
 const { createLoadableComponentsTransformer } = require('typescript-loadable-components-plugin')
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-const sass = require('sass')
 
-const styledComponentsTransformer = createStyledComponentsTransformer()
+// const createStyledComponentsTransformer =
+//   require('typescript-plugin-styled-components').default
+// const styledComponentsTransformer = createStyledComponentsTransformer()
 
 module.exports = ({ mode, entry, server, init }) => {
   const config = {
     mode,
     entry,
     devtool: 'source-map',
-    stats: {
-      colors: true,
-      modules: false,
-      chunks: false,
-      warningsFilter: warning => {
-        return !(
-          warning.includes('DeprecationWarning') ||
-          warning.includes('createParameterDeclaration') ||
-          warning.includes('createMethodDeclaration') ||
-          warning.includes('Decorators have been combined with modifiers') ||
-          warning.includes('The legacy JS API is deprecated')
-        )
-      }
-    },
-    ignoreWarnings: [
-      /DeprecationWarning/,
-      /createParameterDeclaration/,
-      /createMethodDeclaration/,
-      /Decorators have been combined with modifiers/
-    ],
-    performance: {
-      hints: false,
-      maxEntrypointSize: 512000,
-      maxAssetSize: 512000
-    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
@@ -67,8 +40,8 @@ module.exports = ({ mode, entry, server, init }) => {
                   ]
                 ],
                 plugins: [
-                  ['@babel/plugin-proposal-class-properties'],
-                  ['@babel/plugin-proposal-optional-chaining'],
+                  ['@babel/plugin-transform-class-properties'],
+                  ['@babel/plugin-transform-optional-chaining'],
                   ["@babel/plugin-syntax-dynamic-import"],
                   ['babel-plugin-styled-components'],
                   ["@loadable/babel-plugin"]
@@ -78,21 +51,17 @@ module.exports = ({ mode, entry, server, init }) => {
             {
               loader: 'ts-loader',
               options: {
-                logInfoToStdOut: false,
-                logLevel: 'error',
+                logInfoToStdOut: true,
+                logLevel: 'info',
                 transpileOnly: true,
-                silent: true,
                 configFile: path.resolve(__dirname, './tsconfig.json'),
-                compilerOptions: {
-                  preserveConstEnums: true
-                },
                 getCustomTransformers: (program) => {
                   // console.log('getCustomTransformers', program)
 
                   return {
                     before: [
                       //createLoadableComponentsTransformer(program, {}),
-                      styledComponentsTransformer,
+                      // styledComponentsTransformer,
                       createLoadableComponentsTransformer(program, {
                         setComponentId: true,
                         setDisplayName: true,
@@ -142,13 +111,7 @@ module.exports = ({ mode, entry, server, init }) => {
               }
             },
             'postcss-loader',
-            {
-              loader: 'sass-loader',
-              options: {
-                implementation: sass,
-                api: 'modern-compiler'
-              }
-            }
+            'sass-loader'
           ]
         },
         {
@@ -168,11 +131,14 @@ module.exports = ({ mode, entry, server, init }) => {
         },
         {
           test: /\.(png|svg|jp?g|webp|gif)$/i,
-          use: ['file-loader', 'webp-loader?{quality: 100}']
+          type: 'asset/resource'
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: ['file-loader']
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[name][ext]'
+          }
         }
       ]
     },
@@ -189,30 +155,26 @@ module.exports = ({ mode, entry, server, init }) => {
 
   if(init){
     config.cache = false
-  } else if(mode === 'development'){
-    config.cache = {
-      type: 'memory',
-      // cacheUnaffected: true,
-    }
   } else {
     config.cache = {
       type: 'filesystem',
       cacheDirectory: path.resolve(__dirname, '.temp_cache'),
+      // type: 'memory',
+      // cacheUnaffected: true,
     }
   }
 
-  // Browsersync disabled to avoid extra port
-  // if(mode === 'development' && !server){
-  //   config.plugins.push(
-  //     new BrowserSyncPlugin(
-  //       {
-  //         host: 'localhost',
-  //         port: 3000,
-  //         proxy: 'http://localhost:3001/'
-  //       }
-  //     )
-  //   )
-  // }
+  if(mode === 'development' && !server){
+    config.plugins.push(
+      new BrowserSyncPlugin(
+        {
+          host: 'localhost',
+          port: 3000,
+          proxy: 'http://localhost:3001/'
+        }
+      )
+    )
+  }
 
   if(mode === 'production' || server){
     config.plugins.push(
@@ -226,11 +188,12 @@ module.exports = ({ mode, entry, server, init }) => {
     if (mode === 'development') {
       config.entry['vendor'] = ['react', 'react-dom']
     } else if (mode === 'production') {
-      config.plugins.push(
+      config.optimization.minimizer.push(
         new TerserPlugin({
           terserOptions: {
             compress: {
               drop_debugger: true,
+              //drop_console: true,
               pure_funcs: ['console.log']
             }
           }

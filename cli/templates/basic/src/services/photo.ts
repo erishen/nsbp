@@ -19,7 +19,6 @@ const getPhotoWH = (dispatch: any, callback: any, dic = '') => {
         callback && callback()
       })
       .catch((e:any) => {
-        console.log('getPhotoWH_e', e)
         callback && callback()
       })
 }
@@ -38,7 +37,6 @@ const getPhotoMenu = (dispatch:any, callback:any) => {
         callback && callback(data)
       })
       .catch((e:any) => {
-        console.log('getPhotoMenu_e', e)
         callback && callback()
       })
 }

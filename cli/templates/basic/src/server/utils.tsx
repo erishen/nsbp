@@ -1,13 +1,12 @@
 import React from 'react' //引入React以支持JSX的语法
 import { renderToString } from 'react-dom/server' //引入renderToString方法
-import { StaticRouter, Route, matchPath } from 'react-router-dom'
+import { StaticRouter, Routes, Route, matchPath } from 'react-router-dom'
 import routers from '../Routers'
 import { Provider } from 'react-redux'
 import getStore from '../store'
 import serialize from 'serialize-javascript'
 import { REQUEST_QUERY } from '../store/constants'
 import { Helmet } from 'react-helmet'
-import { minify } from 'html-minifier'
 import { ServerStyleSheet } from 'styled-components'
 import Theme from '../component/Theme'
 import path from 'path'
@@ -24,7 +23,6 @@ export const render = (req: any, res: any) => {
   const matchRoutes: any = []
   const promises = []
 
-  console.log('path_query_url', reqPath, query, url)
   let { seo } = query
 
   if (seo !== undefined && seo !== '') {
@@ -32,20 +30,28 @@ export const render = (req: any, res: any) => {
   }
 
   routers.some((route) => {
-    matchPath(reqPath, route) ? matchRoutes.push(route) : ''
+    matchPath({ path: route.path, end: true }, reqPath) ? matchRoutes.push(route) : ''
   })
-
-  // console.log('matchRoutes', matchRoutes)
 
   matchRoutes.forEach((item: any) => {
     if (item?.loadData) {
-      // 从 URL 中解析 dic 参数
-      const urlParams = new URLSearchParams(url.split('?')[1] || '')
-      const dic = urlParams.get('dic') || ''
-
       const promise = new Promise((resolve, reject) => {
         try {
-          store.dispatch(item?.loadData(resolve, dic))
+          store.dispatch(item?.loadData(resolve))
+        } catch (e) {
+          reject()
+        }
+      })
+
+      promises.push(promise)
+    }
+  })
+
+  matchRoutes.forEach((item: any) => {
+    if (item?.loadData) {
+      const promise = new Promise((resolve, reject) => {
+        try {
+          store.dispatch(item?.loadData(resolve))
         } catch (e) {
           reject()
         }
@@ -75,14 +81,11 @@ export const render = (req: any, res: any) => {
 
   promises.push(queryPromise)
 
-  // console.log('promises', promises)
-
   Promise.all(promises)
     .then(() => {
       const nodeEnv = process.env.NODE_ENV
       const sheet = new ServerStyleSheet()
       const serverState = store.getState()
-      console.log('server_state: ', serverState)
 
       const helmet: any = Helmet.renderStatic()
 
@@ -98,21 +101,21 @@ export const render = (req: any, res: any) => {
           webEntryPoints = ['client']
         }
 
-        const webExtractor = new ChunkExtractor({ 
-          statsFile: webStats, 
-          entrypoints: webEntryPoints, 
-          publicPath: '/' 
+        const webExtractor = new ChunkExtractor({
+          statsFile: webStats,
+          entrypoints: webEntryPoints,
+          publicPath: '/'
         })
 
         const jsx = webExtractor.collectChunks(sheet.collectStyles(
             <Theme>
               <Provider store={store}>
-                <StaticRouter location={reqPath} context={{}}>
-                  <div>
+                <StaticRouter location={reqPath}>
+                  <Routes>
                     {routers.map((router) => (
-                      <Route {...router} />
+                      <Route key={router.key} path={router.path} element={router.element} />
                     ))}
-                  </div>
+                  </Routes>
                 </StaticRouter>
               </Provider>
             </Theme>
@@ -121,9 +124,6 @@ export const render = (req: any, res: any) => {
 
         const content = renderToString(jsx)
         const styleTags = sheet.getStyleTags()
-
-        // console.log('content', content)
-        // console.log('styleTags', styleTags)
 
         const html = `
               <!DOCTYPE html>
@@ -147,26 +147,12 @@ export const render = (req: any, res: any) => {
               </html>
           `
 
-        if (nodeEnv === 'development') {
-          res.send(html)
-        } else if (nodeEnv === 'production') {
-          res.send(
-            minify(html, {
-              collapseWhitespace: true,
-              conservativeCollapse: true,
-              removeComments: true,
-              minifyCSS: false, // 因为 styled-components 不能使用 minifyCSS
-              minifyJS: true
-            })
-          )
-        }
+        res.send(html)
       } catch (e) {
-        console.log(e)
-      } finally {
         sheet.seal()
       }
     })
     .catch((e) => {
-      console.log('promises_exception', e)
+      // Error handling
     })
 }

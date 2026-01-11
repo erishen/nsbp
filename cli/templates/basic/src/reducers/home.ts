@@ -6,12 +6,10 @@ export const homeReducer = (state = { data: {} }, action: any) => {
 
   switch (type) {
     case GITHUB_ZEITNEXT_GET:
-      // console.log('state', type, state)
       newState = Object.assign({}, state)
 
       if (data) newState.data = data
 
-      console.log('newState', newState)
       return newState
     default:
       return state
