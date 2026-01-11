@@ -1,16 +1,15 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const createStyledComponentsTransformer =
-  require('typescript-plugin-styled-components').default
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const { version } = require('./package.json')
 const LoadablePlugin = require('@loadable/webpack-plugin')
-const { loadableTransformer } = require('loadable-ts-transformer')
 const { createLoadableComponentsTransformer } = require('typescript-loadable-components-plugin')
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
-const styledComponentsTransformer = createStyledComponentsTransformer()
+// const createStyledComponentsTransformer =
+//   require('typescript-plugin-styled-components').default
+// const styledComponentsTransformer = createStyledComponentsTransformer()
 
 module.exports = ({ mode, entry, server, init }) => {
   const config = {
@@ -62,7 +61,7 @@ module.exports = ({ mode, entry, server, init }) => {
                   return {
                     before: [
                       //createLoadableComponentsTransformer(program, {}),
-                      styledComponentsTransformer, 
+                      // styledComponentsTransformer,
                       createLoadableComponentsTransformer(program, {
                         setComponentId: true,
                         setDisplayName: true,
@@ -132,11 +131,14 @@ module.exports = ({ mode, entry, server, init }) => {
         },
         {
           test: /\.(png|svg|jp?g|webp|gif)$/i,
-          use: ['file-loader', 'webp-loader?{quality: 100}']
+          type: 'asset/resource'
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: ['file-loader']
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[name][ext]'
+          }
         }
       ]
     },
@@ -186,9 +188,9 @@ module.exports = ({ mode, entry, server, init }) => {
     if (mode === 'development') {
       config.entry['vendor'] = ['react', 'react-dom']
     } else if (mode === 'production') {
-      config.plugins.push(
-        new UglifyJsPlugin({
-          uglifyOptions: {
+      config.optimization.minimizer.push(
+        new TerserPlugin({
+          terserOptions: {
             compress: {
               drop_debugger: true,
               //drop_console: true,

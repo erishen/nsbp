@@ -10,3 +10,4 @@ public/*.js.map
 public/*.txt
 public/*.json
 .temp_cache
+.serena

@@ -4,7 +4,7 @@ import Layout from '../component/Layout'
 import { connect } from 'react-redux'
 import { isSEO, getLocationParams } from '../utils'
 import { Helmet } from 'react-helmet'
-import { Motion, spring } from 'react-motion'
+import { motion } from 'framer-motion'
 import { Container } from '../styled/home'
 import { loadData } from '../services/home'
 
@@ -81,21 +81,13 @@ const Home = ({ name, data, query, getGithubZeitNext }: any) => {
           </div>
 
           <Container>
-            <Motion style={{ x: spring(open ? 400 : 0) }}>
-              {({ x }) => (
-                // children is a callback which should accept the current value of
-                // `style`
-                <div className="demo0">
-                  <div
-                    className="demo0-block"
-                    style={{
-                      WebkitTransform: `translate3d(${x}px, 0, 0)`,
-                      transform: `translate3d(${x}px, 0, 0)`
-                    }}
-                  />
-                </div>
-              )}
-            </Motion>
+            <div className="demo0">
+              <motion.div
+                className="demo0-block"
+                animate={{ x: open ? 400 : 0 }}
+                transition={{ type: "spring", stiffness: 170, damping: 26 }}
+              />
+            </div>
           </Container>
         </Layout>
       </Fragment>

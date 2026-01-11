@@ -7,7 +7,6 @@ import getStore from '../store'
 import serialize from 'serialize-javascript'
 import { REQUEST_QUERY } from '../store/constants'
 import { Helmet } from 'react-helmet'
-import { minify } from 'html-minifier'
 import { ServerStyleSheet } from 'styled-components'
 import Theme from '../component/Theme'
 import path from 'path'
@@ -143,19 +142,7 @@ export const render = (req: any, res: any) => {
               </html>
           `
 
-        if (nodeEnv === 'development') {
-          res.send(html)
-        } else if (nodeEnv === 'production') {
-          res.send(
-            minify(html, {
-              collapseWhitespace: true,
-              conservativeCollapse: true,
-              removeComments: true,
-              minifyCSS: false, // 因为 styled-components 不能使用 minifyCSS
-              minifyJS: true
-            })
-          )
-        }
+        res.send(html)
       } catch (e) {
         console.log(e)
       } finally {
