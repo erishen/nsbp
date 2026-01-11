@@ -1,0 +1,32 @@
+{
+  "name": "nsbp-cli",
+  "version": "0.1.0",
+  "description": "CLI tool for creating NSBP (Node React SSR by Webpack) projects",
+  "main": "index.js",
+  "bin": {
+    "nsbp": "./bin/nsbp.js"
+  },
+  "scripts": {
+    "start": "node ./bin/nsbp.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sync-template": "node ./scripts/sync-template.js",
+    "update": "npm run sync-template"
+  },
+  "keywords": [
+    "nsbp",
+    "cli",
+    "react",
+    "ssr",
+    "webpack",
+    "scaffold",
+    "generator"
+  ],
+  "author": "Erishen Sun",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^8.2.6"
+  }
+}

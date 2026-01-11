@@ -1,0 +1,102 @@
+# NSBP CLI Changelog
+
+All notable changes to the NSBP CLI project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.1.0] - 2026-01-09
+
+### Added
+- **Initial release**: CLI tool for creating NSBP (Node React SSR by Webpack) projects
+- **Create command**: `nsbp create <project-name>` to scaffold new projects
+- **Template system**: Built-in templates (basic, blog, ecommerce support planned)
+- **Interactive prompts**: Confirmation for overwriting existing directories
+- **Template synchronization**: Smart sync script (`scripts/sync-template.js`) to update CLI templates from main NSBP project
+
+### Changed
+- **Package.json handling**: Automatic template name transformation ("nsbp-template" → user project name)
+- **Build artifact filtering**: Exclude .js.map, .css.map, .txt, .json, .LICENSE.txt files from public directory during sync
+
+### Features
+- **Skip installation option**: `--skip-install` flag to skip npm install
+- **Template selection**: `--template <template>` option (currently basic only)
+- **Help system**: Comprehensive help with `--help` flag
+- **Version info**: `--version` flag to display CLI version
+- **Project info**: `nsbp info` command to display framework information
+
+### Technical Details
+- **Dependencies**: 
+  - `commander` for CLI argument parsing
+  - `chalk` for colored console output
+  - `inquirer` for interactive prompts
+  - `fs-extra` for enhanced file operations
+- **Built-in templates**: Located in `cli/templates/basic/`
+- **Sync script**: Located in `cli/scripts/sync-template.js`
+
+### Usage
+
+#### Installation
+```bash
+# Install globally
+npm install -g nsbp
+
+# Or use with npx (no installation required)
+npx nsbp create my-app
+```
+
+#### Create a new project
+```bash
+# Basic usage
+nsbp create my-app
+
+# Skip npm install
+nsbp create my-app --skip-install
+
+# Specify template (currently basic only)
+nsbp create my-app --template basic
+```
+
+#### Update CLI templates
+```bash
+# Run from CLI directory
+cd /path/to/nsbp/cli
+npm run sync-template
+
+# Or use the update shortcut
+npm run update
+```
+
+#### Display information
+```bash
+# Show NSBP framework information
+nsbp info
+
+# Show CLI version
+nsbp --version
+
+# Show help
+nsbp --help
+```
+
+### Notes
+- This is the initial release of NSBP CLI
+- The CLI currently supports the "basic" template only
+- Blog and ecommerce templates are planned for future releases
+- The sync script automatically filters out build artifacts to keep templates clean
+- All templates are built-in; no external downloads required
+
+---
+
+## Future Plans
+- **Template expansion**: Add blog and ecommerce templates
+- **Advanced configuration**: Custom webpack and TypeScript configuration options
+- **Plugin system**: Support for third-party templates and plugins
+- **CI/CD integration**: Automated testing and deployment workflows
+- **Internationalization**: Multi-language support for CLI output
+
+## Contributing
+Contributions are welcome! Please see the main NSBP project repository for contribution guidelines.
+
+## License
+ISC © Erishen Sun

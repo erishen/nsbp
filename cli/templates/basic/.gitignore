@@ -1,0 +1,12 @@
+.DS_Store
+node_modules
+build
+public/js
+public/css
+public/client.*
+public/*.js
+public/*.js.map
+public/*.txt
+public/*.json
+.temp_cache
+.serena
