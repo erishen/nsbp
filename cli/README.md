@@ -141,12 +141,6 @@ pnpm install  # CLI项目使用pnpm作为包管理器
 node ./bin/nsbp.js --help  # Test CLI locally
 ```
 
-### Publishing Updates
-From the NSBP project root:
-```bash
-make publish-cli  # Syncs templates, updates version, publishes to npm
-```
-
 ## Package Information
 
 - **Package Name**: `nsbp-cli`

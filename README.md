@@ -135,3 +135,13 @@ make rebuild-dev   # 重新构建并启动开发环境
 
 - `NODE_ENV`: 运行环境 (production/development)
 - `PORT`: 服务端口 (默认 3001)
+
+### CLI 发布
+
+从项目根目录发布 CLI 到 npm 注册表：
+
+```bash
+make publish-cli  # 同步模板、更新版本、发布到 npm
+```
+
+注意：此命令仅在项目根目录可用，生成的 NSBP 项目不包含此目标。
