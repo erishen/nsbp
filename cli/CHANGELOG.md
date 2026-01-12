@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.6] - 2026-01-12
+
+### Features
+
+- integrate conventional-changelog for automatic changelog generation
+- integrate README and CHANGELOG updates into make publish-cli
+
+### Other Changes
+
+- docs: update version in README to 0.2.5 and add changelog entry
+
+---
+
 ## [0.1.0] - 2026-01-09
 
 ### Added
@@ -30,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Project info**: `nsbp info` command to display framework information
 
 ### Technical Details
-- **Dependencies**: 
+- **Dependencies**:
   - `commander` for CLI argument parsing
   - `chalk` for colored console output
   - `inquirer` for interactive prompts
@@ -89,35 +102,6 @@ nsbp --help
 - Blog and ecommerce templates are planned for future releases
 - The sync script automatically filters out build artifacts to keep templates clean
 - All templates are built-in; no external downloads required
-
----
-
-## [0.2.3] - 2026-01-12
-
-### Fixed
-
-- **Publish process**: Fixed the `publish-cli` target in Makefile to ensure version bump is committed and tagged automatically after template sync.
-
-### Changed
-
-- **Template update**: Synchronized CLI templates with latest NSBP project changes.
-
----
-
-## [0.2.4] - 2026-01-12
-
-### Changed
-
-- **Documentation**: Updated README.md with improved formatting and added Docker support section.
-- **Package manager**: Corrected package manager information to reflect that CLI project uses pnpm (instead of npm).
-
----
-
-## [0.2.5] - 2026-01-12
-
-### Changed
-
-- **Template synchronization**: Modified sync script to filter out `publish-cli` target from Makefile when copying to template directory, ensuring generated NSBP projects don't have this internal-only target.
 
 ---
 

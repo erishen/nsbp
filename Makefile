@@ -1,5 +1,14 @@
 .PHONY: help build dev prod down clean logs restart publish-cli
 
+# Package manager detection
+PNPM := $(shell which pnpm)
+NPM := $(shell which npm)
+ifeq ($(PNPM),)
+	PM := npm
+else
+	PM := pnpm
+endif
+
 help: ## Show this help message
 	@echo 'Usage: make [target]'
 	@echo ''
@@ -55,7 +64,7 @@ test: ## Run tests (if configured)
 
 publish-cli: ## Publish CLI to npm registry
 	@echo "🚀 Starting CLI publish process..."
-	cd cli && npm run update
+	cd cli && $(PM) run update
 	@echo "📦 Template updated, committing changes..."
 	git add .
 	git diff --quiet && git diff --cached --quiet || git commit -m "chore: update cli template"
@@ -65,7 +74,7 @@ publish-cli: ## Publish CLI to npm registry
 	@NEW_VERSION=$$(cd cli && node -p "require('./package.json').version"); \
 	sed -i '' "s/- \\*\\*Version\\*\\*: \`[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\`/- \\*\\*Version\\*\\*: \`$$NEW_VERSION\`/" cli/README.md
 	@echo "📝 Generating changelog from commit history..."
-	cd cli && npm run update-changelog
+	cd cli && $(PM) run update-changelog
 	@echo "📦 Committing version bump, README and CHANGELOG updates..."
 	git add cli/package.json cli/README.md cli/CHANGELOG.md
 	git commit -m "chore: bump version to v$$(cd cli && node -p "require('./package.json').version")"
