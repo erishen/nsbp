@@ -16,6 +16,58 @@ http://localhost:3001/?seo=1&from=link
 
 **权限问题已修复！** 详细说明见下面的开发环境说明。
 
+### Docker 镜像加速配置（国内用户必看）
+
+如果遇到拉取镜像超时错误（`failed to resolve source metadata for docker.io/library/node:20-alpine`），需要配置 Docker 镜像加速器。
+
+#### macOS / Linux
+
+编辑或创建 `~/.docker/daemon.json`:
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://docker.nju.edu.cn",
+    "https://docker.mirrors.sjtug.sjtu.edu.cn"
+  ]
+}
+```
+
+然后重启 Docker Desktop:
+
+```bash
+# macOS
+killall Docker && open -a Docker
+
+# Linux
+sudo systemctl restart docker
+```
+
+#### Windows
+
+Docker Desktop → Settings → Docker Engine，添加:
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://docker.nju.edu.cn",
+    "https://docker.mirrors.sjtug.sjtu.edu.cn"
+  ]
+}
+```
+
+点击 "Apply & Restart"。
+
+#### 验证配置
+
+```bash
+docker info | grep -A 10 "Registry Mirrors"
+```
+
+### 生产环境
+
 ### 生产环境
 
 使用 Makefile (推荐):

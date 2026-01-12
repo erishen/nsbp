@@ -2,8 +2,8 @@
 
 FROM node:20-alpine
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+# Update apk cache and install dumb-init for proper signal handling
+RUN apk update && apk add dumb-init
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
@@ -40,7 +40,7 @@ exec su-exec nodejs:nodejs "$@"\n' > /entrypoint.sh && \
     chmod +x /entrypoint.sh
 
 # Install su-exec for user switching
-RUN apk add --no-cache su-exec
+RUN apk add su-exec
 
 # Expose port
 EXPOSE 3001
