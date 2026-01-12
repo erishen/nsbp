@@ -145,7 +145,7 @@ node ./bin/nsbp.js --help  # Test CLI locally
 
 - **Package Name**: `nsbp-cli`
 - **Bin Command**: `nsbp` (install globally and run `nsbp --help`)
-- **Version**: `0.2.4`
+- **Version**: `0.2.5`
 - **Dependencies**: chalk, commander, fs-extra, inquirer
 - **Package Manager**: Uses pnpm (also compatible with npm)
 - **Node Version**: >=16.0.0

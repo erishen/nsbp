@@ -7,10 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- **Template synchronization**: Modified sync script to filter out `publish-cli` target from Makefile when copying to template directory, ensuring generated NSBP projects don't have this internal-only target.
-
 ---
 
 ## [0.1.0] - 2026-01-09
@@ -114,6 +110,14 @@ nsbp --help
 
 - **Documentation**: Updated README.md with improved formatting and added Docker support section.
 - **Package manager**: Corrected package manager information to reflect that CLI project uses pnpm (instead of npm).
+
+---
+
+## [0.2.5] - 2026-01-12
+
+### Changed
+
+- **Template synchronization**: Modified sync script to filter out `publish-cli` target from Makefile when copying to template directory, ensuring generated NSBP projects don't have this internal-only target.
 
 ---
 
