@@ -76,8 +76,11 @@ program
             fs.copySync(source, target, {
               filter: (src) => {
                 // Exclude node_modules, build, .temp_cache, etc.
+                // Use relative path to avoid matching parent directory names
+                const relativePath = path.relative(source, src);
+                const segments = relativePath.split(path.sep);
                 const excluded = ['node_modules', '.temp_cache', 'build', '.git', '.DS_Store', '.serena'];
-                return !excluded.some(ex => src.includes(ex));
+                return !segments.some(seg => excluded.includes(seg));
               }
             });
           } else {

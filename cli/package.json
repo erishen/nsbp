@@ -1,11 +1,11 @@
 {
   "name": "nsbp-cli",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "CLI tool for creating NSBP (Node React SSR by Webpack) projects",
   "main": "index.js",
   "files": [
-    "bin",
-    "templates",
+    "bin/**/*",
+    "templates/**/*",
     "README.md"
   ],
   "bin": {
