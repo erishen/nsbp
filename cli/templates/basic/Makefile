@@ -1,5 +1,14 @@
 .PHONY: help build dev prod down clean logs restart
 
+# Package manager detection
+PNPM := $(shell which pnpm)
+NPM := $(shell which npm)
+ifeq ($(PNPM),)
+	PM := npm
+else
+	PM := pnpm
+endif
+
 help: ## Show this help message
 	@echo 'Usage: make [target]'
 	@echo ''
