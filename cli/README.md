@@ -28,8 +28,8 @@ Create a new NSBP project with a single command:
 ```bash
 nsbp create my-app
 cd my-app
-npm install
-npm run dev
+pnpm install  # NSBP CLI uses pnpm as package manager
+pnpm run dev
 ```
 
 For development with Docker (recommended):
@@ -110,7 +110,8 @@ Location: `cli/scripts/sync-template.js`
 ### Usage
 ```bash
 cd cli
-npm run update  # Runs sync-template script
+pnpm run update  # CLI项目使用pnpm，运行同步脚本
+# 或者使用 npm run update（兼容）
 ```
 
 ### Features
@@ -136,7 +137,7 @@ To work on the CLI locally:
 
 ```bash
 cd cli
-npm install
+pnpm install  # CLI项目使用pnpm作为包管理器
 node ./bin/nsbp.js --help  # Test CLI locally
 ```
 
@@ -150,8 +151,9 @@ make publish-cli  # Syncs templates, updates version, publishes to npm
 
 - **Package Name**: `nsbp-cli`
 - **Bin Command**: `nsbp` (install globally and run `nsbp --help`)
-- **Version**: `0.2.3`
+- **Version**: `0.2.4`
 - **Dependencies**: chalk, commander, fs-extra, inquirer
+- **Package Manager**: Uses pnpm (also compatible with npm)
 - **Node Version**: >=16.0.0
 
 ## License
