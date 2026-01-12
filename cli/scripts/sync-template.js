@@ -68,6 +68,49 @@ const SPECIAL_FILES = {
     // 确保版本号
     pkg.version = '1.0.0';
     return JSON.stringify(pkg, null, 2);
+  },
+  'Makefile': (content) => {
+    // 从 .PHONY 行中移除 publish-cli
+    let lines = content.split('\n');
+    let resultLines = [];
+    let skip = false;
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      
+      // 处理 .PHONY 行
+      if (line.startsWith('.PHONY:')) {
+        // 移除 publish-cli 并清理多余的逗号
+        const cleaned = line.replace(/\s+publish-cli/g, '').replace(/\s*,\s*$/, '');
+        resultLines.push(cleaned);
+        continue;
+      }
+      
+      // 跳过 publish-cli 目标定义
+      if (line.startsWith('publish-cli:')) {
+        skip = true;
+        continue;
+      }
+      
+      // 如果遇到空行，停止跳过（表示目标块结束）
+      if (skip && line.trim() === '') {
+        skip = false;
+        // 不添加这个空行，避免多余的空行
+        continue;
+      }
+      
+      // 如果 skip 为 false，添加行
+      if (!skip) {
+        resultLines.push(line);
+      }
+    }
+    
+    // 确保文件末尾没有多余的空行
+    while (resultLines.length > 0 && resultLines[resultLines.length - 1] === '') {
+      resultLines.pop();
+    }
+    
+    return resultLines.join('\n');
   }
 };
 
