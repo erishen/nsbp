@@ -88,6 +88,27 @@ nsbp --help
 
 ---
 
+## [0.2.3] - 2026-01-12
+
+### Fixed
+
+- **Publish process**: Fixed the `publish-cli` target in Makefile to ensure version bump is committed and tagged automatically after template sync.
+
+### Changed
+
+- **Template update**: Synchronized CLI templates with latest NSBP project changes.
+
+---
+
+## [0.2.4] - 2026-01-12
+
+### Changed
+
+- **Documentation**: Updated README.md with improved formatting and added Docker support section.
+- **Package manager**: Corrected package manager information to reflect that CLI project uses pnpm (instead of npm).
+
+---
+
 ## Future Plans
 - **Template expansion**: Add blog and ecommerce templates
 - **Advanced configuration**: Custom webpack and TypeScript configuration options
