@@ -347,7 +347,7 @@ export const getPhotoMenu = (req: any, res: any) => {
             <QuickStartGrid>
               <QuickStartCard>
                 <QuickStartTitle>1️⃣ 创建项目</QuickStartTitle>
-                <QuickStartCode>$ npx nsbp create my-app</QuickStartCode>
+                <QuickStartCode>$ npx nsbp-cli create my-app</QuickStartCode>
                 <QuickStartDescription>
                   使用 CLI 工具创建新项目
                 </QuickStartDescription>
