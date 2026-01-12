@@ -15,7 +15,8 @@
     "start": "node ./bin/nsbp.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "sync-template": "node ./scripts/sync-template.js",
-    "update": "npm run sync-template"
+    "update": "npm run sync-template",
+    "update-changelog": "node ./scripts/update-changelog.js"
   },
   "keywords": [
     "nsbp",

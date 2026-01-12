@@ -61,8 +61,14 @@ publish-cli: ## Publish CLI to npm registry
 	git diff --quiet && git diff --cached --quiet || git commit -m "chore: update cli template"
 	@echo "🔖 Updating version..."
 	cd cli && npm version patch --no-git-tag-version
-	@echo "📝 Committing version bump..."
-	git add cli/package.json
+	@echo "🔄 Updating README.md with new version..."
+	@NEW_VERSION=$$(cd cli && node -p "require('./package.json').version"); \
+	sed -i '' "s/- \\*\\*Version\\*\\*: \`[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\`/- \\*\\*Version\\*\\*: \`$$NEW_VERSION\`/" cli/README.md
+	@echo "📝 Updating CHANGELOG.md with new version..."
+	@TODAY=$$(date +%Y-%m-%d); \
+	cd cli && npm run update-changelog -- $$NEW_VERSION $$TODAY
+	@echo "📦 Committing version bump, README and CHANGELOG updates..."
+	git add cli/package.json cli/README.md cli/CHANGELOG.md
 	git commit -m "chore: bump version to v$$(cd cli && node -p "require('./package.json').version")"
 	@echo "🏷️  Creating git tag..."
 	git tag -a "v$$(cd cli && node -p "require('./package.json').version")" -m "Version $$(cd cli && node -p "require('./package.json').version")"
