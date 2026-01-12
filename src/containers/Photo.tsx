@@ -123,7 +123,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
                 <motion.img
                   key={i}
                   className="demo4-photo"
-                  src={useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2]}
+                  src={photos[i][2] ? (useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2]) : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='}
                   initial={false}
                   animate={{
                     left: pos.left,

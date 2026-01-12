@@ -1,0 +1,37 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: nsbp-app-dev
+    ports:
+      - "3001:3001"
+      - "9229:9229"  # Node.js debug port
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./scripts:/app/scripts
+      - ./webpack.base.js:/app/webpack.base.js
+      - ./webpack.client.js:/app/webpack.client.js
+      - ./webpack.server.js:/app/webpack.server.js
+      - ./tsconfig.json:/app/tsconfig.json
+      # Persist node_modules
+      - node_modules:/app/node_modules
+      # Build output - named volume for persistence
+      - build_output:/app/build
+    command: ["dumb-init", "--", "npm", "run", "dev"]
+    restart: unless-stopped
+    networks:
+      - nsbp-network
+
+volumes:
+  node_modules:
+  build_output:
+
+networks:
+  nsbp-network:
+    driver: bridge

@@ -1,6 +1,10 @@
 .DS_Store
+
+# Dependencies
 node_modules
 package-lock.json
+
+# Build outputs
 build
 public/js
 public/css
@@ -10,4 +14,6 @@ public/*.js.map
 public/*.txt
 public/*.json
 .temp_cache
+
+# Development tools
 .serena
