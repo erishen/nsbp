@@ -59,7 +59,14 @@ publish-cli: ## Publish CLI to npm registry
 	@echo "📦 Template updated, committing changes..."
 	git add .
 	git diff --quiet && git diff --cached --quiet || git commit -m "chore: update cli template"
-	cd cli && npm version patch
+	@echo "🔖 Updating version..."
+	cd cli && npm version patch --no-git-tag-version
+	@echo "📝 Committing version bump..."
+	git add cli/package.json
+	git commit -m "chore: bump version to v$$(cd cli && node -p "require('./package.json').version")"
+	@echo "🏷️  Creating git tag..."
+	git tag -a "v$$(cd cli && node -p "require('./package.json').version")" -m "Version $$(cd cli && node -p "require('./package.json').version")"
+	@echo "📤 Publishing to npm..."
 	cd cli && npm publish
 	@echo "📤 Pushing to git repository..."
 	git push --follow-tags
