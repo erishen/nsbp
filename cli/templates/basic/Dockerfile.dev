@@ -1,0 +1,52 @@
+# Development Dockerfile
+
+FROM node:20-alpine
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+# Create non-root user
+RUN addgroup -u 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first to leverage Docker cache
+COPY package*.json ./
+
+# Install pnpm and all dependencies (including devDependencies)
+RUN npm install -g pnpm && pnpm install && pnpm store prune
+
+# Copy application code
+COPY . .
+
+# Create build directory with proper permissions
+RUN mkdir -p /app/build && \
+    chown -R nodejs:nodejs /app
+
+# Create entrypoint script to fix volume permissions
+RUN printf '#!/bin/sh\n\
+# Fix permissions for volume mounts before switching user\n\
+if [ -d "/app/build" ]; then\n\
+  chown -R nodejs:nodejs /app/build 2>/dev/null || true\n\
+  chmod -R 755 /app/build 2>/dev/null || true\n\
+fi\n\
+if [ -d "/app/node_modules" ]; then\n\
+  chown -R nodejs:nodejs /app/node_modules 2>/dev/null || true\n\
+fi\n\
+# Switch to nodejs user and execute command\n\
+exec su-exec nodejs:nodejs "$@"\n' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Install su-exec for user switching
+RUN apk add --no-cache su-exec
+
+# Expose port
+EXPOSE 3001
+
+# Use entrypoint (runs as root, fixes perms, then switches to nodejs)
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Start development server
+CMD ["dumb-init", "--", "npm", "run", "dev"]

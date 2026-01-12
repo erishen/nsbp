@@ -47,7 +47,7 @@ const getFileMenu = (dir: string): { name: string; cover?: string; count?: numbe
       const count = files.length
 
       // 在该目录下找 cover.jpg
-      let cover = undefined
+      let cover = ''
       const coverPath = path.join(fullPath, 'cover.jpg')
       if (fs.existsSync(coverPath)) {
         // 转成相对 public 的 URL 路径

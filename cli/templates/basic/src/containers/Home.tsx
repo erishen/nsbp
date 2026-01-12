@@ -394,7 +394,7 @@ export const getPhotoMenu = (req: any, res: any) => {
                     <PhotoCard>
                       <PhotoImageWrapper>
                         <PhotoImage
-                          src={item.cover}
+                          src={item.cover || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='}
                           alt={item.name}
                           loading="lazy"
                         />

@@ -227,11 +227,12 @@ module.exports = ({ mode, entry, server, init }) => {
             },
             name(module) {
               //名字就是包当中的名字
-              return (
-                /[\\/]node_modules[\\/](.*)/.exec(module.identifier()) &&
-                /[\\/]node_modules[\\/](.*)/.exec(module.identifier()).length &&
-                /[\\/]node_modules[\\/](.*)/.exec(module.identifier())[1].replace(/\/|\\/g, '_')
-              )
+              const match = /[\\/]node_modules[\\/](.*)/.exec(module.identifier())
+              if (match && match.length) {
+                // 移除开头的点号，避免生成隐藏文件
+                return match[1].replace(/\/|\\/g, '_').replace(/^\./, '')
+              }
+              return false
             },
             minChunks: 1, //最小共用次数为1时就使用
             priority: 30, //权重为30

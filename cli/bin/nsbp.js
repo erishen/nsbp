@@ -63,6 +63,12 @@ program
         '.prettierrc',
         '.prettierignore',
         '.gitignore',
+        '.dockerignore',
+        'docker-compose.yml',
+        'docker-compose.dev.yml',
+        'Dockerfile',
+        'Dockerfile.dev',
+        'Makefile',
         'README.md'
       ];
 
