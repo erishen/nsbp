@@ -7,12 +7,15 @@ const path = require('path');
 const { execSync } = require('child_process');
 const inquirer = require('inquirer');
 
+// Read version from package.json dynamically
+const packageJson = require('../package.json');
+
 const program = new Command();
 
 program
   .name('nsbp')
   .description('CLI tool to create NSBP (Node React SSR by Webpack) projects')
-  .version('0.1.0');
+  .version(packageJson.version);
 
 program
   .command('create <project-name>')
