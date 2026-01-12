@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.7] - 2026-01-12
+
+### Features
+
+- integrate conventional-changelog for automatic changelog generation
+- integrate README and CHANGELOG updates into make publish-cli
+
+### Other Changes
+
+- chore: update cli template
+- docs: update version in README to 0.2.5 and add changelog entry
+
+---
+
 ## [0.2.6] - 2026-01-12
 
 ### Features
