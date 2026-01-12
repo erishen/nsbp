@@ -16,7 +16,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "sync-template": "node ./scripts/sync-template.js",
     "update": "npm run sync-template",
-    "update-changelog": "node ./scripts/update-changelog.js"
+    "update-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "keywords": [
     "nsbp",
@@ -42,6 +43,9 @@
     "commander": "^11.0.0",
     "fs-extra": "^11.2.0",
     "inquirer": "^8.2.6"
+  },
+  "devDependencies": {
+    "conventional-changelog-cli": "^2.2.2"
   },
   "engines": {
     "node": ">=16.0.0"

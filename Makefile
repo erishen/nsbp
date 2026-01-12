@@ -64,9 +64,8 @@ publish-cli: ## Publish CLI to npm registry
 	@echo "🔄 Updating README.md with new version..."
 	@NEW_VERSION=$$(cd cli && node -p "require('./package.json').version"); \
 	sed -i '' "s/- \\*\\*Version\\*\\*: \`[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\`/- \\*\\*Version\\*\\*: \`$$NEW_VERSION\`/" cli/README.md
-	@echo "📝 Updating CHANGELOG.md with new version..."
-	@TODAY=$$(date +%Y-%m-%d); \
-	cd cli && npm run update-changelog -- $$NEW_VERSION $$TODAY
+	@echo "📝 Generating changelog from commit history..."
+	cd cli && npm run update-changelog
 	@echo "📦 Committing version bump, README and CHANGELOG updates..."
 	git add cli/package.json cli/README.md cli/CHANGELOG.md
 	git commit -m "chore: bump version to v$$(cd cli && node -p "require('./package.json').version")"
