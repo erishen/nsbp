@@ -4,148 +4,155 @@ Command-line interface for creating NSBP (Node React SSR by Webpack) projects.
 
 📦 **Published on npm**: [https://www.npmjs.com/package/nsbp-cli](https://www.npmjs.com/package/nsbp-cli)
 
-## Installation from npm
+## Installation
 
-Install globally from npm registry:
-
-\`\`\`bash
-# Install globally
+### Global Installation (npm)
+```bash
 npm install -g nsbp-cli
+```
 
-# Or use npx (no installation required)
+### Using npx (No Installation)
+```bash
 npx nsbp-cli create my-app
+```
 
-# Verify installation
-nsbp-cli --version
-\`\`\`
+### Verify Installation
+```bash
+nsbp --version
+```
 
-## Local Usage
+## Quick Start
 
-The CLI is also located in \`cli/\` directory of the NSBP project. Run it locally for development:
+Create a new NSBP project with a single command:
 
-\`\`\`bash
-# Navigate to CLI directory
-cd cli
+```bash
+nsbp create my-app
+cd my-app
+npm install
+npm run dev
+```
 
-# Show help
-node ./bin/nsbp-cli.js --help
+For development with Docker (recommended):
+```bash
+cd my-app
+make dev  # Starts development environment with hot reload
+```
 
-# Show NSBP information
-node ./bin/nsbp-cli.js info
+## Command Reference
 
-# Create a new project
-node ./bin/nsbp-cli.js create my-app
+### Create a New Project
+```bash
+nsbp create <app-name> [options]
 
-# Skip npm install
-node ./bin/nsbp-cli.js create my-app --skip-install
-\`\`\`
+# Examples
+nsbp create my-app
+nsbp create my-app --skip-install  # Skip npm install
+nsbp create my-app --template basic  # Specify template (basic is default)
+```
 
-## Usage
-
-### Create a new project
-
-\`\`\`bash
-# From npm (after global install)
-nsbp-cli create my-app
-
-# From npx
-npx nsbp-cli create my-app
-
-# From local CLI directory
-node ./bin/nsbp-cli.js create my-app
-
-# Skip npm install
-nsbp-cli create my-app --skip-install
-
-# Specify template (currently only basic is available)
-nsbp-cli create my-app --template basic
-\`\`\`
-
-### Display information
-
-\`\`\`bash
-# Show NSBP framework information
-nsbp-cli info
-\`\`\`
+### Display Framework Information
+```bash
+nsbp info
+```
 
 ### Help
-
-\`\`\`bash
-# Show all commands
-nsbp-cli --help
-
-# Show create command help
-nsbp-cli create --help
-\`\`\`
+```bash
+nsbp --help          # Show all commands
+nsbp create --help   # Show create command options
+```
 
 ## Templates
 
-- **basic**: Default template with core NSBP features (currently available)
-- **blog**: Blog-focused template with article layouts (coming soon)
-- **ecommerce**: E-commerce template with product pages (coming soon)
+The CLI provides project templates to get started quickly:
 
-## How it works
+- **basic** (default) - Complete NSBP stack with React SSR, TypeScript, and Webpack
+  - Includes full Docker support for development and production
+  - Pre-configured with Makefile for easy Docker operations
+  - Ready-to-use project structure
 
-The CLI copies NSBP project structure from \`templates/basic/\` to your target directory and creates a new \`package.json\` with appropriate dependencies. You get a fully functional NSBP project ready for development.
+- **blog** - Blog-focused template with article layouts (coming soon)
+- **ecommerce** - E-commerce template with product pages (coming soon)
+
+## Docker Support
+
+The **basic** template includes comprehensive Docker configuration:
+
+### Docker Files Included
+- `.dockerignore` - Docker build ignore rules
+- `docker-compose.yml` - Production environment configuration
+- `docker-compose.dev.yml` - Development environment with hot reload
+- `Dockerfile` - Multi-stage production build
+- `Dockerfile.dev` - Development build
+- `Makefile` - Convenient Docker commands
+
+### Available Make Commands
+```bash
+make dev      # Start development environment (hot reload)
+make prod     # Start production environment
+make rebuild  # Rebuild and restart production containers
+make logs     # View container logs
+make down     # Stop and remove containers
+make shell    # Open shell in production container
+make shell-dev # Open shell in development container
+```
+
+## How It Works
+
+The CLI copies the NSBP project structure from `templates/basic/` to your target directory and creates a new `package.json` with appropriate dependencies. You get a fully functional NSBP project ready for development, including complete Docker support.
 
 ## Template Synchronization
 
 The CLI includes a synchronization script that keeps built-in templates up-to-date with the main NSBP project code.
 
 ### Sync Script
-Location: \`cli/scripts/sync-template.js\`
+Location: `cli/scripts/sync-template.js`
 
 ### Usage
-\`\`\`bash
-# From CLI directory
-cd /path/to/nsbp-cli/cli
-
-# Run sync script
-pnpm run sync-template
-# or
-npm run sync-template
-
-# Or use to update shortcut
-pnpm run update
-# or
-npm run update
-\`\`\`
+```bash
+cd cli
+npm run update  # Runs sync-template script
+```
 
 ### Features
-- **Smart copying**: Copies only source code and configuration files
-- **Build artifact filtering**: Automatically excludes .js.map, .css.map, .txt, .json, and .LICENSE.txt files from the public directory
-- **Template transformation**: Converts main project's package.json to template format (name: "nsbp-cli-template")
-- **Integrity verification**: Checks for required files like src/Routers.tsx, scripts/start.js, and package.json
+- **Smart copying** - Copies only source code and configuration files
+- **Build artifact filtering** - Automatically excludes build artifacts from the public directory
+- **Template transformation** - Converts main project's package.json to template format
+- **Integrity verification** - Checks for required files before synchronization
 
-### What gets synchronized
-- \`src/\` - React components and routing
-- \`public/\` - Static assets (images, favicon.ico)
-- \`scripts/\` - Startup and utility scripts
-- \`webpack.*.js\` - Webpack configuration files
-- \`tsconfig.json\` - TypeScript configuration
-- \`postcss.config.js\` - PostCSS configuration
-- \`package.json\` - Project configuration (automatically templatized)
-- \`.gitignore\`, \`.prettierrc\`, \`.prettierignore\`, \`README.md\`
+### Synchronized Files
+- `src/` - React components and routing
+- `public/` - Static assets
+- `scripts/` - Startup and utility scripts
+- `webpack.*.js` - Webpack configuration
+- `tsconfig.json` - TypeScript configuration
+- `postcss.config.js` - PostCSS configuration
+- `package.json` - Project configuration (templatized)
+- `.gitignore`, `.prettierrc`, `.prettierignore`, `README.md`
+- **Docker files**: `.dockerignore`, `docker-compose.yml`, `docker-compose.dev.yml`, `Dockerfile`, `Dockerfile.dev`, `Makefile`
 
 ## Development
 
 To work on the CLI locally:
 
-\`\`\`bash
+```bash
 cd cli
-pnpm install
-# or
 npm install
-node ./bin/nsbp-cli.js create test-app
-\`\`\`
+node ./bin/nsbp.js --help  # Test CLI locally
+```
+
+### Publishing Updates
+From the NSBP project root:
+```bash
+make publish-cli  # Syncs templates, updates version, publishes to npm
+```
 
 ## Package Information
 
-- **Package Name**: \`nsbp-cli\`
-- **Bin Command**: \`nsbp-cli\`
-- **Version**: \`0.1.0\`
+- **Package Name**: `nsbp-cli`
+- **Bin Command**: `nsbp` (install globally and run `nsbp --help`)
+- **Version**: `0.2.3`
 - **Dependencies**: chalk, commander, fs-extra, inquirer
-- **Package Manager**: Supports both npm and pnpm
+- **Node Version**: >=16.0.0
 
 ## License
 
