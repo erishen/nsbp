@@ -72,7 +72,7 @@ publish-cli: ## Publish CLI to npm registry
 	cd cli && npm version patch --no-git-tag-version
 	@echo "🔄 Updating README.md with new version..."
 	@NEW_VERSION=$$(cd cli && node -p "require('./package.json').version"); \
-	sed -i '' "s/- \\*\\*Version\\*\\*: \`[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\`/- \\*\\*Version\\*\\*: \`$$NEW_VERSION\`/" cli/README.md
+	sed -i '' "s/- \*\*Version\*\*: \`[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\`/- \*\*Version\*\*: \`\$$NEW_VERSION\`/" cli/README.md
 	@echo "📝 Generating changelog from commit history..."
 	cd cli && $(PM) run update-changelog
 	@echo "📦 Committing version bump, README and CHANGELOG updates..."
