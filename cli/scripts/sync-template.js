@@ -24,8 +24,14 @@ const COPY_ITEMS = [
   'tsconfig.json',
   'postcss.config.js',
   '.gitignore',
+  '.dockerignore',
   '.prettierrc',
   '.prettierignore',
+  'docker-compose.yml',
+  'docker-compose.dev.yml',
+  'Dockerfile',
+  'Dockerfile.dev',
+  'Makefile',
   'README.md',
   'package.json'
 ];

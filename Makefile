@@ -1,4 +1,4 @@
-.PHONY: help build dev prod down clean logs restart
+.PHONY: help build dev prod down clean logs restart publish-cli
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -52,3 +52,15 @@ shell-dev: ## Open shell in development container
 
 test: ## Run tests (if configured)
 	docker-compose exec app npm test
+
+publish-cli: ## Publish CLI to npm registry
+	@echo "🚀 Starting CLI publish process..."
+	cd cli && npm run update
+	@echo "📦 Template updated, committing changes..."
+	git add .
+	git diff --quiet && git diff --cached --quiet || git commit -m "chore: update cli template"
+	cd cli && npm version patch
+	cd cli && npm publish
+	@echo "📤 Pushing to git repository..."
+	git push --follow-tags
+	@echo "✅ CLI published successfully!"
