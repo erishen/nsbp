@@ -1,10 +1,15 @@
-import React from 'react' //引入React以支持JSX的语法
-import { renderToString } from 'react-dom/server' //引入renderToString方法
-import { StaticRouter, Routes, Route, matchPath } from 'react-router-dom'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { StaticRouter, Route, matchPath } from 'react-router-dom'
+// @ts-ignore - Routes is available in react-router-dom v7 but not in types
+import { Routes } from 'react-router-dom'
 import routers from '../Routers'
+// @ts-ignore
 import { Provider } from 'react-redux'
+// @ts-ignore
 import getStore from '../store'
 import serialize from 'serialize-javascript'
+// @ts-ignore
 import { REQUEST_QUERY } from '../store/constants'
 import { Helmet } from 'react-helmet'
 import { ServerStyleSheet } from 'styled-components'
@@ -12,14 +17,9 @@ import Theme from '../component/Theme'
 import path from 'path'
 import { ChunkExtractor } from '@loadable/server'
 
-const removeCommentsAndSpacing = (str = '') =>
-  str.replace(/\/\*.*\*\//g, ' ').replace(/\s+/g, ' ')
-
-const removeSpacing = (str = '') => str.replace(/\s+/g, ' ')
-
 export const render = (req: any, res: any) => {
   const store = getStore()
-  const { path:reqPath, query, url } = req
+  const { path:reqPath, query } = req
   const matchRoutes: any = []
   const promises = []
 
@@ -30,21 +30,7 @@ export const render = (req: any, res: any) => {
   }
 
   routers.some((route) => {
-    matchPath({ path: route.path, end: true }, reqPath) ? matchRoutes.push(route) : ''
-  })
-
-  matchRoutes.forEach((item: any) => {
-    if (item?.loadData) {
-      const promise = new Promise((resolve, reject) => {
-        try {
-          store.dispatch(item?.loadData(resolve))
-        } catch (e) {
-          reject()
-        }
-      })
-
-      promises.push(promise)
-    }
+    matchPath(reqPath, route.path) ? matchRoutes.push(route) : ''
   })
 
   matchRoutes.forEach((item: any) => {
@@ -148,11 +134,14 @@ export const render = (req: any, res: any) => {
           `
 
         res.send(html)
-      } catch (e) {
+      } catch (e: any) {
+        console.error('SSR rendering error:', e)
         sheet.seal()
+        res.status(500).send('Internal Server Error')
       }
     })
-    .catch((e) => {
-      // Error handling
+    .catch((e: any) => {
+      console.error('Data loading error:', e)
+      res.status(500).send('Data loading failed')
     })
 }

@@ -24,6 +24,7 @@ app.use((req, res) => {
   render(req, res)
 })
 
-app.listen(3001, () => {
-  // Server started successfully
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`)
 })

@@ -2,9 +2,6 @@
 import fs from "fs"
 import path from "path"
 import probe from 'probe-image-size'
-import { useCurrentFlag, outPhotoDic, outPhotoSep, outPhotoDicPath } from '../utils/config'
-
-const CURRENT_DIC = 'images'
 
 // 获取项目根目录（无论从哪个目录运行服务器）
 const getProjectRoot = () => {
@@ -67,10 +64,22 @@ export const getPhotoWH = (req: any, res: any) => {
     const dic = req.query.dic || ''
     const photosDicPath = getPhotosDicPath()
 
+    // 验证 dic 参数，只允许字母数字、下划线和短横线
+    if (dic && !/^[a-zA-Z0-9_-]+$/.test(dic)) {
+      return res.status(400).json({ error: 'Invalid directory name' })
+    }
+
     const fileList: any = []
     let photoPath = photosDicPath
     if (dic) {
       photoPath = path.join(photosDicPath, dic)
+    }
+
+    // 确保路径在允许的目录内，防止路径遍历攻击
+    const resolvedPhotoPath = path.resolve(photoPath)
+    const resolvedPhotosDicPath = path.resolve(photosDicPath)
+    if (!resolvedPhotoPath.startsWith(resolvedPhotosDicPath)) {
+      return res.status(403).json({ error: 'Access denied' })
     }
 
     const getFileList = (dir: string, list: string[]) => {
@@ -99,12 +108,13 @@ export const getPhotoWH = (req: any, res: any) => {
 
     // 按前端期望的格式包装
     res.json({ data: whArr })
-  } catch (err) {
+  } catch (err: any) {
+    console.error('getPhotoWH error:', err)
     res.status(500).json({ error: 'Internal Server Error', details: err.message })
   }
 }
 
-export const getPhotoMenu = (req: any, res: any) => {
+export const getPhotoMenu = (_req: any, res: any) => {
   try {
     const photosDicPath = getPhotosDicPath()
 
@@ -112,7 +122,8 @@ export const getPhotoMenu = (req: any, res: any) => {
 
     // 按前端期望的格式包装
     res.json({ data: fileMenu })
-  } catch (err) {
+  } catch (err: any) {
+    console.error('getPhotoMenu error:', err)
     res.status(500).json({ error: 'Internal Server Error', details: err.message })
   }
 }

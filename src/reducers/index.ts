@@ -4,15 +4,10 @@ import { REQUEST_QUERY } from '../store/constants'
 
 const queryReducer = (state = {}, action: any) => {
   const { type, query } = action
-  let newState = null
 
   switch (type) {
     case REQUEST_QUERY:
-      newState = {
-        ...query
-      }
-
-      return newState
+      return { ...query }
     default:
       return state
   }

@@ -1,31 +1,23 @@
-export const getLocationParams = (param: any) => {
-  let result = ''
-  if (param !== '') {
-    const href = window?.location?.href
-    if (href && href.indexOf('?') !== -1) {
-      const query = href.split('?')[1]
-      const queryArr = query.split('&')
+export const getLocationParams = (param: string) => {
+  if (typeof window === 'undefined') return ''
 
-      queryArr.forEach((item) => {
-        const itemArr = item.split('=')
-
-        if (param.toLowerCase() === itemArr[0].toLowerCase()) {
-          result = itemArr[1]
-          return false
-        }
-      })
-    }
+  try {
+    const url = new URL(window.location.href)
+    const value = url.searchParams.get(param)
+    return value || ''
+  } catch (e) {
+    console.error('Failed to parse URL:', e)
+    return ''
   }
-  return result
 }
 
 export const isSEO = () => {
   if (typeof window !== 'undefined') {
-    let seo: any = getLocationParams('seo')
+    const seo = getLocationParams('seo')
     if (seo !== '') {
-      seo = parseInt(seo, 10)
+      return parseInt(seo, 10)
     }
-    return seo
+    return 0
   }
   return 0
 }
