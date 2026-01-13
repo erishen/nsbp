@@ -250,6 +250,13 @@ async function syncTemplate() {
     }
   }
 
+  // Rename .gitignore to gitignore for npm packaging
+  const gitignorePath = path.join(TARGET_DIR, '.gitignore');
+  if (fs.existsSync(gitignorePath)) {
+    await fs.rename(gitignorePath, path.join(TARGET_DIR, 'gitignore'));
+    console.log(chalk.green(`  重命名: .gitignore -> gitignore`));
+  }
+
   // 确保必要的目录存在（即使源目录为空）
   const requiredDirs = ['public/css', 'public/js', 'public/images'];
   for (const dir of requiredDirs) {
