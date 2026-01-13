@@ -62,7 +62,7 @@ program
         'postcss.config.js',
         '.prettierrc',
         '.prettierignore',
-        '.gitignore',
+        'gitignore',
         '.dockerignore',
         'docker-compose.yml',
         'docker-compose.dev.yml',
@@ -93,6 +93,12 @@ program
             fs.copySync(source, target);
           }
         }
+      }
+
+      // Rename gitignore to .gitignore
+      const gitignorePath = path.join(targetDir, 'gitignore');
+      if (fs.existsSync(gitignorePath)) {
+        fs.renameSync(gitignorePath, path.join(targetDir, '.gitignore'));
       }
 
       // Create package.json for new project

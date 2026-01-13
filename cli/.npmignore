@@ -7,3 +7,6 @@ node_modules
 coverage
 dist
 build
+
+# Don't ignore .gitignore in templates
+!templates/**/.gitignore
