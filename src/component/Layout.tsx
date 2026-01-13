@@ -4,7 +4,7 @@ import Loading from './Loading'
 
 const Layout = ({ children, query }: any) => {
   let seo: any = 0
-  if (query) {
+  if (query !== undefined && query !== null) {
     seo = query.seo
   }
 

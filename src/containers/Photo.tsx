@@ -73,7 +73,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
     if (!isSEO()) {
       doGetPhotoMenu()
     } else {
-      if(from === 'link'){
+      if (from === 'link') {
         doGetPhotoMenu()
       }
     }
@@ -154,7 +154,7 @@ const mapStateToProps = (state: any) => {
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-  getPhotoMenu(dic:any) {
+  getPhotoMenu: (dic: any) => {
     dispatch(loadData(null, dic))
   }
 })

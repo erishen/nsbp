@@ -5,7 +5,7 @@ let prefix = 'http://localhost:3001'
 export const doGet = (action:any) => {
   return new Promise((resolve, reject) => {
 
-    if(typeof window !== "undefined"){
+    if(typeof window !== "undefined") {
       prefix = window.location.origin
     }
 
