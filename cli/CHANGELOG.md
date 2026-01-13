@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.15] - 2026-01-13
+
+### Fixes
+
+- include .gitignore in npm package by renaming to gitignore
+
+### Other Changes
+
+- chore: update cli template
+
+---
+
 ## [0.2.14] - 2026-01-13
 
 ### Other Changes
