@@ -52,6 +52,8 @@ import {
   QuickStartTitle,
   QuickStartCode,
   QuickStartDescription,
+  DemoButtonLink,
+  DemoButtonIcon,
   Footer
 } from '../styled/home'
 
@@ -124,10 +126,11 @@ const Home: React.FC = () => {
       }} />
       <Helmet>
         <title>Nsbp.js - 轻量级 React SSR 框架</title>
-        <meta name="description" content="Nsbp.js - 一个轻量级 React SSR 框架，专为低资源部署与高度可定制场景而生。与 Next.js 相比，更节省资源，更灵活配置。" />
+        <meta name="description" content="Nsbp.js - 一个轻量级 React SSR 框架，专为低资源部署与高度可定制场景而生。与 Next.js 相比，更节省资源，更灵活配置。查看线上演示：https://nsbp.erishen.cn/" />
         <meta name="keywords" content="Nsbp.js, React SSR, 轻量级, SSR, TypeScript, React 19" />
         <meta property="og:title" content="Nsbp.js - 轻量级 React SSR 框架" />
-        <meta property="og:description" content="与 Next.js 相比，Nsbp.js 更轻量、更灵活、更可控。" />
+        <meta property="og:description" content="与 Next.js 相比，Nsbp.js 更轻量、更灵活、更可控。查看线上演示：https://nsbp.erishen.cn/" />
+        <meta property="og:url" content="https://nsbp.erishen.cn/" />
       </Helmet>
 
       <Layout query={{}}>
@@ -147,6 +150,17 @@ const Home: React.FC = () => {
                 <br />
                 完全掌控 Webpack 配置，无黑盒限制
               </HeroSubtitle>
+
+              <DemoButtonLink
+                href="https://nsbp.erishen.cn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fade-in"
+                style={{animationDelay: '0.4s'}}
+              >
+                <DemoButtonIcon>🌐</DemoButtonIcon>
+                查看线上演示
+              </DemoButtonLink>
 
               <HeroStats>
                 <StatCard>
