@@ -1,7 +1,13 @@
-# 开发
+# NSBP
+
+🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/)
+
+## 开发
 - npm run dev   (开发运行)
 - npm run build (生产编译)
 - npm start     (生产运行)
+
+### 本地访问
 
 客户端渲染
 http://localhost:3001/
@@ -15,60 +21,6 @@ http://localhost:3001/?seo=1&from=link
 ## Docker 部署
 
 **权限问题已修复！** 详细说明见下面的开发环境说明。
-
-🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/) - 由 NSBP 生成的线上示例
-
-### Docker 镜像加速配置（国内用户必看）
-
-如果遇到拉取镜像超时错误（`failed to resolve source metadata for docker.io/library/node:20-alpine`），需要配置 Docker 镜像加速器。
-
-#### macOS / Linux
-
-编辑或创建 `~/.docker/daemon.json`:
-
-```json
-{
-  "registry-mirrors": [
-    "https://docker.m.daocloud.io",
-    "https://docker.nju.edu.cn",
-    "https://docker.mirrors.sjtug.sjtu.edu.cn"
-  ]
-}
-```
-
-然后重启 Docker Desktop:
-
-```bash
-# macOS
-killall Docker && open -a Docker
-
-# Linux
-sudo systemctl restart docker
-```
-
-#### Windows
-
-Docker Desktop → Settings → Docker Engine，添加:
-
-```json
-{
-  "registry-mirrors": [
-    "https://docker.m.daocloud.io",
-    "https://docker.nju.edu.cn",
-    "https://docker.mirrors.sjtug.sjtu.edu.cn"
-  ]
-}
-```
-
-点击 "Apply & Restart"。
-
-#### 验证配置
-
-```bash
-docker info | grep -A 10 "Registry Mirrors"
-```
-
-### 生产环境
 
 ### 生产环境
 

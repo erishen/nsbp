@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: nsbp-app
     ports:
-      - "3001:3001"
+      - "8091:3001"
     environment:
       - NODE_ENV=production
       - PORT=3001
