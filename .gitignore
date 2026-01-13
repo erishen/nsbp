@@ -1,11 +1,15 @@
 .DS_Store
+Thumbs.db
 
 # Dependencies
 node_modules
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # Build outputs
 build
+dist
 public/js
 public/css
 public/client.*
@@ -15,5 +19,35 @@ public/*.txt
 public/*.json
 .temp_cache
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+coverage
+.nyc_output
+
 # Development tools
 .serena
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
