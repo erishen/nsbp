@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.10] - 2026-01-13
+
+### Features
+
+- update nsbp.erishen.cn
+- update Makefile
+
+### Other Changes
+
+- chore: update cli template
+
+---
+
 ## [0.2.9] - 2026-01-12
 
 ### Other Changes
