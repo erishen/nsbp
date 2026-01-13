@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.18] - 2026-01-13
+
+### Other Changes
+
+- chore: bump version to v0.2.17
+- chore: bump version to v0.2.16
+- chore: update cli template
+- chore: bump version to v0.2.15
+
+---
+
 ## [0.2.16] - 2026-01-13
 
 ### Other Changes
