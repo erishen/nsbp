@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "node react ssr by webpack",
   "main": "index.js",
+  "homepage": "https://nsbp.erishen.cn/",
   "scripts": {
     "dev": "npm-run-all -l -s dev:init -p dev:build:*",
     "dev:init": "cross-env INIT=1 webpack --config webpack.server.js --mode development",

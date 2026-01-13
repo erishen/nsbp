@@ -16,6 +16,8 @@ http://localhost:3001/?seo=1&from=link
 
 **权限问题已修复！** 详细说明见下面的开发环境说明。
 
+🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/) - 由 NSBP 生成的线上示例
+
 ### Docker 镜像加速配置（国内用户必看）
 
 如果遇到拉取镜像超时错误（`failed to resolve source metadata for docker.io/library/node:20-alpine`），需要配置 Docker 镜像加速器。

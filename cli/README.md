@@ -2,6 +2,8 @@
 
 Command-line interface for creating NSBP (Node React SSR by Webpack) projects.
 
+🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/)
+
 📦 **Published on npm**: [https://www.npmjs.com/package/nsbp-cli](https://www.npmjs.com/package/nsbp-cli)
 
 ## Installation

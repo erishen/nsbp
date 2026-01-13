@@ -1,5 +1,7 @@
 # Docker 快速启动指南
 
+🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/)
+
 ## 5 分钟快速开始
 
 ### 生产环境（推荐用于生产部署）
