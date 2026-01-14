@@ -43,7 +43,7 @@ COPY --from=builder /app/public ./public
 
 # Copy scripts and config
 COPY --from=builder /app/scripts ./scripts
-COPY --from=builder /app/tsconfig.json ./
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 # Change ownership
 RUN chown -R nodejs:nodejs /app

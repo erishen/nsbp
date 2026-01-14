@@ -1,24 +1,29 @@
+# 从 .env 文件读取环境变量（如果存在）
+# 开发环境配置优先级：.env > docker-compose.dev.yml 默认值
+
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
     container_name: nsbp-app-dev
     ports:
       - "3001:3001"
       - "9229:9229"  # Node.js debug port
     environment:
-      - NODE_ENV=development
-      - PORT=3001
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=${PORT:-3001}
+      # 开发环境默认禁用速率限制，如需启用可在 .env 中设置
+      - ENABLE_RATE_LIMIT=${ENABLE_RATE_LIMIT:-0}
     volumes:
       # Mount source code for hot reload
       - ./src:/app/src
       - ./public:/app/public
       - ./scripts:/app/scripts
-      - ./webpack.base.js:/app/webpack.base.js
-      - ./webpack.client.js:/app/webpack.client.js
-      - ./webpack.server.js:/app/webpack.server.js
-      - ./tsconfig.json:/app/tsconfig.json
+      - ./config/webpack.base.js:/app/webpack.base.js
+      - ./config/webpack.client.js:/app/webpack.client.js
+      - ./config/webpack.server.js:/app/webpack.server.js
+      - ./config/tsconfig.json:/app/tsconfig.json
       # Persist node_modules
       - node_modules:/app/node_modules
       # Build output - named volume for persistence

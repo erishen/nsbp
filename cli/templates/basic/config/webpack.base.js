@@ -2,7 +2,7 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const { version } = require('./package.json')
+const { version } = require('../package.json')
 const LoadablePlugin = require('@loadable/webpack-plugin')
 const { createLoadableComponentsTransformer } = require('typescript-loadable-components-plugin')
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
@@ -54,7 +54,7 @@ module.exports = ({ mode, entry, server, init }) => {
                 logInfoToStdOut: true,
                 logLevel: 'info',
                 transpileOnly: true,
-                configFile: path.resolve(__dirname, './tsconfig.json'),
+                configFile: path.resolve(__dirname, '../tsconfig.json'),
                 getCustomTransformers: (program) => {
                   // console.log('getCustomTransformers', program)
 

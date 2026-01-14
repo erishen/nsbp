@@ -1,7 +1,7 @@
 const path = require('path') //node的path模块
 const { merge } = require('webpack-merge')
 const config = require('./webpack.base.js')
-const { version } = require('./package.json')
+const { version } = require('../package.json')
 
 const server = false
 
@@ -12,7 +12,7 @@ const entry = {
 const clientConfig = {
   output: {
     //打包出口
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, '../public'),
     filename: ({ chunk }) => {
       const { name } = chunk
       // console.log('name', name)
