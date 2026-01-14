@@ -1,4 +1,4 @@
-import { GITHUB_ZEITNEXT_GET } from '../store/constants'
+import { GITHUB_ZEITNEXT_GET } from '@store/constants'
 
 export const homeReducer = (state = { data: {} }, action: any) => {
   const { type, data } = action

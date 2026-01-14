@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Layout from '../component/Layout'
+import Layout from '@components/Layout'
 import { Helmet } from 'react-helmet'
 import {
   GlobalStyle,

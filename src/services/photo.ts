@@ -1,5 +1,5 @@
-import { doGet } from '../utils/fetch'
-import { GET_PHOTO_MENU, GET_PHOTO_WIDTH_HEIGHT } from '../store/constants'
+import { doGet } from '@utils/fetch'
+import { GET_PHOTO_MENU, GET_PHOTO_WIDTH_HEIGHT } from '@store/constants'
 
 
 const getPhotoWH = (dispatch: any, callback: any, dic = '') => {
@@ -18,7 +18,7 @@ const getPhotoWH = (dispatch: any, callback: any, dic = '') => {
         })
         callback && callback()
       })
-      .catch((e:any) => {
+      .catch((_e:any) => {
         callback && callback()
       })
 }
@@ -36,7 +36,7 @@ const getPhotoMenu = (dispatch:any, callback:any) => {
 
         callback && callback(data)
       })
-      .catch((e:any) => {
+      .catch((_e:any) => {
         callback && callback()
       })
 }

@@ -1,22 +1,22 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import Header from '../component/Header'
-import Layout from '../component/Layout'
+import Header from '@components/Header'
+import Layout from '@components/Layout'
 import { Helmet } from 'react-helmet'
-import { Container, Row } from '../styled/photo'
+import { Container, Row } from '@styled/photo'
 import { motion } from 'framer-motion'
-import { isSEO, getLocationParams } from '../utils'
-import { useCurrentFlag } from '../utils/clientConfig'
+import { isSEO, getLocationParams } from '@/utils'
+import { useCurrentFlag } from '@utils/clientConfig'
 import _ from 'lodash'
-import { loadData } from '../services/photo'
+import { loadData } from '@services/photo'
 
-const springSettings = { type: "spring", stiffness: 170, damping: 26 }
+const springSettings = { type: "spring" as const, stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
 const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
   const location = useLocation()
-  let { dic, from } = query
+  let { from } = query
   const photos = Array.isArray(data) ? data : []
   const [currPhoto, setCurrPhoto] = useState(0)
 
@@ -38,7 +38,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
     .reduce((sum:any, width:any) => sum - width, 0)
 
   // Calculate position for each photo
-  const photoPositions = photos.reduce((acc:any, [origW, origH]:any, i:any, arr:any) => {
+  const photoPositions = photos.reduce((acc:any, [_origW, _origH]:any, i:any, _arr:any) => {
     const prevLeft = i === 0 ? leftStartCoords : acc[i-1].left + acc[i-1].width
     acc.push({
       left: prevLeft,

@@ -33,5 +33,5 @@ const App = () => {
 }
 
 loadableReady(() => {
-  const root = hydrateRoot(document.getElementById('root')!, <App />)
+  hydrateRoot(document.getElementById('root')!, <App />)
 })

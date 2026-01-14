@@ -1,30 +1,5 @@
-import { doGet } from '../utils/fetch'
-import { GITHUB_ZEITNEXT_GET, GET_PHOTO_MENU } from '../store/constants'
-
-const getData = (callback: any) => {
-
-  return (dispatch: any) => {
-    doGet('https://api.apiopen.top/getJoke?page=1&count=2&type=video')
-      .then((res:any) => {
-        // console.log('res', res)
-        dispatch({
-          type: GITHUB_ZEITNEXT_GET,
-          data: res?.data
-        })
-
-        callback && callback()
-      })
-      .catch((e:any) => {
-        // console.log('e', e.response)
-        dispatch({
-          type: GITHUB_ZEITNEXT_GET,
-          data: e?.response?.data
-        })
-
-        callback && callback()
-      })
-  }
-}
+import { doGet } from '@utils/fetch'
+import { GET_PHOTO_MENU } from '@store/constants'
 
 export const loadData = (resolve: any = null) => {
   return (dispatch: any) => {

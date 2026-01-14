@@ -1,6 +1,6 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
-import { GlobalStyle, theme, theme2 } from '../styled/common'
+import { GlobalStyle, theme2 } from '@styled/common'
 
 const Theme = ({ children }: any) => {
   return (

@@ -1,6 +1,6 @@
 import { homeReducer } from './home'
 import { photoReducer } from './photo'
-import { REQUEST_QUERY } from '../store/constants'
+import { REQUEST_QUERY } from '@store/constants'
 
 const queryReducer = (state = {}, action: any) => {
   const { type, query } = action

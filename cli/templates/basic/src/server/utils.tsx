@@ -1,19 +1,15 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter, Route, matchPath } from 'react-router-dom'
-// @ts-ignore - Routes is available in react-router-dom v7 but not in types
 import { Routes } from 'react-router-dom'
-import routers from '../Routers'
-// @ts-ignore
+import routers from '@/Routers'
 import { Provider } from 'react-redux'
-// @ts-ignore
-import getStore from '../store'
+import getStore from '@store'
 import serialize from 'serialize-javascript'
-// @ts-ignore
-import { REQUEST_QUERY } from '../store/constants'
+import { REQUEST_QUERY } from '@store/constants'
 import { Helmet } from 'react-helmet'
 import { ServerStyleSheet } from 'styled-components'
-import Theme from '../component/Theme'
+import Theme from '@components/Theme'
 import path from 'path'
 import { ChunkExtractor } from '@loadable/server'
 

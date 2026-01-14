@@ -27,7 +27,12 @@
       "@server/*": ["./src/server/*"],
       "@client/*": ["./src/client/*"],
       "@css/*": ["./src/css/*"],
-      "@externals/*": ["./src/externals/*"]
+      "@externals/*": ["./src/externals/*"],
+      "@reducers": ["./src/reducers/index"],
+      "@store": ["./src/store/index"],
+      "@utils": ["./src/utils/index"],
+      "@client": ["./src/client/index"],
+      "@server": ["./src/server/index"]
     }
   },
   "include":[

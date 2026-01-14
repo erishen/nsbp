@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container } from '../styled/component/layout'
+import { Container } from '@styled/component/layout'
 import Loading from './Loading'
 
 const Layout = ({ children, query }: any) => {

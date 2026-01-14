@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react'
-import Header from '../component/Header'
-import Layout from '../component/Layout'
+import Header from '@components/Header'
+import Layout from '@components/Layout'
 import { Helmet } from 'react-helmet'
 import '../css/test.css'
 import '../css/test.less'
 import '../css/test2.sass'
 import '../css/test3.scss'
-import { Container } from '../styled/test'
+import { Container } from '@styled/test'
 
 const Login = ({ query }: any) => {
   return (
