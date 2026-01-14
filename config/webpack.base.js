@@ -17,7 +17,21 @@ module.exports = ({ mode, entry, server, init }) => {
     entry,
     devtool: 'source-map',
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+      alias: {
+        '@': path.resolve(__dirname, '../src'),
+        '@components': path.resolve(__dirname, '../src/component'),
+        '@utils': path.resolve(__dirname, '../src/utils'),
+        '@services': path.resolve(__dirname, '../src/services'),
+        '@styled': path.resolve(__dirname, '../src/styled'),
+        '@store': path.resolve(__dirname, '../src/store'),
+        '@reducers': path.resolve(__dirname, '../src/reducers'),
+        '@containers': path.resolve(__dirname, '../src/containers'),
+        '@server': path.resolve(__dirname, '../src/server'),
+        '@client': path.resolve(__dirname, '../src/client'),
+        '@css': path.resolve(__dirname, '../src/css'),
+        '@externals': path.resolve(__dirname, '../src/externals')
+      }
     },
     module: {
       rules: [

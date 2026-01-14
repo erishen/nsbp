@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Container, LogoWrapper as Logo, Nav, NavLink, Brand } from '../styled/component/header'
+import { Container, LogoWrapper as Logo, Nav, NavLink, Brand } from '@styled/component/header'
 
 const Header = () => {
   const location = useLocation()

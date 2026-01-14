@@ -1,9 +1,9 @@
 import express from 'express'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
-import { render } from './utils'
-import { getPhotoWH, getPhotoMenu } from './photo'
-import { useCurrentFlag, outPhotoDicPath } from '../utils/config'
+import { render } from '@server/utils'
+import { getPhotoWH, getPhotoMenu } from '@server/photo'
+import { useCurrentFlag, outPhotoDicPath } from '@utils/config'
 
 const app = express()
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import routers from '../Routers'
+import routers from '@/Routers'
 import { Provider } from 'react-redux'
-import getStore from '../store'
-import { isSEO } from '../utils'
-import Theme from '../component/Theme'
+import getStore from '@/store'
+import { isSEO } from '@/utils'
+import Theme from '@components/Theme'
 import { loadableReady } from '@loadable/component'
 
 const App = () => {

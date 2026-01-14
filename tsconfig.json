@@ -13,7 +13,22 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "preserveConstEnums": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/component/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@services/*": ["./src/services/*"],
+      "@styled/*": ["./src/styled/*"],
+      "@store/*": ["./src/store/*"],
+      "@reducers/*": ["./src/reducers/*"],
+      "@containers/*": ["./src/containers/*"],
+      "@server/*": ["./src/server/*"],
+      "@client/*": ["./src/client/*"],
+      "@css/*": ["./src/css/*"],
+      "@externals/*": ["./src/externals/*"]
+    }
   },
   "include":[
     "./src/**/*",
