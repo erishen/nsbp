@@ -1,4 +1,4 @@
-.PHONY: help build dev prod down clean logs restart env-dev env-prod env-local show-env
+.PHONY: help build dev prod down clean logs restart env-dev env-prod env-local
 
 # Package manager detection
 PNPM := $(shell which pnpm)

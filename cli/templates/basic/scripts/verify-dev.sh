@@ -20,7 +20,7 @@ else
     echo ""
     echo "启动命令："
     echo "  make dev"
-    echo "  docker-compose -f docker-compose.dev.yml up -d --build"
+    echo "  docker-compose -f docker/docker-compose.dev.yml up -d --build"
     exit 1
 fi
 
@@ -35,7 +35,7 @@ fi
 
 echo ""
 echo "3. 检查权限错误..."
-if docker-compose -f docker-compose.dev.yml logs 2>&1 | grep -q "EACCES"; then
+if docker-compose -f docker/docker-compose.dev.yml logs 2>&1 | grep -q "EACCES"; then
     echo -e "${RED}❌ 发现权限错误${NC}"
     echo ""
     echo "最近的权限错误："
@@ -46,7 +46,7 @@ fi
 
 echo ""
 echo "4. 检查构建状态..."
-if docker-compose -f docker-compose.dev.yml logs 2>&1 | grep -q "compiled successfully"; then
+if docker-compose -f docker/docker-compose.dev.yml logs 2>&1 | grep -q "compiled successfully"; then
     echo -e "${GREEN}✅ 构建完成${NC}"
 else
     echo -e "${YELLOW}⚠️  构建中或未开始${NC}"
@@ -54,7 +54,7 @@ fi
 
 echo ""
 echo "5. 检查服务器监听..."
-if docker-compose -f docker-compose.dev.yml logs 2>&1 | grep -q "listening"; then
+if docker-compose -f docker/docker-compose.dev.yml logs 2>&1 | grep -q "listening"; then
     echo -e "${GREEN}✅ 服务器正在监听${NC}"
 else
     echo -e "${YELLOW}⚠️  服务器尚未启动监听${NC}"
@@ -69,9 +69,9 @@ echo "访问应用："
 echo "  http://localhost:3001"
 echo ""
 echo "查看日志："
-echo "  docker-compose -f docker-compose.dev.yml logs -f"
+echo "  docker-compose -f docker/docker-compose.dev.yml logs -f"
 echo ""
 echo "停止服务："
 echo "  make down"
-echo "  docker-compose -f docker-compose.dev.yml down"
+echo "  docker-compose -f docker/docker-compose.dev.yml down"
 echo ""

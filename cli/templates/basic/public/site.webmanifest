@@ -1,0 +1,20 @@
+{
+  "name": "Nsbp.js - 轻量级 React SSR 框架",
+  "short_name": "Nsbp.js",
+  "description": "轻量级 React SSR 框架，专为低资源部署与高度可定制场景而生",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
