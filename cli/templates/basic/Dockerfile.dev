@@ -49,4 +49,4 @@ EXPOSE 3001
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Start development server
-CMD ["dumb-init", "--", "npm", "run", "dev"]
+CMD ["dumb-init", "--", "pnpm", "run", "dev"]

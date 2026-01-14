@@ -17,7 +17,7 @@
     "start": "node ./bin/nsbp.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "sync-template": "node ./scripts/sync-template.js",
-    "update": "npm run sync-template",
+    "update": "pnpm run sync-template",
     "update-changelog": "node ./scripts/update-changelog.js",
     "changelog": "npx conventional-changelog -p angular -i CHANGELOG.md -s"
   },

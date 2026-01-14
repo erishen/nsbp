@@ -63,7 +63,7 @@ shell-dev: ## Open shell in development container
 	$(COMPOSE) -f docker-compose.dev.yml exec app sh
 
 test: ## Run tests (if configured)
-	$(COMPOSE) exec app npm test
+	$(COMPOSE) exec app $(PM) test
 
 publish-cli: ## Publish CLI to npm registry
 	@echo "🚀 Starting CLI publish process..."

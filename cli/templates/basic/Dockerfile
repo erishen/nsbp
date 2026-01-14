@@ -16,7 +16,7 @@ RUN npm install -g pnpm && pnpm install
 COPY . .
 
 # Build application
-RUN npm run build
+RUN pnpm run build
 
 # Stage 2: Production
 FROM node:20-alpine AS production

@@ -369,7 +369,7 @@ export const getPhotoMenu = (req: any, res: any) => {
 
               <QuickStartCard>
                 <QuickStartTitle>2️⃣ 启动开发</QuickStartTitle>
-                <QuickStartCode>$ npm run dev</QuickStartCode>
+                <QuickStartCode>$ pnpm run dev</QuickStartCode>
                 <QuickStartDescription>
                   启动开发服务器，默认端口 3001
                 </QuickStartDescription>

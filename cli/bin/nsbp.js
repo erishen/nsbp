@@ -21,7 +21,7 @@ program
   .command('create <project-name>')
   .description('Create a new NSBP project')
   .option('-t, --template <template>', 'Specify template (basic, blog, ecommerce)', 'basic')
-  .option('--skip-install', 'Skip npm install')
+  .option('--skip-install', 'Skip pnpm install')
   .action(async (projectName, options) => {
     console.log(chalk.cyan(`🚀 Creating NSBP project: ${projectName}`));
     
@@ -104,15 +104,10 @@ program
       // Create package.json for new project
       const originalPackage = require(path.join(templateSource, 'package.json'));
       const newPackage = {
+        ...originalPackage,
         name: projectName,
         version: '1.0.0',
-        description: `NSBP project: ${projectName}`,
-        scripts: originalPackage.scripts,
-        dependencies: originalPackage.dependencies,
-        devDependencies: originalPackage.devDependencies,
-        keywords: originalPackage.keywords,
-        author: originalPackage.author,
-        license: originalPackage.license
+        description: `NSBP project: ${projectName}`
       };
 
       fs.writeFileSync(
@@ -120,20 +115,43 @@ program
         JSON.stringify(newPackage, null, 2)
       );
 
+      // Remove package-lock.json if exists (use pnpm instead)
+      const packageLockPath = path.join(targetDir, 'package-lock.json');
+      if (fs.existsSync(packageLockPath)) {
+        fs.removeSync(packageLockPath);
+      }
+
+      // Create .npmignore to prevent package-lock.json from being committed
+      const npmignorePath = path.join(targetDir, '.npmignore');
+      if (!fs.existsSync(npmignorePath)) {
+        fs.writeFileSync(npmignorePath, 'package-lock.json\n');
+      }
+
       // Optionally install dependencies
       if (!options.skipInstall) {
+        // Check if pnpm is available
+        try {
+          execSync('which pnpm', { stdio: 'ignore' });
+        } catch {
+          console.error(chalk.red('❌ pnpm is not installed or not available in PATH.'));
+          console.error(chalk.yellow('Please install pnpm before continuing:'));
+          console.error(chalk.cyan('  npm install -g pnpm'));
+          console.error(chalk.yellow('Or use --skip-install flag to skip dependency installation.'));
+          process.exit(1);
+        }
+        
         console.log(chalk.cyan('📦 Installing dependencies...'));
         process.chdir(targetDir);
-        execSync('npm install', { stdio: 'inherit' });
+        execSync('pnpm install', { stdio: 'inherit' });
       }
 
       console.log(chalk.green(`✅ NSBP project "${projectName}" created successfully!`));
       console.log(chalk.yellow('\nNext steps:'));
       console.log(`  cd ${projectName}`);
       if (options.skipInstall) {
-        console.log('  npm install');
+        console.log('  pnpm install');
       }
-      console.log('  npm run dev');
+      console.log('  pnpm run dev');
       console.log(chalk.cyan('\nHappy coding! 🎉'));
 
     } catch (error) {
