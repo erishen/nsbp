@@ -31,8 +31,14 @@ prod: ## Start production environment (removes orphan containers)
 	$(COMPOSE) -f docker/docker-compose.yml up -d --remove-orphans
 
 down: ## Stop and remove containers (including orphan containers)
-	$(COMPOSE) -f docker/docker-compose.yml down --remove-orphans
-	$(COMPOSE) -f docker/docker-compose.dev.yml down --remove-orphans
+	@echo "Stopping production containers..."
+	@$(COMPOSE) -f docker/docker-compose.yml down --remove-orphans || echo "Warning: Failed to stop production containers"
+	@echo "Stopping development containers..."
+	@$(COMPOSE) -f docker/docker-compose.dev.yml down --remove-orphans || echo "Warning: Failed to stop development containers"
+	@echo "Cleaning up any remaining nsbp containers..."
+	@docker ps -a --filter "name=nsbp-" --format "{{.Names}}" | xargs -r docker stop
+	@docker ps -a --filter "name=nsbp-" --format "{{.Names}}" | xargs -r docker rm
+	@echo "Cleanup complete!"
 
 clean: ## Stop containers, remove images and volumes (including orphan containers)
 	$(COMPOSE) -f docker/docker-compose.yml down -v --rmi all --remove-orphans
