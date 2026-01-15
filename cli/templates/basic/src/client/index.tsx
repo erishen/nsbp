@@ -23,7 +23,11 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             {routers.map((router) => (
-              <Route key={router.key} path={router.path} element={router.element} />
+              <Route
+                key={router.key}
+                path={router.path}
+                element={router.element}
+              />
             ))}
           </Routes>
         </BrowserRouter>

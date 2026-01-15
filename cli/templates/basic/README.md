@@ -2,6 +2,49 @@
 
 🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/)
 
+## 🚀 快速开始
+
+```bash
+# 1. 安装依赖
+pnpm install
+
+# 2. 初始化 Git hooks（代码质量检查）
+pnpm run prepare
+
+# 3. 配置环境变量
+cp .env.example .env
+
+# 4. 启动开发环境
+pnpm run dev
+```
+
+## 📝 开发工具
+
+本项目配置了完整的代码质量检查工具：
+
+- **ESLint**: TypeScript + React 代码质量检查
+- **Prettier**: 自动代码格式化
+- **Husky**: Git hooks 自动化
+
+### 代码检查命令
+
+```bash
+pnpm run lint        # Lint 检查
+pnpm run lint:fix    # Lint 自动修复
+pnpm run format      # 格式化代码
+```
+
+### Git Hooks
+
+- `pre-commit`: 提交前自动 lint 和格式化
+- `pre-push`: 推送前运行完整 lint 检查
+- `commit-msg`: 验证提交信息格式（Conventional Commits）
+
+详细配置请查看：
+- [docs/ESLINT_AND_PRETTIER.md](./docs/ESLINT_AND_PRETTIER.md) - ESLint 和 Prettier 配置
+- [docs/SETUP_GIT_HOOKS.md](./docs/SETUP_GIT_HOOKS.md) - Git hooks 配置
+- [docs/DEVELOPMENT_GUIDE.md](./docs/DEVELOPMENT_GUIDE.md) - 完整开发指南
+
 ## 环境变量配置
 
 ### 快速开始

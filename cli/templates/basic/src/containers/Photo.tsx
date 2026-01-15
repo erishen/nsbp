@@ -11,7 +11,7 @@ import { useCurrentFlag } from '@utils/clientConfig'
 import _ from 'lodash'
 import { loadData } from '@services/photo'
 
-const springSettings = { type: "spring" as const, stiffness: 170, damping: 26 }
+const springSettings = { type: 'spring' as const, stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
 const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
@@ -24,7 +24,9 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
 
   const [currWidth, currHeight] = currPhotoData
 
-  const widths = photos.map(([origW, origH]:any) => (currHeight / origH) * origW)
+  const widths = photos.map(
+    ([origW, origH]: any) => (currHeight / origH) * origW
+  )
 
   // 同步 currPhoto 和 currPhotoData
   useEffect(() => {
@@ -35,18 +37,22 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
 
   const leftStartCoords = widths
     .slice(0, currPhoto)
-    .reduce((sum:any, width:any) => sum - width, 0)
+    .reduce((sum: any, width: any) => sum - width, 0)
 
   // Calculate position for each photo
-  const photoPositions = photos.reduce((acc:any, [_origW, _origH]:any, i:any, _arr:any) => {
-    const prevLeft = i === 0 ? leftStartCoords : acc[i-1].left + acc[i-1].width
-    acc.push({
-      left: prevLeft,
-      height: currHeight,
-      width: widths[i] || 0
-    })
-    return acc
-  }, [])
+  const photoPositions = photos.reduce(
+    (acc: any, [_origW, _origH]: any, i: any, _arr: any) => {
+      const prevLeft =
+        i === 0 ? leftStartCoords : acc[i - 1].left + acc[i - 1].width
+      acc.push({
+        left: prevLeft,
+        height: currHeight,
+        width: widths[i] || 0
+      })
+      return acc
+    },
+    []
+  )
 
   // console.log('photoPositions', photoPositions)
 
@@ -93,13 +99,13 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
       <Layout query={query}>
         <Container>
           <Row>
-          {
-            _.map(menu, (item:any, index:number) => {
+            {_.map(menu, (item: any, index: number) => {
               return (
-                <Link key={`menu${index}`} to={`/photo?dic=${item.name}`}>{item.name}</Link>
+                <Link key={`menu${index}`} to={`/photo?dic=${item.name}`}>
+                  {item.name}
+                </Link>
               )
-            })
-          }
+            })}
           </Row>
           <Row>Scroll Me</Row>
           <Row>
@@ -123,7 +129,13 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
                 <motion.img
                   key={i}
                   className="demo4-photo"
-                  src={photos[i][2] ? (useCurrentFlag ? `/images/${photos[i][2]}` : photos[i][2]) : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='}
+                  src={
+                    photos[i][2]
+                      ? useCurrentFlag
+                        ? `/images/${photos[i][2]}`
+                        : photos[i][2]
+                      : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+                  }
                   initial={false}
                   animate={{
                     left: pos.left,

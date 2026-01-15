@@ -1,6 +1,5 @@
-
-import fs from "fs"
-import path from "path"
+import fs from 'fs'
+import path from 'path'
 import probe from 'probe-image-size'
 
 // 获取项目根目录（无论从哪个目录运行服务器）
@@ -29,7 +28,9 @@ const getPhotosDicPath = () => {
 }
 
 // 获取目录下的子目录（分类），并为每个分类找封面图和图片数量
-const getFileMenu = (dir: string): { name: string; cover?: string; count?: number }[] => {
+const getFileMenu = (
+  dir: string
+): { name: string; cover?: string; count?: number }[] => {
   const arr = fs.readdirSync(dir)
   const result: { name: string; cover?: string; count?: number }[] = []
 
@@ -40,7 +41,9 @@ const getFileMenu = (dir: string): { name: string; cover?: string; count?: numbe
       // 分类名
       const name = item
       // 计算图片数量
-      const files = fs.readdirSync(fullPath).filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f))
+      const files = fs
+        .readdirSync(fullPath)
+        .filter((f) => /\.(jpg|jpeg|png|webp)$/i.test(f))
       const count = files.length
 
       // 在该目录下找 cover.jpg
@@ -110,7 +113,9 @@ export const getPhotoWH = (req: any, res: any) => {
     res.json({ data: whArr })
   } catch (err: any) {
     console.error('getPhotoWH error:', err)
-    res.status(500).json({ error: 'Internal Server Error', details: err.message })
+    res
+      .status(500)
+      .json({ error: 'Internal Server Error', details: err.message })
   }
 }
 
@@ -124,6 +129,8 @@ export const getPhotoMenu = (_req: any, res: any) => {
     res.json({ data: fileMenu })
   } catch (err: any) {
     console.error('getPhotoMenu error:', err)
-    res.status(500).json({ error: 'Internal Server Error', details: err.message })
+    res
+      .status(500)
+      .json({ error: 'Internal Server Error', details: err.message })
   }
 }

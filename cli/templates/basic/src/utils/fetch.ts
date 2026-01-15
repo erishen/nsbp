@@ -2,10 +2,9 @@ import axios from 'axios'
 
 let prefix = 'http://localhost:3001'
 
-export const doGet = (action:any) => {
+export const doGet = (action: any) => {
   return new Promise((resolve, reject) => {
-
-    if(typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       prefix = window.location.origin
     }
 
@@ -18,9 +17,6 @@ export const doGet = (action:any) => {
       }
     }
 
-    axios
-      .get(url)
-      .then(resolve)
-      .catch(reject)
+    axios.get(url).then(resolve).catch(reject)
   })
 }

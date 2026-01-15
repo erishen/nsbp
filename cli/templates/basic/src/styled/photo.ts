@@ -33,8 +33,8 @@ export const Row = styled.div`
   justify-content: flex-start;
   align-items: center;
   font-size: 20px;
-  word-wrap: break-word; 
-  word-break: break-all; 
+  word-wrap: break-word;
+  word-break: break-all;
   overflow: hidden;
   padding-bottom: 10px;
 

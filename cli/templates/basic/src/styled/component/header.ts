@@ -6,7 +6,11 @@ export const Container = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, rgba(255,255,255, 0.95), rgba(255,255,255, 0.85));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.85)
+  );
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);

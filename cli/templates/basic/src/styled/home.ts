@@ -12,12 +12,16 @@ export const GlobalStyle = styled.div`
     padding: 0;
   }
 
-  html, body, #root {
+  html,
+  body,
+  #root {
     height: 100%;
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+      Arial, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #2d3748;
     -webkit-font-smoothing: antialiased;
@@ -57,7 +61,9 @@ export const GlobalStyle = styled.div`
   }
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   /* 淡入动画 */
@@ -129,9 +135,21 @@ export const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     background-image:
-      radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 40%,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 50%
+      );
     z-index: -1;
   }
 
@@ -141,7 +159,11 @@ export const HeroSection = styled.section`
     width: 300px;
     height: 300px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 70%
+    );
     filter: blur(40px);
     animation: float 6s ease-in-out infinite;
   }
@@ -159,8 +181,13 @@ export const HeroSection = styled.section`
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    50% { transform: translateY(-20px) scale(1.1); }
+    0%,
+    100% {
+      transform: translateY(0px) scale(1);
+    }
+    50% {
+      transform: translateY(-20px) scale(1.1);
+    }
   }
 
   @media (max-width: 768px) {
@@ -219,7 +246,11 @@ export const HeroSubtitle = styled.p`
 
 export const HeroBadge = styled.span`
   display: inline-block;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
   backdrop-filter: blur(15px);
   padding: 0.75rem 1.5rem;
   border-radius: 999px;
@@ -239,13 +270,22 @@ export const HeroBadge = styled.span`
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
     animation: shine 3s infinite;
   }
 
   @keyframes shine {
-    0% { left: -100%; }
-    100% { left: 100%; }
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
   }
 `
 
@@ -271,7 +311,11 @@ export const HeroStats = styled.div`
 `
 
 export const StatCard = styled.div`
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
   backdrop-filter: blur(20px);
   padding: 1.75rem;
   border-radius: 16px;
@@ -292,12 +336,21 @@ export const StatCard = styled.div`
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
   }
 
   &:hover {
     transform: translateY(-8px) scale(1.02);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25),
+      rgba(255, 255, 255, 0.15)
+    );
     box-shadow:
       0 12px 40px rgba(0, 0, 0, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -337,7 +390,11 @@ export const StatLabel = styled.div`
 
 export const TechSection = styled.section`
   padding: 6rem 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -353,8 +410,16 @@ export const TechSection = styled.section`
     right: 0;
     bottom: 0;
     background-image:
-      radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 50%);
+      radial-gradient(
+        circle at 10% 20%,
+        rgba(102, 126, 234, 0.05) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 90% 80%,
+        rgba(118, 75, 162, 0.05) 0%,
+        transparent 50%
+      );
     pointer-events: none;
   }
 `
@@ -461,7 +526,8 @@ export const CodeExample = styled.pre`
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+  font-family:
+    'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
   font-size: 0.85rem;
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -757,7 +823,8 @@ export const QuickStartCode = styled.pre`
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+  font-family:
+    'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
   font-size: 0.85rem;
   line-height: 1.6;
   max-width: 100%;
@@ -806,13 +873,22 @@ export const DemoButtonLink = styled.a`
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
     animation: shine 2s infinite;
   }
 
   @keyframes shine {
-    0% { left: -100%; }
-    100% { left: 100%; }
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
   }
 
   &:hover {
