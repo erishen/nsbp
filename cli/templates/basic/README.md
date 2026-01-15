@@ -1,6 +1,20 @@
 # NSBP
 
+<div align="center">
+
+![npm version](https://img.shields.io/npm/v/nsbp-cli?style=flat-square&logo=npm)
+![License](https://img.shields.io/github/license/erishen/nsbp?style=flat-square)
+![Node.js](https://img.shields.io/badge/Node.js->=18.0-brightgreen?style=flat-square&logo=node.js)
+![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)
+![Downloads](https://img.shields.io/npm/dm/nsbp-cli?style=flat-square)
+![GitHub Issues](https://img.shields.io/github/issues/erishen/nsbp?style=flat-square&logo=github)
+![Last Commit](https://img.shields.io/github/last-commit/erishen/nsbp?style=flat-square&logo=github)
+![Maintenance](https://img.shields.io/maintenance/yes/2025?style=flat-square)
+
 🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/)
+
+</div>
 
 ## 🚀 快速开始
 
