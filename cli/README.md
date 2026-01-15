@@ -154,4 +154,4 @@ node ./bin/nsbp.js --help  # Test CLI locally
 
 ## License
 
-ISC
+MIT

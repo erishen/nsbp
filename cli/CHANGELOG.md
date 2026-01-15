@@ -304,4 +304,4 @@ nsbp --help
 Contributions are welcome! Please see the main NSBP project repository for contribution guidelines.
 
 ## License
-ISC © Erishen Sun
+MIT © Erishen Sun
