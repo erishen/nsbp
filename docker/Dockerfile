@@ -10,7 +10,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install pnpm and dependencies (including devDependencies for building)
-RUN npm install -g pnpm && pnpm install
+# Set HUSKY=0 to disable husky in Docker environment
+RUN npm install -g pnpm && HUSKY=0 pnpm install
 
 # Copy source code
 COPY . .
@@ -35,7 +36,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install pnpm and only production dependencies
-RUN npm install -g pnpm && pnpm install --prod && pnpm store prune
+# Use --ignore-scripts to disable prepare script (husky is in devDependencies)
+RUN npm install -g pnpm && pnpm install --prod --ignore-scripts && pnpm store prune
 
 # Copy build artifacts from builder stage
 COPY --from=builder /app/build ./build

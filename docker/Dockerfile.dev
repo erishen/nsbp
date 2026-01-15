@@ -16,7 +16,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install pnpm and all dependencies (including devDependencies)
-RUN npm install -g pnpm && pnpm install && pnpm store prune
+# Use --ignore-scripts to disable prepare script (husky is in devDependencies)
+RUN npm install -g pnpm && pnpm install --ignore-scripts && pnpm store prune
 
 # Copy application code
 COPY . .
