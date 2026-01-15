@@ -2,7 +2,11 @@ import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { GlobalStyle, theme2 } from '@styled/common'
 
-const Theme = ({ children }: any) => {
+interface ThemeProps {
+  children: React.ReactNode
+}
+
+const Theme = ({ children }: ThemeProps) => {
   return (
     <>
       <GlobalStyle whiteColor={true} />

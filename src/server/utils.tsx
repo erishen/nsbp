@@ -15,7 +15,7 @@ import { ChunkExtractor } from '@loadable/server'
 
 export const render = (req: any, res: any) => {
   const store = getStore()
-  const { path:reqPath, query } = req
+  const { path: reqPath, query } = req
   const matchRoutes: any = []
   const promises = []
 
@@ -71,10 +71,7 @@ export const render = (req: any, res: any) => {
 
       const helmet: any = Helmet.renderStatic()
 
-      const webStats = path.resolve(
-        __dirname,
-        '../public/loadable-stats.json',
-      )
+      const webStats = path.resolve(__dirname, '../public/loadable-stats.json')
 
       try {
         let webEntryPoints = ['client', 'vendor']
@@ -89,13 +86,18 @@ export const render = (req: any, res: any) => {
           publicPath: '/'
         })
 
-        const jsx = webExtractor.collectChunks(sheet.collectStyles(
+        const jsx = webExtractor.collectChunks(
+          sheet.collectStyles(
             <Theme>
               <Provider store={store}>
                 <StaticRouter location={reqPath}>
                   <Routes>
                     {routers.map((router) => (
-                      <Route key={router.key} path={router.path} element={router.element} />
+                      <Route
+                        key={router.key}
+                        path={router.path}
+                        element={router.element}
+                      />
                     ))}
                   </Routes>
                 </StaticRouter>

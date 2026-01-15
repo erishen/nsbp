@@ -43,6 +43,9 @@ coverage
 *.swo
 *~
 
+# Husky (git hooks)
+.husky/_
+
 # OS
 .DS_Store
 .DS_Store?
