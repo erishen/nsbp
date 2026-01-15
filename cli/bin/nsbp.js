@@ -68,6 +68,9 @@ program
         'tsconfig.json',
         '.prettierrc',
         '.prettierignore',
+        '.prettierrc.js',
+        'eslint.config.js',
+        '.husky',
         'gitignore',
         'Makefile',
         'README.md'
