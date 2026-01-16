@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import Header from '@components/Header'
@@ -6,10 +6,10 @@ import Layout from '@components/Layout'
 import { Helmet } from 'react-helmet'
 import { Container, Row } from '@styled/photo'
 import { motion } from 'framer-motion'
-import { isSEO, getLocationParams } from '@/utils'
+import { isSEO, getLocationParams, usePreserveNSBP } from '@/utils'
 import { useCurrentFlag } from '@utils/clientConfig'
 import _ from 'lodash'
-import { loadData } from '@services/photo'
+import { loadDataForContainer } from '@services/photo'
 
 const springSettings = { type: 'spring' as const, stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
@@ -17,8 +17,11 @@ const NEXT = 'show-next'
 const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
   const location = useLocation()
   let { from } = query
+  const { withNSBP } = usePreserveNSBP()
   const photos = Array.isArray(data) ? data : []
   const [currPhoto, setCurrPhoto] = useState(0)
+  // 使用 ref 来跟踪初始的 dic 值，用于区分首次加载和分类切换
+  const initialDicRef = useRef<string | null>(null)
 
   const [currPhotoData, setCurrPhotoData] = useState(photos[0] || [0, 0, ''])
 
@@ -70,23 +73,35 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
   }
 
   useEffect(() => {
-    const currentDic = getLocationParams('dic')
+    const currentDic = getLocationParams('dic') || ''
+
+    // 初始化时记录初始 dic 值
+    if (initialDicRef.current === null) {
+      initialDicRef.current = currentDic
+    }
 
     const doGetPhotoMenu = () => {
       getPhotoMenu(currentDic)
     }
 
-    if (!isSEO()) {
+    // 判断是否需要加载数据：
+    // 1. 客户端渲染模式（isSEO() === 0）- 总是加载
+    // 2. 服务端渲染模式：
+    //    - 如果没有数据（hasNoData）- 需要加载
+    //    - 如果分类切换（isCategoryChanged）- 需要加载
+    const isClientMode = isSEO() === 0
+    const hasNoData = !data || data.length === 0
+    const isCategoryChanged = currentDic !== initialDicRef.current
+
+    // 客户端渲染模式：总是需要加载数据
+    // 服务端渲染模式：只有在没有数据或分类切换时才加载
+    if (isClientMode || hasNoData || isCategoryChanged) {
       doGetPhotoMenu()
-    } else {
-      if (from === 'link') {
-        doGetPhotoMenu()
-      }
     }
 
     // 重置到第一张
     setCurrPhoto(0)
-  }, [location?.search])
+  }, [location?.search, from])
 
   return (
     <Fragment>
@@ -101,7 +116,10 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
           <Row>
             {_.map(menu, (item: any, index: number) => {
               return (
-                <Link key={`menu${index}`} to={`/photo?dic=${item.name}`}>
+                <Link
+                  key={`menu${index}`}
+                  to={withNSBP(`/photo?dic=${item.name}`)}
+                >
                   {item.name}
                 </Link>
               )
@@ -131,9 +149,9 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
                   className="demo4-photo"
                   src={
                     photos[i][2]
-                      ? useCurrentFlag
+                      ? isSEO() === 1
                         ? `/images/${photos[i][2]}`
-                        : photos[i][2]
+                        : `/images/${photos[i][2]}`
                       : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
                   }
                   initial={false}
@@ -167,7 +185,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   getPhotoMenu: (dic: any) => {
-    dispatch(loadData(null, dic))
+    dispatch(loadDataForContainer(null, dic))
   }
 })
 

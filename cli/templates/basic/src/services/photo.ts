@@ -57,6 +57,14 @@ const getData = (callback: any, dic: any) => {
   }
 }
 
-export const loadData = (resolve: any = null, dic = '') => {
+// 用于路由预取数据的 loadData 函数
+export const loadData = (resolve: any = null, query: any = {}) => {
+  // 从 URL 查询参数中获取 dic
+  const { dic } = query
+  return getData(resolve, dic || '')
+}
+
+// 用于容器内部调用的 loadData 函数（保持向后兼容）
+export const loadDataForContainer = (resolve: any = null, dic = '') => {
   return getData(resolve, dic)
 }

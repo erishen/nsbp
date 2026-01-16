@@ -85,6 +85,13 @@ export const getPhotoWH = (req: any, res: any) => {
       return res.status(403).json({ error: 'Access denied' })
     }
 
+    // 检查目录是否存在
+    if (!fs.existsSync(photoPath)) {
+      return res
+        .status(404)
+        .json({ error: 'Directory not found', details: photoPath })
+    }
+
     const getFileList = (dir: string, list: string[]) => {
       const arr = fs.readdirSync(dir)
       arr.forEach((item) => {

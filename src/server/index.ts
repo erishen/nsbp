@@ -41,7 +41,6 @@ if (process.env.ENABLE_RATE_LIMIT === '1') {
     legacyHeaders: false // Disable the `X-RateLimit-*` headers
   })
   app.use('/api', limiter)
-  console.log('🛡️ Rate limiting enabled for /api routes')
 }
 
 // 4. Static file serving (disable dotfiles access)
@@ -79,15 +78,12 @@ app.get('/getPhotoMenu', (req, res) => {
 
 // Catch-all middleware for SSR
 app.use((req, res) => {
-  // console.log('req.url', req.url, req.headers)
   render(req, res)
 })
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`)
-  console.log(`🔒 Security headers enabled`)
   if (process.env.ENABLE_RATE_LIMIT === '1') {
-    console.log(`🚦 Rate limiting active`)
+    // Rate limiting active
   }
 })

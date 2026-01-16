@@ -144,14 +144,24 @@ docker-compose exec app env | grep NODE_ENV
 
 ### 本地访问
 
-客户端渲染
+**服务端渲染**（默认，对 SEO 友好）
+```
 http://localhost:3001/
+```
 
-服务端渲染
-http://localhost:3001/?seo=1
+**客户端渲染**（禁用 SSR）
+```
+http://localhost:3001/?nsbp=0
+```
 
-服务端渲染不成功，改为客户端渲染
-http://localhost:3001/?seo=1&from=link
+**服务端渲染回退**（如果 SSR 失败，自动回退到客户端渲染）
+```
+http://localhost:3001/?nsbp=1&from=link
+```
+
+> **参数说明**：`nsbp` 参数控制渲染模式
+> - `nsbp=1` 或省略：服务端渲染（SSR，默认）
+> - `nsbp=0`：客户端渲染（CSR）
 
 ## Docker 部署
 

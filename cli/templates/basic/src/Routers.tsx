@@ -1,5 +1,6 @@
 import React from 'react'
 import { loadData as homeLoadData } from '@services/home'
+import { loadData as photoLoadData } from '@services/photo'
 import loadable from '@loadable/component'
 
 const Loading = () => {
@@ -33,7 +34,7 @@ export default [
   {
     path: '/photo',
     element: <Photo />,
-    loadData: homeLoadData, // 使用相同的 loadData 来预取图片菜单
+    loadData: photoLoadData, // 使用 photo 的 loadData 来预取图片数据
     key: 'photo'
   }
 ]

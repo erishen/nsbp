@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Layout from '@components/Layout'
 import { Helmet } from 'react-helmet'
+import { isSEO, usePreserveNSBP } from '@/utils'
 import {
   GlobalStyle,
   PageWrapper,
@@ -66,20 +67,23 @@ interface PhotoMenuItem {
 const Home: React.FC = () => {
   const [menu, setMenu] = useState<PhotoMenuItem[]>([])
   const [loading, setLoading] = useState(true)
+  const { withNSBP } = usePreserveNSBP()
 
   useEffect(() => {
     if (typeof window === 'undefined') return
 
     setLoading(true)
+
+    // 检查是否为客户端渲染模式
+    const isClientMode = isSEO() === 0
+
     // 先检查服务端是否已预取了图片菜单数据
     const serverMenu = window?.context?.state?.photo?.menu || {}
     const serverMenuArray = Array.isArray(serverMenu) ? serverMenu : []
 
-    if (serverMenuArray.length > 0) {
-      setMenu(serverMenuArray)
-      setLoading(false)
-    } else {
-      // 如果服务端没有预取，则在客户端获取
+    // 客户端渲染模式下，始终发起新请求；服务端渲染模式下，如果有预取数据则使用预取数据
+    if (isClientMode || serverMenuArray.length === 0) {
+      // 客户端获取数据
       fetch('/getPhotoMenu')
         .then((res) => {
           if (!res.ok) throw new Error(`Status ${res.status}`)
@@ -93,6 +97,10 @@ const Home: React.FC = () => {
           setMenu([])
         })
         .finally(() => setLoading(false))
+    } else {
+      // 使用服务端预取的数据
+      setMenu(serverMenuArray)
+      setLoading(false)
     }
   }, [])
 
@@ -467,7 +475,10 @@ export const getPhotoMenu = (req: any, res: any) => {
             ) : menu.length > 0 ? (
               <PhotoGrid>
                 {menu.map((item) => (
-                  <Link key={item.name} to={`/photo?dic=${item.name}`}>
+                  <Link
+                    key={item.name}
+                    to={withNSBP(`/photo?dic=${item.name}`)}
+                  >
                     <PhotoCard>
                       <PhotoImageWrapper>
                         <PhotoImage

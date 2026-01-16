@@ -9,13 +9,13 @@ import Theme from '@components/Theme'
 import { loadableReady } from '@loadable/component'
 
 const App = () => {
-  const [store, setStore] = useState(getStore())
-
-  useEffect(() => {
-    if (isSEO()) {
-      setStore(getStore(window?.context?.state))
+  // 优先使用服务端预取的状态初始化 store
+  const [store, setStore] = useState(() => {
+    if (isSEO() && window?.context?.state) {
+      return getStore(window.context.state)
     }
-  }, [])
+    return getStore()
+  })
 
   return (
     <Theme>

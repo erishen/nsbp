@@ -19,10 +19,10 @@ export const render = (req: any, res: any) => {
   const matchRoutes: any = []
   const promises = []
 
-  let { seo } = query
+  let { nsbp } = query
 
-  if (seo !== undefined && seo !== '') {
-    seo = parseInt(seo, 10)
+  if (nsbp !== undefined && nsbp !== '') {
+    nsbp = parseInt(nsbp, 10)
   }
 
   routers.some((route) => {
@@ -33,7 +33,8 @@ export const render = (req: any, res: any) => {
     if (item?.loadData) {
       const promise = new Promise((resolve, reject) => {
         try {
-          store.dispatch(item?.loadData(resolve))
+          // 将 query 参数传递给 loadData，确保能正确预取数据
+          store.dispatch(item?.loadData(resolve, query))
         } catch (e) {
           reject()
         }

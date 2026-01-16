@@ -25,9 +25,14 @@ pnpm run dev:build:start # 启动服务器
 
 ### 3. 访问应用
 
-- **客户端渲染**: http://localhost:3001/
-- **服务端渲染**: http://localhost:3001/?seo=1
+- **服务端渲染**（默认，SEO 友好）: http://localhost:3001/
+- **客户端渲染**（禁用 SSR）: http://localhost:3001/?nsbp=0
+- **服务端渲染回退**（SSR 失败时回退到 CSR）: http://localhost:3001/?nsbp=1&from=link
 - **BrowserSync**: http://localhost:3000/
+
+> **参数说明**：`nsbp` 参数控制渲染模式
+> - `nsbp=1` 或省略：服务端渲染（SSR，默认）
+> - `nsbp=0`：客户端渲染（CSR）
 
 ## 📝 开发工作流
 

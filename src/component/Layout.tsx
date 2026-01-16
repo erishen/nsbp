@@ -4,17 +4,17 @@ import Loading from './Loading'
 
 interface LayoutProps {
   children: React.ReactNode
-  query?: { seo?: string | number }
+  query?: { nsbp?: string | number }
 }
 
 const Layout = ({ children, query }: LayoutProps) => {
-  let seo: string | number | undefined
+  let nsbp: string | number | undefined
   if (query !== undefined && query !== null) {
-    seo = query.seo
+    nsbp = query.nsbp
   }
 
   const [pageLoad, setPageLoad] = useState(
-    seo !== undefined ? parseInt(String(seo), 10) : 0
+    nsbp !== undefined ? parseInt(String(nsbp), 10) : 0
   )
 
   useEffect(() => {

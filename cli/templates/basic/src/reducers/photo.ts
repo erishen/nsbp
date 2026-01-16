@@ -8,7 +8,7 @@ interface PhotoState {
 }
 
 export const photoReducer = (
-  state: PhotoState = { data: [[0, 0, '']], menu: {} },
+  state: PhotoState = { data: [], menu: {} },
   action: any
 ) => {
   const { type, data, menu } = action
