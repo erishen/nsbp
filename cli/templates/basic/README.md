@@ -8,11 +8,23 @@
 ![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)
 ![Downloads](https://img.shields.io/npm/dm/nsbp-cli?style=flat-square)
-![GitHub Issues](https://img.shields.io/github/issues/erishen/nsbp?style=flat-square&logo=github)
-![Last Commit](https://img.shields.io/github/last-commit/erishen/nsbp?style=flat-square&logo=github)
-![Maintenance](https://img.shields.io/maintenance/yes/2025?style=flat-square)
+[![GitHub Issues](https://img.shields.io/github/issues/erishen/nsbp?style=flat-square&logo=github)](https://github.com/erishen/nsbp/issues)
+[![GitHub Forks](https://img.shields.io/github/forks/erishen/nsbp?style=flat-square&logo=github)](https://github.com/erishen/nsbp/network/members)
+[![GitHub Stars](https://img.shields.io/github/stars/erishen/nsbp?style=flat-square&logo=github)](https://github.com/erishen/nsbp/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/erishen/nsbp?style=flat-square&logo=github)](https://github.com/erishen/nsbp/commits/main)
+[![Maintenance](https://img.shields.io/maintenance/yes/2025?style=flat-square)](https://github.com/erishen/nsbp)
 
 🌐 **Online Demo**: [https://nsbp.erishen.cn/](https://nsbp.erishen.cn/)
+
+[![Star on GitHub](https://img.shields.io/badge/Star-⭐-gold?style=flat-square)](https://github.com/erishen/nsbp)
+
+</div>
+
+## 📚 文档
+
+- [更新日志](./CHANGELOG.md) - 查看版本更新记录
+- [贡献指南](./CONTRIBUTING.md) - 如何参与贡献
+- [行为准则](./CODE_OF_CONDUCT.md) - 社区行为规范
 
 </div>
 
@@ -361,12 +373,7 @@ ENABLE_RATE_LIMIT=1 pnpm start
 - [ ] 静态文件访问已测试
 - [ ] CSP 策略已测试（检查控制台错误）
 
-### CLI 发布
 
-从项目根目录发布 CLI 到 npm 注册表：
+---
 
-```bash
-make publish-cli  # 同步模板、更新版本、发布到 npm
-```
-
-注意：此命令仅在项目根目录可用，生成的 NSBP 项目不包含此目标。
+如有问题，请参考 [NSBP 文档](https://github.com/erishen/nsbp)。

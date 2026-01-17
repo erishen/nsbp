@@ -69,6 +69,56 @@ const SPECIAL_FILES = {
     pkg.version = '1.0.0'
     return JSON.stringify(pkg, null, 2)
   },
+  'README.md': (content) => {
+    // 删除 CLI 发布相关内容
+    let lines = content.split('\n')
+    let resultLines = []
+    let skip = false
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+
+      // 查找 "### CLI 发布" 部分
+      if (line.trim().startsWith('### CLI 发布')) {
+        skip = true
+        continue
+      }
+
+      // 如果遇到新的顶级标题（## 或 ###），停止跳过
+      if (skip && (line.startsWith('## ') || line.startsWith('### '))) {
+        skip = false
+        // 跳过被删除的第一个标题行
+        continue
+      }
+
+      // 如果 skip 为 false，添加行
+      if (!skip) {
+        resultLines.push(line)
+      }
+    }
+
+    // 确保文件末尾有结束分隔符和帮助链接
+    const lastLine = resultLines[resultLines.length - 1]
+    if (!lastLine || !lastLine.includes('NSBP 文档')) {
+      // 如果没有帮助链接，添加
+      resultLines.push('')
+      resultLines.push('---')
+      resultLines.push('')
+      resultLines.push(
+        '如有问题，请参考 [NSBP 文档](https://github.com/erishen/nsbp)。'
+      )
+    }
+
+    // 确保文件末尾没有多余的空行
+    while (
+      resultLines.length > 0 &&
+      resultLines[resultLines.length - 1] === ''
+    ) {
+      resultLines.pop()
+    }
+
+    return resultLines.join('\n')
+  },
   Makefile: (content) => {
     // 从 .PHONY 行中移除 publish-cli
     let lines = content.split('\n')
