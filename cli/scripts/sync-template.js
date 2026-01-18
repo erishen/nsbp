@@ -30,6 +30,7 @@ const COPY_ITEMS = [
   '.prettierignore',
   '.prettierrc.js',
   'eslint.config.js',
+  'jest.config.js',
   '.husky',
   'Makefile',
   'README.md',
