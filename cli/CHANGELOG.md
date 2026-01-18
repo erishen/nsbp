@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.38] - 2026-01-18
+
+### Other Changes
+
+- chore: update cli template
+
+---
+
 ## [0.2.36] - 2026-01-17
 
 ### Features
