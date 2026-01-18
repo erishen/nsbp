@@ -70,6 +70,7 @@ program
         '.prettierignore',
         '.prettierrc.js',
         'eslint.config.js',
+        'jest.config.js',
         '.husky',
         'gitignore',
         'Makefile',
