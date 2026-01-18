@@ -29,7 +29,9 @@ module.exports = [
       'webpack.server.js',
       '.prettierrc.js',
       'cli/**',
-      'scripts/**'
+      'scripts/**',
+      'jest.setup.*',
+      'jest.config.*'
     ]
   },
   {

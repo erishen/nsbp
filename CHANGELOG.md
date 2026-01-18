@@ -8,22 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial release of NSBP framework
-- Server-side rendering (SSR) with React 19 and TypeScript 5
-- Client-side rendering fallback support
-- Comprehensive Docker configuration for development and production
-- Security features including Helmet, rate limiting, and CSP
-- Complete tooling setup: ESLint, Prettier, Husky
-- Loadable components for code splitting
-- Redux Toolkit for state management
-- Styled-components and CSS/Sass/Less support
-- GitHub templates for issues and pull requests
-- Contributing guidelines and code of conduct
+- 完整的测试框架集成（Jest + React Testing Library + Playwright）
+- 单元测试和集成测试支持
+- E2E 测试支持（Playwright）
+- 测试覆盖率配置和报告
+- 测试工具和辅助函数
+- 核心组件单元测试（Loading、Header）
+- Redux store 测试
+- 完整的测试文档
 
 ### Changed
-- Modernized tech stack to React 19.2.3
-- Upgraded TypeScript to 5.x
-- Enhanced Webpack 5 configuration
+- 现代化 tsconfig.json 配置（moduleResolution: bundler）
+- 移除弃用的 baseUrl 配置
 
 ## [1.0.0] - 2026-01-16
 
