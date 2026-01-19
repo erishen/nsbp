@@ -9,9 +9,12 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
+# Configure npm and pnpm to use Chinese mirror registry for faster downloads in China
+RUN npm config set registry https://registry.npmmirror.com
+
 # Install pnpm and dependencies (including devDependencies for building)
 # Set HUSKY=0 to disable husky in Docker environment
-RUN npm install -g pnpm && HUSKY=0 pnpm install
+RUN npm install -g pnpm && pnpm config set registry https://registry.npmmirror.com && HUSKY=0 pnpm install
 
 # Copy source code
 COPY . .
@@ -35,9 +38,12 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
+# Configure npm and pnpm to use Chinese mirror registry for faster downloads in China
+RUN npm config set registry https://registry.npmmirror.com
+
 # Install pnpm and only production dependencies
 # Use --ignore-scripts to disable prepare script (husky is in devDependencies)
-RUN npm install -g pnpm && pnpm install --prod --ignore-scripts && pnpm store prune
+RUN npm install -g pnpm && pnpm config set registry https://registry.npmmirror.com && pnpm install --prod --ignore-scripts && pnpm store prune
 
 # Copy build artifacts from builder stage
 COPY --from=builder /app/build ./build
