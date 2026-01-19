@@ -46,11 +46,9 @@ export const render = (req: any, res: any) => {
 
   const queryDispatch = (callback: any) => {
     return (dispatch: any) => {
-      setTimeout(() => {
-        dispatch({ type: REQUEST_QUERY, query })
-
-        callback && callback()
-      }, 0)
+      // 直接同步执行，避免 setTimeout 导致的竞态条件
+      dispatch({ type: REQUEST_QUERY, query })
+      callback && callback()
     }
   }
 
