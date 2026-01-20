@@ -7,6 +7,9 @@ import { useCurrentFlag, outPhotoDicPath } from '@utils/config'
 
 const app = express()
 
+// 0. Trust proxy - Important for HTTPS reverse proxy (nginx)
+app.set('trust proxy', true)
+
 // 1. Security headers (helmet)
 app.use(
   helmet({

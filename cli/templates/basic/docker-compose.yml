@@ -4,11 +4,11 @@
 services:
   app:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile
     container_name: nsbp-app
     ports:
-      - "8091:3001"
+      - "${HOST_PORT:-8081}:${PORT:-3001}"
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=${PORT:-3001}

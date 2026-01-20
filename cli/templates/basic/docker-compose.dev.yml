@@ -4,12 +4,12 @@
 services:
   app:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile.dev
     container_name: nsbp-app-dev
     ports:
-      - "3001:3001"
-      - "9229:9229"  # Node.js debug port
+      - "${HOST_PORT_DEV:-3001}:${PORT:-3001}"
+      - "${DEBUG_PORT:-9229}:9229"  # Node.js debug port
     environment:
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=${PORT:-3001}

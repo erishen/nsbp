@@ -107,12 +107,29 @@ const Home: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    // 模拟页面加载
+    // 客户端模拟页面加载动画
     const timer = setTimeout(() => {
       setIsLoaded(true)
     }, 500)
     return () => clearTimeout(timer)
   }, [])
+
+  // 客户端处理页面加载器的淡出和移除
+  useEffect(() => {
+    if (!isLoaded) return
+
+    const removeLoader = () => {
+      const loader = document.getElementById('pageLoader')
+      if (loader) {
+        loader.classList.add('fade-out')
+        setTimeout(() => loader.remove(), 500)
+      }
+    }
+
+    // 延迟移除加载器
+    const removeTimer = setTimeout(removeLoader, 300)
+    return () => clearTimeout(removeTimer)
+  }, [isLoaded])
 
   return (
     <GlobalStyle>
@@ -121,19 +138,6 @@ const Home: React.FC = () => {
           <div className="loader-spinner"></div>
         </div>
       )}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-          setTimeout(() => {
-            const loader = document.getElementById('pageLoader');
-            if (loader) {
-              loader.classList.add('fade-out');
-              setTimeout(() => loader.remove(), 500);
-            }
-          }, 800);
-        `
-        }}
-      />
       <Helmet>
         <title>Nsbp.js - 轻量级 React SSR 框架</title>
         <meta

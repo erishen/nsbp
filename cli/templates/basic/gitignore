@@ -22,6 +22,7 @@ public/*.json
 .env.*.local
 .env.development
 .env.production
+!docker/.env
 
 # Logs
 logs

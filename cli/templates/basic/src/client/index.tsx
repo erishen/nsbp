@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import routers from '@/Routers'
@@ -9,13 +9,13 @@ import Theme from '@components/Theme'
 import { loadableReady } from '@loadable/component'
 
 const App = () => {
-  // 优先使用服务端预取的状态初始化 store
-  const [store, setStore] = useState(() => {
+  // 使用 useMemo 确保 store 只创建一次，避免每次渲染都创建新 store
+  const store = useMemo(() => {
     if (isSEO() && window?.context?.state) {
       return getStore(window.context.state)
     }
     return getStore()
-  })
+  }, []) // 空依赖数组，只执行一次
 
   return (
     <Theme>

@@ -20,6 +20,8 @@ const COPY_ITEMS = [
   'scripts',
   'config',
   'docker',
+  'docker-compose.yml',
+  'docker-compose.dev.yml',
   'docs',
   '.env.example',
   '.env.development',
