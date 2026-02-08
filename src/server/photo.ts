@@ -62,7 +62,16 @@ const getFileMenu = (
   return result
 }
 
-export const getPhotoWH = (req: any, res: any) => {
+interface Request {
+  query: { dic?: string }
+}
+
+interface Response {
+  status: (code: number) => Response
+  json: (data: unknown) => void
+}
+
+export const getPhotoWH = (req: Request, res: Response) => {
   try {
     const dic = req.query.dic || ''
     const photosDicPath = getPhotosDicPath()
@@ -72,7 +81,7 @@ export const getPhotoWH = (req: any, res: any) => {
       return res.status(400).json({ error: 'Invalid directory name' })
     }
 
-    const fileList: any = []
+    const fileList: string[] = []
     let photoPath = photosDicPath
     if (dic) {
       photoPath = path.join(photosDicPath, dic)
@@ -108,25 +117,28 @@ export const getPhotoWH = (req: any, res: any) => {
 
     getFileList(photoPath, fileList)
 
-    const whArr: any = []
-    fileList.forEach((item: any, index: number) => {
+    const whArr: [number, number, string][] = []
+    fileList.forEach((item: string, index: number) => {
       const data = fs.readFileSync(item)
       let fileName = path.relative(photosDicPath, fileList[index])
-      const { width, height }: any = probe.sync(data)
+      const result = probe.sync(data)
+      const width = result?.width ?? 0
+      const height = result?.height ?? 0
       whArr.push([width, height, fileName])
     })
 
     // 按前端期望的格式包装
     res.json({ data: whArr })
-  } catch (err: any) {
-    console.error('getPhotoWH error:', err)
+  } catch (err) {
+    const error = err as Error
+    console.error('getPhotoWH error:', error)
     res
       .status(500)
-      .json({ error: 'Internal Server Error', details: err.message })
+      .json({ error: 'Internal Server Error', details: error.message })
   }
 }
 
-export const getPhotoMenu = (_req: any, res: any) => {
+export const getPhotoMenu = (_req: Request, res: Response) => {
   try {
     const photosDicPath = getPhotosDicPath()
 
@@ -134,10 +146,11 @@ export const getPhotoMenu = (_req: any, res: any) => {
 
     // 按前端期望的格式包装
     res.json({ data: fileMenu })
-  } catch (err: any) {
-    console.error('getPhotoMenu error:', err)
+  } catch (err) {
+    const error = err as Error
+    console.error('getPhotoMenu error:', error)
     res
       .status(500)
-      .json({ error: 'Internal Server Error', details: err.message })
+      .json({ error: 'Internal Server Error', details: error.message })
   }
 }

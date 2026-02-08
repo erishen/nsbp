@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
   html,body,#__next {
@@ -7,7 +7,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: ${(props: any) => (props.whiteColor ? 'white' : 'black')};
+    background-color: ${(props: { whiteColor?: boolean }) => (props.whiteColor ? 'white' : 'black')};
     font-family: Helvetica;
     margin: 0;
   }

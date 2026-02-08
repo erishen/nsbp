@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef } from 'react'
+import React, { Fragment, useState, useEffect, useRef, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import Header from '@components/Header'
@@ -7,29 +7,44 @@ import { Helmet } from 'react-helmet'
 import { Container, Row } from '@styled/photo'
 import { motion } from 'framer-motion'
 import { isSEO, getLocationParams, usePreserveNSBP } from '@/utils'
-import { useCurrentFlag } from '@utils/clientConfig'
 import _ from 'lodash'
 import { loadDataForContainer } from '@services/photo'
 
 const springSettings = { type: 'spring' as const, stiffness: 170, damping: 26 }
 const NEXT = 'show-next'
 
-const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
+interface QueryParams {
+  from?: string
+  nsbp?: string | number
+}
+
+interface PhotoProps {
+  query: QueryParams
+  data: [number, number, string][]
+  menu: Array<{ name: string; cover?: string; count?: number }>
+  getPhotoMenu: (dic: string) => void
+}
+
+const Photo = ({ query, data, menu, getPhotoMenu }: PhotoProps) => {
   const location = useLocation()
   let { from } = query
   const { withNSBP } = usePreserveNSBP()
-  const photos = Array.isArray(data) ? data : []
+  // 使用 useMemo 缓存 photos，避免每次渲染都创建新数组
+  const photos = useMemo(() => (Array.isArray(data) ? data : []), [data])
   const [currPhoto, setCurrPhoto] = useState(0)
   // 使用 ref 来跟踪初始的 dic 值，用于区分首次加载和分类切换
   const initialDicRef = useRef<string | null>(null)
 
-  const [currPhotoData, setCurrPhotoData] = useState(photos[0] || [0, 0, ''])
+  const [currPhotoData, setCurrPhotoData] = useState<[number, number, string]>(
+    photos[0] || [0, 0, '']
+  )
 
   const [currWidth, currHeight] = currPhotoData
 
-  const widths = photos.map(
-    ([origW, origH]: any) => (currHeight / origH) * origW
-  )
+  const widths = photos.map((photo) => {
+    const [origW, origH] = photo
+    return (currHeight / origH) * origW
+  })
 
   // 同步 currPhoto 和 currPhotoData
   useEffect(() => {
@@ -40,30 +55,33 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
 
   const leftStartCoords = widths
     .slice(0, currPhoto)
-    .reduce((sum: any, width: any) => sum - width, 0)
+    .reduce((sum: number, width: number) => sum - width, 0)
 
   // Calculate position for each photo
-  const photoPositions = photos.reduce(
-    (acc: any, [_origW, _origH]: any, i: any, _arr: any) => {
-      const prevLeft =
-        i === 0 ? leftStartCoords : acc[i - 1].left + acc[i - 1].width
-      acc.push({
-        left: prevLeft,
-        height: currHeight,
-        width: widths[i] || 0
-      })
-      return acc
-    },
-    []
-  )
+  interface PhotoPosition {
+    left: number
+    height: number
+    width: number
+  }
+
+  const photoPositions = photos.reduce<PhotoPosition[]>((acc, _item, i) => {
+    const prevLeft =
+      i === 0 ? leftStartCoords : acc[i - 1].left + acc[i - 1].width
+    acc.push({
+      left: prevLeft,
+      height: currHeight,
+      width: widths[i] || 0
+    })
+    return acc
+  }, [])
 
   // console.log('photoPositions', photoPositions)
 
-  const handleChange = ({ target: { value } }: any) => {
-    setCurrPhoto(value)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrPhoto(Number(e.target.value))
   }
 
-  const clickHandler = (btn: any) => {
+  const clickHandler = (btn: string) => {
     let photoIndex = btn === NEXT ? currPhoto + 1 : currPhoto - 1
 
     photoIndex = photoIndex >= 0 ? photoIndex : photos.length - 1
@@ -101,6 +119,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
 
     // 重置到第一张
     setCurrPhoto(0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location?.search, from])
 
   return (
@@ -114,7 +133,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
       <Layout query={query}>
         <Container>
           <Row>
-            {_.map(menu, (item: any, index: number) => {
+            {_.map(menu, (item: { name: string }, index: number) => {
               return (
                 <Link
                   key={`menu${index}`}
@@ -143,7 +162,7 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
               animate={{ height: currHeight, width: currWidth }}
               transition={springSettings}
             >
-              {photoPositions.map((pos: any, i: any) => (
+              {photoPositions.map((pos, i) => (
                 <motion.img
                   key={i}
                   className="demo4-photo"
@@ -175,7 +194,15 @@ const Photo = ({ query, data, menu, getPhotoMenu }: any) => {
   )
 }
 
-const mapStateToProps = (state: any) => {
+interface RootState {
+  query: QueryParams
+  photo: {
+    menu: Array<{ name: string; cover?: string; count?: number }>
+    data: [number, number, string][]
+  }
+}
+
+const mapStateToProps = (state: RootState) => {
   return {
     query: state?.query,
     menu: state?.photo?.menu,
@@ -183,10 +210,8 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  getPhotoMenu: (dic: any) => {
-    dispatch(loadDataForContainer(null, dic))
-  }
-})
+const mapDispatchToProps = {
+  getPhotoMenu: (dic: string) => loadDataForContainer(null, dic)
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Photo)

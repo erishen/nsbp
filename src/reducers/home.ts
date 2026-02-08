@@ -1,6 +1,11 @@
 import { GITHUB_ZEITNEXT_GET } from '@store/constants'
 
-export const homeReducer = (state = { data: {} }, action: any) => {
+interface HomeAction {
+  type: string
+  data?: unknown
+}
+
+export const homeReducer = (state = { data: {} }, action: HomeAction) => {
   const { type, data } = action
 
   switch (type) {

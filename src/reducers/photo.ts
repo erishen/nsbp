@@ -3,13 +3,19 @@ import { GET_PHOTO_MENU, GET_PHOTO_WIDTH_HEIGHT } from '@store/constants'
 interface PhotoState {
   data: [number, number, string][]
   menu:
-    | Record<string, any>
+    | Record<string, unknown>
     | Array<{ name: string; cover?: string; count?: number }>
+}
+
+interface PhotoAction {
+  type: string
+  data?: [number, number, string][]
+  menu?: PhotoState['menu']
 }
 
 export const photoReducer = (
   state: PhotoState = { data: [], menu: {} },
-  action: any
+  action: PhotoAction
 ) => {
   const { type, data, menu } = action
 
