@@ -13,10 +13,25 @@ import Theme from '@components/Theme'
 import path from 'path'
 import { ChunkExtractor } from '@loadable/server'
 
-export const render = (req: any, res: any) => {
+interface Request {
+  path: string
+  query: Record<string, string | undefined>
+}
+
+interface Response {
+  send: (html: string) => void
+  status: (code: number) => { send: (msg: string) => void }
+}
+
+export const render = (req: Request, res: Response) => {
   const store = getStore()
   const { path: reqPath, query } = req
-  const matchRoutes: any = []
+  const matchRoutes: {
+    loadData?: (
+      resolve: (data?: unknown) => void,
+      query: Request['query']
+    ) => unknown
+  }[] = []
   const promises = []
 
   let { nsbp } = query
@@ -29,13 +44,13 @@ export const render = (req: any, res: any) => {
     matchPath(reqPath, route.path) ? matchRoutes.push(route) : ''
   })
 
-  matchRoutes.forEach((item: any) => {
+  matchRoutes.forEach((item) => {
     if (item?.loadData) {
       const promise = new Promise((resolve, reject) => {
         try {
           // 将 query 参数传递给 loadData，确保能正确预取数据
           store.dispatch(item?.loadData(resolve, query))
-        } catch (e) {
+        } catch {
           reject()
         }
       })
@@ -44,8 +59,10 @@ export const render = (req: any, res: any) => {
     }
   })
 
-  const queryDispatch = (callback: any) => {
-    return (dispatch: any) => {
+  const queryDispatch = (callback: (() => void) | null) => {
+    return (
+      dispatch: (action: { type: string; query: Request['query'] }) => void
+    ) => {
       // 直接同步执行，避免 setTimeout 导致的竞态条件
       dispatch({ type: REQUEST_QUERY, query })
       callback && callback()
@@ -54,8 +71,8 @@ export const render = (req: any, res: any) => {
 
   const queryPromise = new Promise((resolve, reject) => {
     try {
-      store.dispatch(queryDispatch(resolve))
-    } catch (e) {
+      store.dispatch(queryDispatch(() => resolve()))
+    } catch {
       reject()
     }
   })
@@ -68,7 +85,7 @@ export const render = (req: any, res: any) => {
       const sheet = new ServerStyleSheet()
       const serverState = store.getState()
 
-      const helmet: any = Helmet.renderStatic()
+      const helmet = Helmet.renderStatic()
 
       const webStats = path.resolve(__dirname, '../public/loadable-stats.json')
 
@@ -138,14 +155,14 @@ export const render = (req: any, res: any) => {
           `
 
         res.send(html)
-      } catch (e: any) {
-        console.error('SSR rendering error:', e)
+      } catch (e: Error) {
+        console.error('SSR rendering error:', e.message)
         sheet.seal()
         res.status(500).send('Internal Server Error')
       }
     })
-    .catch((e: any) => {
-      console.error('Data loading error:', e)
+    .catch((e: Error) => {
+      console.error('Data loading error:', e.message)
       res.status(500).send('Data loading failed')
     })
 }

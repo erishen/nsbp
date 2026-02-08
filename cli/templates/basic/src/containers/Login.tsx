@@ -8,7 +8,7 @@ import '../css/test2.sass'
 import '../css/test3.scss'
 import { Container } from '@styled/test'
 
-const Login = ({ query }: any) => {
+const Login = ({ query }: { query?: Record<string, string> }) => {
   return (
     <Fragment>
       <Helmet>

@@ -2,7 +2,12 @@ import { homeReducer } from './home'
 import { photoReducer } from './photo'
 import { REQUEST_QUERY } from '@store/constants'
 
-const queryReducer = (state = {}, action: any) => {
+interface QueryAction {
+  type: string
+  query?: Record<string, unknown>
+}
+
+const queryReducer = (state = {}, action: QueryAction) => {
   const { type, query } = action
 
   switch (type) {
