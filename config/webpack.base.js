@@ -4,12 +4,6 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { version } = require('../package.json')
 const LoadablePlugin = require('@loadable/webpack-plugin')
-const { createLoadableComponentsTransformer } = require('typescript-loadable-components-plugin')
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-
-// const createStyledComponentsTransformer =
-//   require('typescript-plugin-styled-components').default
-// const styledComponentsTransformer = createStyledComponentsTransformer()
 
 module.exports = ({ mode, entry, server, init }) => {
   const config = {
@@ -36,58 +30,9 @@ module.exports = ({ mode, entry, server, init }) => {
     module: {
       rules: [
         {
-          test: /\.(ts|js)x?$/,
+          test: /\.(ts|tsx|js|jsx)$/,
           exclude: /node_modules/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: [
-                  '@babel/preset-react',
-                  [
-                    '@babel/preset-env',
-                    {
-                      targets: {
-                        browsers: ['last 2 versions'] //对主流浏览器最近两个版本进行兼容
-                      }
-                    }
-                  ]
-                ],
-                plugins: [
-                  ['@babel/plugin-transform-class-properties'],
-                  ['@babel/plugin-transform-optional-chaining'],
-                  ["@babel/plugin-syntax-dynamic-import"],
-                  ['babel-plugin-styled-components'],
-                  ["@loadable/babel-plugin"]
-                ]
-              }
-            },
-            {
-              loader: 'ts-loader',
-              options: {
-                logInfoToStdOut: true,
-                logLevel: 'info',
-                transpileOnly: true,
-                configFile: path.resolve(__dirname, '../tsconfig.json'),
-                getCustomTransformers: (program) => {
-                  // console.log('getCustomTransformers', program)
-
-                  return {
-                    before: [
-                      //createLoadableComponentsTransformer(program, {}),
-                      // styledComponentsTransformer,
-                      createLoadableComponentsTransformer(program, {
-                        setComponentId: true,
-                        setDisplayName: true,
-                        minify: true,
-                      }),
-                      //loadableTransformer
-                    ]
-                  }
-                }
-              }
-            }
-          ]
+          use: ['babel-loader']
         },
         {
           test: /\.less$/,
@@ -98,7 +43,7 @@ module.exports = ({ mode, entry, server, init }) => {
             {
               loader: 'css-loader',
               options: {
-                importLoaders: 1,
+                importLoaders: 1
               }
             },
             'postcss-loader',
@@ -106,10 +51,10 @@ module.exports = ({ mode, entry, server, init }) => {
               loader: 'less-loader',
               options: {
                 lessOptions: {
-                  javascriptEnabled: true,
+                  javascriptEnabled: true
                 }
               }
-            },
+            }
           ]
         },
         {
@@ -121,7 +66,7 @@ module.exports = ({ mode, entry, server, init }) => {
             {
               loader: 'css-loader',
               options: {
-                importLoaders: 1,
+                importLoaders: 1
               }
             },
             'postcss-loader',
@@ -137,7 +82,7 @@ module.exports = ({ mode, entry, server, init }) => {
             {
               loader: 'css-loader',
               options: {
-                importLoaders: 1,
+                importLoaders: 1
               }
             },
             'postcss-loader'
@@ -164,33 +109,36 @@ module.exports = ({ mode, entry, server, init }) => {
     optimization: {
       minimize: mode === 'production' || server ? true : false,
       minimizer: [`...`, new CssMinimizerPlugin()]
+    },
+    performance: {
+      hints: 'warning',
+      maxAssetSize: 500000,
+      maxEntrypointSize: 500000
     }
   }
 
-  if(init){
+  if (init) {
     config.cache = false
   } else {
     config.cache = {
       type: 'filesystem',
-      cacheDirectory: path.resolve(__dirname, '.temp_cache'),
+      cacheDirectory: path.resolve(__dirname, '.temp_cache')
       // type: 'memory',
       // cacheUnaffected: true,
     }
   }
 
-  if(mode === 'development' && !server){
+  if (mode === 'development' && !server) {
     config.plugins.push(
-      new BrowserSyncPlugin(
-        {
-          host: 'localhost',
-          port: 3000,
-          proxy: 'http://localhost:3001/'
-        }
-      )
+      new BrowserSyncPlugin({
+        host: 'localhost',
+        port: 3000,
+        proxy: 'http://localhost:3001/'
+      })
     )
   }
 
-  if(mode === 'production' || server){
+  if (mode === 'production' || server) {
     config.plugins.push(
       new MiniCssExtractPlugin({
         filename: `css/[name].${version}.css`
@@ -241,7 +189,9 @@ module.exports = ({ mode, entry, server, init }) => {
             },
             name(module) {
               //名字就是包当中的名字
-              const match = /[\\/]node_modules[\\/](.*)/.exec(module.identifier())
+              const match = /[\\/]node_modules[\\/](.*)/.exec(
+                module.identifier()
+              )
               if (match && match.length) {
                 // 移除开头的点号，避免生成隐藏文件
                 return match[1].replace(/\/|\\/g, '_').replace(/^\./, '')
