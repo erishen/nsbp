@@ -1,6 +1,6 @@
 {
   "name": "nsbp-cli",
-  "version": "0.2.50",
+  "version": "0.2.51",
   "description": "CLI tool for creating NSBP (Node React SSR by Webpack) projects",
   "main": "index.js",
   "homepage": "https://nsbp.erishen.cn/",
