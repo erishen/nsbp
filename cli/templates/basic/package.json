@@ -9,7 +9,7 @@
     "dev:init": "cross-env INIT=1 webpack --config config/webpack.server.js --mode development",
     "dev:build:server": "webpack --config config/webpack.server.js --mode development --watch",
     "dev:build:client": "webpack --config config/webpack.client.js --mode development --watch",
-    "dev:build:start": "node ./scripts/start.js",
+    "dev:build:start": "nodemon --watch build --ext js --exec \"node ./scripts/start.js\"",
     "build": "pnpm run clean && npm-run-all -l -p build:**",
     "build:server": "webpack --config config/webpack.server.js --mode production",
     "build:client": "webpack --config config/webpack.client.js --mode production",

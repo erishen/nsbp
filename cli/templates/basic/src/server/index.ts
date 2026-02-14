@@ -51,13 +51,22 @@ app.use(
   express.static('public', {
     dotfiles: 'ignore',
     setHeaders: (res, filePath) => {
-      // Cache static assets for 1 year
+      // 开发环境使用较短的缓存时间，避免代码更新后浏览器使用旧缓存
+      // 生产环境使用 1 年缓存（配合 hash 文件名）
+      const isDev = process.env.NODE_ENV !== 'production'
+
       if (
         filePath.match(
           /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/
         )
       ) {
-        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+        if (isDev) {
+          // 开发环境：缓存 1 小时，便于开发调试
+          res.setHeader('Cache-Control', 'public, max-age=3600')
+        } else {
+          // 生产环境：缓存 1 年（配合 webpack 的 contenthash）
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+        }
       }
     }
   })

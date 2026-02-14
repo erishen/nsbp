@@ -15,7 +15,7 @@ import { ChunkExtractor } from '@loadable/server'
 
 interface Request {
   path: string
-  query: Record<string, string | undefined>
+  query: Record<string, string | string[] | ParsedQs | undefined>
 }
 
 interface Response {
