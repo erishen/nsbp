@@ -20,365 +20,264 @@
 
 </div>
 
-## 📚 文档
+## 📚 Docs
 
-- [更新日志](./CHANGELOG.md) - 查看版本更新记录
-- [贡献指南](./CONTRIBUTING.md) - 如何参与贡献
-- [行为准则](./CODE_OF_CONDUCT.md) - 社区行为规范
+- [Changelog](./CHANGELOG.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
 
-</div>
-
-## 🚀 快速开始
+## 🚀 Quick Start
 
 ```bash
-# 1. 安装依赖
+# 1. Install dependencies
 pnpm install
 
-# 2. 初始化 Git hooks（代码质量检查）
+# 2. Initialize Git hooks
 pnpm run prepare
 
-# 3. 配置环境变量
+# 3. Configure environment
 cp .env.example .env
 
-# 4. 启动开发环境
+# 4. Start dev server
 pnpm run dev
 ```
 
-## 📝 开发工具
+## 📝 Development Tools
 
-本项目配置了完整的代码质量检查工具：
+The project includes a complete code quality toolchain:
 
-- **ESLint**: TypeScript + React 代码质量检查
-- **Prettier**: 自动代码格式化
-- **Husky**: Git hooks 自动化
+- **ESLint**: TypeScript + React linting
+- **Prettier**: Auto code formatting
+- **Husky**: Automated Git hooks
 
-### 代码检查命令
+### Lint Commands
 
 ```bash
-pnpm run lint        # Lint 检查
-pnpm run lint:fix    # Lint 自动修复
-pnpm run format      # 格式化代码
+pnpm run lint        # Lint check
+pnpm run lint:fix    # Auto-fix
+pnpm run format      # Format code
 ```
 
 ### Git Hooks
 
-- `pre-commit`: 提交前自动 lint 和格式化
-- `pre-push`: 推送前运行完整 lint 检查
-- `commit-msg`: 验证提交信息格式（Conventional Commits）
+- `pre-commit`: Auto lint and format before commit
+- `pre-push`: Full lint before push
+- `commit-msg`: Validate commit message format (Conventional Commits)
 
-详细配置请查看：
-- [docs/ESLINT_AND_PRETTIER.md](./docs/ESLINT_AND_PRETTIER.md) - ESLint 和 Prettier 配置
-- [docs/SETUP_GIT_HOOKS.md](./docs/SETUP_GIT_HOOKS.md) - Git hooks 配置
-- [docs/DEVELOPMENT_GUIDE.md](./docs/DEVELOPMENT_GUIDE.md) - 完整开发指南
+Detailed guides:
+- [ESLint & Prettier](./docs/ESLINT_AND_PRETTIER.md)
+- [Git Hooks Setup](./docs/SETUP_GIT_HOOKS.md)
+- [Development Guide](./docs/DEVELOPMENT_GUIDE.md)
 
-## 环境变量配置
+## Environment Configuration
 
-### 快速开始
+### Quick Start
 
 ```bash
-# 1. 复制环境变量模板
+# 1. Copy template
 cp .env.example .env
 
-# 2. 根据需要编辑 .env 文件
-# 编辑 NODE_ENV、PORT、ENABLE_RATE_LIMIT 等
+# 2. Edit .env as needed
+# Edit NODE_ENV, PORT, ENABLE_RATE_LIMIT, etc.
 
-# 3. 开始开发或部署
-pnpm run dev              # 本地开发
-docker-compose up -d         # Docker 部署
+# 3. Start
+pnpm run dev              # Local development
+docker-compose up -d         # Docker deployment
 ```
 
-### 环境变量说明
+### Variables
 
-| 变量名 | 默认值 | 说明 | 推荐环境 |
-|-------|--------|------|---------|
-| `NODE_ENV` | development | 运行环境 (development/production) | 全部 |
-| `PORT` | 3001 | 服务端口 | 全部 |
-| `ENABLE_RATE_LIMIT` | 0 | 启用速率限制 (1=启用, 0=禁用) | 生产环境 |
-| `DEBUG` | - | 启用调试日志 | 开发环境 |
-| `TZ` | Asia/Shanghai | 时区配置 | 生产环境 |
+| Variable | Default | Description | Recommended |
+|----------|---------|-------------|-------------|
+| `NODE_ENV` | development | Environment (development/production) | All |
+| `PORT` | 3001 | Service port | All |
+| `ENABLE_RATE_LIMIT` | 0 | Enable rate limiting (1=on, 0=off) | Production |
+| `DEBUG` | - | Enable debug logging | Development |
+| `TZ` | Asia/Shanghai | Timezone | Production |
 
-### 配置文件说明
+### Config Files
 
-- **`.env.example`** - 环境变量模板（提交到 Git）
-- **`.env`** - 本地开发配置（不提交到 Git）
-- **`.env.production`** - 生产环境配置（不提交到 Git）
-- **`.env.development`** - 开发环境配置（不提交到 Git）
-- **`.env.local`** - 本地敏感信息（最高优先级，不提交到 Git）
+- **`.env.example`** — Template (committed to Git)
+- **`.env`** — Local dev config (not committed)
+- **`.env.production`** — Production config (not committed)
+- **`.env.development`** — Dev config (not committed)
+- **`.env.local`** — Local secrets (highest priority, not committed)
 
-### 配置优先级
+### Priority
 
 ```
-.env.local > .env > docker-compose.yml 默认值
+.env.local > .env > docker-compose.yml defaults
 ```
 
-### 本地开发配置
+### Local Development
 
 ```bash
-# 复制开发环境配置
 cp .env.development .env
-
-# 或手动创建 .env 文件
-cat > .env << EOF
-NODE_ENV=development
-PORT=3001
-ENABLE_RATE_LIMIT=0
-EOF
-
-# 启动开发环境
 pnpm run dev
 ```
 
-### Docker 部署配置
+### Docker Deployment
 
 ```bash
-# 生产环境配置
 cp .env.production .env
-
-# Docker Compose 会自动读取 .env 文件
 docker-compose up -d
-
-# 查看环境变量是否生效
-docker-compose exec app env | grep NODE_ENV
 ```
 
-### 敏感信息管理
+### Sensitive Info
 
-**重要：**
-- ✅ `.env.example` 可以提交到 Git（模板文件）
-- ❌ `.env`、`.env.local` 不要提交到 Git（已在 .gitignore 中）
-- ✅ 敏感信息（密钥、数据库密码）放在 `.env.local` 中
-- ✅ `.env.local` 会覆盖其他配置，优先级最高
+- ✅ `.env.example` — safe to commit (template)
+- ❌ `.env`, `.env.local` — do not commit (in .gitignore)
+- ✅ Put secrets (keys, passwords) in `.env.local`
 
-## 开发
-- pnpm run dev   (开发运行)
-- pnpm run build (生产编译)
-- pnpm start     (生产运行)
+## Development
 
-### 本地访问
+- `pnpm run dev` — Development
+- `pnpm run build` — Production build
+- `pnpm start` — Production start
 
-**服务端渲染**（默认，对 SEO 友好）
+### Local Access
+
+**Server-Side Rendering** (default, SEO-friendly)
 ```
 http://localhost:3001/
 ```
 
-**客户端渲染**（禁用 SSR）
+**Client-Side Rendering** (SSR disabled)
 ```
 http://localhost:3001/?nsbp=0
 ```
 
-**服务端渲染回退**（如果 SSR 失败，自动回退到客户端渲染）
+**SSR Fallback** (auto-fallback to CSR if SSR fails)
 ```
 http://localhost:3001/?nsbp=1&from=link
 ```
 
-> **参数说明**：`nsbp` 参数控制渲染模式
-> - `nsbp=1` 或省略：服务端渲染（SSR，默认）
-> - `nsbp=0`：客户端渲染（CSR）
+> `nsbp` parameter controls render mode:
+> - `nsbp=1` or omitted: SSR (default)
+> - `nsbp=0`: CSR
 
-## Docker 部署
+## Docker Deployment
 
-**权限问题已修复！** 详细说明见下面的开发环境说明。
+### Production
 
-### 生产环境
-
-使用 Makefile (推荐):
+Using Makefile (recommended):
 
 ```bash
-# 构建并启动
-make prod
-
-# 或分步执行
-make build
-make prod
-
-# 查看日志
-make logs
-
-# 重启
-make restart
-
-# 进入容器
-make shell
-
-# 停止
-make down
-
-# 完全清理（删除镜像和卷）
-make clean
+make prod            # Build & start
+make logs            # View logs
+make restart         # Restart
+make shell           # Enter container
+make down            # Stop
+make clean           # Clean everything
 ```
 
-或直接使用 Docker Compose:
+Or directly with Docker Compose:
 
 ```bash
-# 构建镜像
 docker-compose build
-
-# 启动服务（后台运行）
 docker-compose up -d
-
-# 查看日志
 docker-compose logs -f
-
-# 停止服务
 docker-compose down
 ```
 
-访问: http://localhost:3001
+Access: http://localhost:3001
 
-### 开发环境
-
-⚠️ **重要提示**:
-1. 首次启动开发环境需要等待构建完成，期间可能看到 `Cannot find module` 错误，这是正常的
-2. 开发环境使用 volume 挂载，遇到权限问题时会自动修复
-3. 如果遇到权限错误（EACCES），容器会自动修复权限（通过 entrypoint.sh）
+### Development
 
 ```bash
-# 启动开发环境（带热重载）
-make dev
-
-# 查看日志
-make logs-dev
-
-# 进入容器
-make shell-dev
-
-# 重启开发环境
-make restart-dev
-
-# 重新构建并启动
-make rebuild-dev
+make dev             # Start dev (with hot reload)
+make logs-dev        # View dev logs
+make shell-dev       # Enter dev container
+make restart-dev     # Restart dev
+make rebuild-dev     # Rebuild & start
 ```
 
-或直接使用 Docker Compose:
+Or:
 
 ```bash
-# 构建并启动开发环境
 docker-compose -f docker-compose.dev.yml up --build
-
-# 后台运行
-docker-compose -f docker-compose.dev.yml up -d --build
-
-# 查看日志
-docker-compose -f docker-compose.dev.yml logs -f
-
-# 停止
-docker-compose -f docker-compose.dev.yml down
 ```
 
-### Docker 命令速查
+### Docker Commands
 
 ```bash
-# 查看所有可用命令
-make help
+# Production
+make build         # Build image
+make prod          # Start production
+make logs          # View logs
+make restart       # Restart
+make shell         # Enter container
+make down          # Stop
 
-# 生产环境
-make build         # 构建镜像
-make prod          # 启动生产环境
-make logs          # 查看日志
-make restart       # 重启容器
-make shell         # 进入容器
-make down          # 停止容器
+# Development
+make build-dev     # Build dev image
+make dev           # Start dev
+make logs-dev      # View dev logs
+make restart-dev   # Restart dev container
+make shell-dev     # Enter dev container
 
-# 开发环境
-make build-dev     # 构建开发镜像
-make dev           # 启动开发环境
-make logs-dev      # 查看开发日志
-make restart-dev   # 重启开发容器
-make shell-dev     # 进入开发容器
-
-# 通用命令
-make clean         # 清理所有资源（镜像、卷等）
-make rebuild       # 重新构建并启动生产环境
-make rebuild-dev   # 重新构建并启动开发环境
+# General
+make clean         # Clean all resources
+make rebuild       # Rebuild & start production
+make rebuild-dev   # Rebuild & start development
 ```
 
-### 环境变量
+## Security
 
-可在 `docker-compose.yml` 或 `docker-compose.dev.yml` 中配置环境变量：
+NSBP includes multiple layers of security protection with production-grade defaults.
 
-- `NODE_ENV`: 运行环境 (production/development)
-- `PORT`: 服务端口 (默认 3001)
-- `ENABLE_RATE_LIMIT`: 启用速率限制 (1=启用，0=禁用，默认禁用)
+### HTTP Headers (Helmet)
 
-## 安全特性
+- Content Security Policy (CSP): prevents XSS
+- X-Frame-Options: prevents clickjacking
+- X-Content-Type-Options: prevents MIME sniffing
+- Strict-Transport-Security: enforces HTTPS
+- X-XSS-Protection: XSS protection
+- Referrer-Policy: referrer control
 
-NSBP 内置了多层安全防护，默认启用生产级安全配置：
+### Static File Security
 
-### 已启用的安全措施
+- ✅ Blocks access to `.env`, `.git`, and other sensitive files
+- ✅ Static asset cache optimization (1 year)
+- ✅ Request body size limit (10MB)
 
-#### 1. **HTTP 头部安全 (Helmet)**
-- Content Security Policy (CSP): 防止 XSS 攻击
-- X-Frame-Options: 防止点击劫持
-- X-Content-Type-Options: 防止 MIME 类型嗅探
-- Strict-Transport-Security: 强制 HTTPS
-- X-XSS-Protection: XSS 保护
-- Referrer-Policy: 控制引用信息
+### Tech Stack Hiding
 
-#### 2. **静态文件安全**
-- ✅ 禁止访问 `.env`、`.git` 等敏感文件
-- ✅ 静态资源缓存优化（1 年缓存）
-- ✅ 请求体大小限制（10MB）
+- ✅ Removes `X-Powered-By` header
+- ✅ No Express version disclosure
 
-#### 3. **技术栈隐藏**
-- ✅ 移除 `X-Powered-By` 头部
-- ✅ 不暴露 Express 版本信息
+### Rate Limiting (Optional)
 
-#### 4. **速率限制 (可选)**
-- ✅ 15 分钟内最多 100 次请求
-- ✅ 自动限流恶意 IP
-- ✅ 可通过环境变量启用/禁用
+- ✅ Max 100 requests per 15 minutes
+- ✅ Auto-block malicious IPs
+- ✅ Toggle via environment variable
 
-### 启用速率限制
+Enable in production:
 
-在生产环境中，建议启用速率限制以防止 DDoS 攻击：
-
-**Docker 方式：**
 ```bash
-# docker-compose.yml 中添加
+# docker-compose.yml
 environment:
   - ENABLE_RATE_LIMIT=1
-```
 
-**本地开发方式：**
-```bash
-# .env 文件
+# or .env
 ENABLE_RATE_LIMIT=1
-
-# 或命令行
-ENABLE_RATE_LIMIT=1 pnpm start
 ```
 
-### 安全最佳实践
+### Security Checklist
 
-#### 生产环境建议
-1. ✅ **启用 HTTPS**: 使用反向代理（Nginx/Apache）配置 SSL
-2. ✅ **启用速率限制**: 防止暴力攻击和 DDoS
-3. ✅ **设置强密码**: 数据库、API 密钥等
-4. ✅ **定期更新依赖**: `pnpm update`
-5. ✅ **配置防火墙**: 限制入站流量
+Before deployment:
+- [ ] Latest dependencies installed (`pnpm install`)
+- [ ] Environment configured (NODE_ENV=production)
+- [ ] HTTPS configured
+- [ ] Secrets removed from codebase
+- [ ] Rate limiting enabled (production)
+- [ ] Static file access tested
+- [ ] CSP policy tested
 
-#### 开发环境
-- ✅ 默认配置已足够
-- ❌ 不建议启用速率限制（影响开发效率）
-- ✅ 保留详细错误日志便于调试
-
-### 安全检查清单
-
-部署前请确认：
-- [ ] 已安装最新依赖 (`pnpm install`)
-- [ ] 环境变量已配置（NODE_ENV=production）
-- [ ] HTTPS 已配置
-- [ ] 敏感信息（密钥、数据库密码）已移出代码库
-- [ ] 速率限制已启用（生产环境）
-- [ ] 静态文件访问已测试
-- [ ] CSP 策略已测试（检查控制台错误）
-
-### CLI 发布
-
-从项目根目录发布 CLI 到 npm 注册表：
+### CLI Publishing
 
 ```bash
-make publish-cli  # 同步模板、更新版本、发布到 npm
+make publish-cli  # Sync templates, bump version, publish to npm
 ```
 
-注意：此命令仅在项目根目录可用，生成的 NSBP 项目不包含此目标。
+Note: This command is only available in the project root. Generated NSBP projects do not include this target.
