@@ -281,3 +281,10 @@ make publish-cli  # Sync templates, bump version, publish to npm
 ```
 
 Note: This command is only available in the project root. Generated NSBP projects do not include this target.
+
+---
+
+## Related Articles
+
+- English: [Production React SSR Framework](https://erishen.cn/building-production-react-ssr-framework/)
+- 中文: [生产级 React SSR 框架](https://erishen.cn/building-production-react-ssr-framework-cn/)

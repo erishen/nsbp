@@ -382,3 +382,10 @@ make publish-cli  # 同步模板、更新版本、发布到 npm
 ```
 
 注意：此命令仅在项目根目录可用，生成的 NSBP 项目不包含此目标。
+
+---
+
+## 相关文章
+
+- 中文: [生产级 React SSR 框架](https://erishen.cn/building-production-react-ssr-framework-cn/)
+- English: [Production React SSR Framework](https://erishen.cn/building-production-react-ssr-framework/)
