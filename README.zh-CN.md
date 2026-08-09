@@ -386,6 +386,4 @@ make publish-cli  # 同步模板、更新版本、发布到 npm
 ---
 
 ## 相关文章
-
-- 中文: [生产级 React SSR 框架](https://erishen.cn/building-production-react-ssr-framework-cn/)
-- English: [Production React SSR Framework](https://erishen.cn/building-production-react-ssr-framework/)
+- [我如何从零构建一个生产级 React SSR 框架](https://erishen.cn/building-production-react-ssr-framework-cn/)
