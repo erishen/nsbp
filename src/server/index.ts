@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
@@ -52,8 +53,9 @@ app.use(
     dotfiles: 'ignore',
     setHeaders: (res, filePath) => {
       // 开发环境使用较短的缓存时间，避免代码更新后浏览器使用旧缓存
-      // 生产环境使用 1 年缓存（配合 hash 文件名）
+      // 生产环境只有文件名带 contenthash 的资源才能长缓存，其余必须回源校验
       const isDev = process.env.NODE_ENV !== 'production'
+      const isHashed = /\.[0-9a-f]{8}\.(bundle|chunk)\.(js|css)$/.test(filePath)
 
       if (
         filePath.match(
@@ -63,9 +65,12 @@ app.use(
         if (isDev) {
           // 开发环境：缓存 1 小时，便于开发调试
           res.setHeader('Cache-Control', 'public, max-age=3600')
-        } else {
-          // 生产环境：缓存 1 年（配合 webpack 的 contenthash）
+        } else if (isHashed) {
+          // 生产环境：带 contenthash 的资源可以永久缓存
           res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+        } else {
+          // 无指纹的资源（图片、旧命名产物）每次都要校验，避免拿到过期内容
+          res.setHeader('Cache-Control', 'no-cache')
         }
       }
     }
@@ -90,6 +95,15 @@ app.get('/getPhotoMenu', (req, res) => {
 
 // Catch-all middleware for SSR
 app.use((req, res) => {
+  // 带扩展名的路径是静态资源请求，未命中就该 404。
+  // 否则会返回 200 + HTML，浏览器把 HTML 当 JS 执行，问题被完全掩盖
+  if (path.extname(req.path)) {
+    res.status(404).type('text/plain').send('Not Found')
+    return
+  }
+
+  // SSR 页面不能被缓存：缓存住的 HTML 会引用已经不存在的 chunk
+  res.set('Cache-Control', 'no-store')
   render(req, res)
 })
 
